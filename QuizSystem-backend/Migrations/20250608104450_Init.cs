@@ -30,7 +30,7 @@ namespace QuizSystem_backend.Migrations
                 name: "ExamSessions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     start_date = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -39,20 +39,20 @@ namespace QuizSystem_backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExamSessions", x => x.Id);
+                    table.PrimaryKey("PK_ExamSessions", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
+                    table.PrimaryKey("PK_Roles", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -81,7 +81,7 @@ namespace QuizSystem_backend.Migrations
                 name: "Subjects",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     subject_code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
@@ -90,7 +90,7 @@ namespace QuizSystem_backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Subjects", x => x.Id);
+                    table.PrimaryKey("PK_Subjects", x => x.id);
                     table.ForeignKey(
                         name: "FK_Subjects_Departments_department_id",
                         column: x => x.department_id,
@@ -124,7 +124,7 @@ namespace QuizSystem_backend.Migrations
                         name: "FK_Users_Roles_role_id",
                         column: x => x.role_id,
                         principalTable: "Roles",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -142,21 +142,22 @@ namespace QuizSystem_backend.Migrations
                     total_score = table.Column<double>(type: "float", nullable: false),
                     subject_id = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<int>(type: "int", nullable: false),
-                    ExamSessionId = table.Column<int>(type: "int", nullable: true)
+                    exam_session_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Exams", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Exams_ExamSessions_ExamSessionId",
-                        column: x => x.ExamSessionId,
+                        name: "FK_Exams_ExamSessions_exam_session_id",
+                        column: x => x.exam_session_id,
                         principalTable: "ExamSessions",
-                        principalColumn: "Id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Exams_Subjects_subject_id",
                         column: x => x.subject_id,
                         principalTable: "Subjects",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -175,13 +176,13 @@ namespace QuizSystem_backend.Migrations
                         name: "FK_ExamSessionSubjects_ExamSessions_ExamSessionId",
                         column: x => x.ExamSessionId,
                         principalTable: "ExamSessions",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExamSessionSubjects_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -241,17 +242,17 @@ namespace QuizSystem_backend.Migrations
                 name: "Questions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     content = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     created_by = table.Column<int>(type: "int", nullable: false),
                     type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    difficutly = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    difficulty = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Questions", x => x.Id);
+                    table.PrimaryKey("PK_Questions", x => x.id);
                     table.ForeignKey(
                         name: "FK_Questions_Teachers_created_by",
                         column: x => x.created_by,
@@ -281,7 +282,7 @@ namespace QuizSystem_backend.Migrations
                         name: "FK_TeacherSubjectClasses_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_TeacherSubjectClasses_Teachers_TeacherId",
@@ -310,7 +311,7 @@ namespace QuizSystem_backend.Migrations
                         name: "FK_Answers_Questions_question_id",
                         column: x => x.question_id,
                         principalTable: "Questions",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -336,7 +337,7 @@ namespace QuizSystem_backend.Migrations
                         name: "FK_ExamQuestions_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -374,9 +375,9 @@ namespace QuizSystem_backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exams_ExamSessionId",
+                name: "IX_Exams_exam_session_id",
                 table: "Exams",
-                column: "ExamSessionId");
+                column: "exam_session_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Exams_subject_id",

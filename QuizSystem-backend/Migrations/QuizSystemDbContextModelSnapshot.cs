@@ -151,8 +151,9 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasColumnName("exam_code");
 
-                    b.Property<int?>("ExamSessionId")
-                        .HasColumnType("int");
+                    b.Property<int>("ExamSessionId")
+                        .HasColumnType("int")
+                        .HasColumnName("exam_session_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -219,7 +220,8 @@ namespace QuizSystem_backend.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
@@ -269,7 +271,8 @@ namespace QuizSystem_backend.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
@@ -285,7 +288,7 @@ namespace QuizSystem_backend.Migrations
                     b.Property<string>("Difficulty")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasColumnName("difficutly");
+                        .HasColumnName("difficulty");
 
                     b.Property<int>("Status")
                         .HasColumnType("int")
@@ -307,7 +310,8 @@ namespace QuizSystem_backend.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
@@ -325,7 +329,8 @@ namespace QuizSystem_backend.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
@@ -462,14 +467,14 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("class_id");
 
+                    b.Property<bool>("IsFirstTimeLogin")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_first_time_login");
+
                     b.Property<string>("StudentCode")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("student_code");
-
-                    b.Property<bool>("isFirstTimeLogin")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_first_time_login");
 
                     b.HasIndex("ClassId");
 
@@ -484,14 +489,14 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("department_id");
 
+                    b.Property<bool>("IsFirstTimeLogin")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_first_time_login");
+
                     b.Property<string>("TeacherCode")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("teacher_code");
-
-                    b.Property<bool>("isFirstTimeLogin")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_first_time_login");
 
                     b.HasIndex("DepartmentId");
 
@@ -522,15 +527,19 @@ namespace QuizSystem_backend.Migrations
 
             modelBuilder.Entity("QuizSystem_backend.Models.Exam", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.ExamSession", null)
+                    b.HasOne("QuizSystem_backend.Models.ExamSession", "ExamSession")
                         .WithMany("Exams")
-                        .HasForeignKey("ExamSessionId");
+                        .HasForeignKey("ExamSessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
                         .WithMany("Exams")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("ExamSession");
 
                     b.Navigation("Subject");
                 });

@@ -11,9 +11,11 @@
         public double TotalScore { get; set; }
         public int SubjectId { get; set; }
         public int Status { get; set; }
+        public int ExamSessionId { get; set; }
 
         // Navigation
         public virtual Subject Subject { get; set; } = null!;
+        public virtual ExamSession ExamSession { get; set; } = null!;
 
         public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = new List<ExamQuestion>();
     }

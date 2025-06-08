@@ -2,6 +2,8 @@
 using QuizSystem_backend.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Session;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+//using QuizSystem_backend.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +47,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -61,5 +64,7 @@ app.UseAuthorization();
 app.UseSession();
 
 app.MapControllers();
+
+SeedData.Initialize(app.Services);
 
 app.Run();

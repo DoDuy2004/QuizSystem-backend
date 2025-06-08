@@ -3,7 +3,7 @@
     public class Teacher : User
     {
         public string TeacherCode { get; set; } = string.Empty;
-        public bool isFirstTimeLogin { get; set; }
+        public bool IsFirstTimeLogin { get; set; }
         public int DepartmentId { get; set; }
 
         // Navigation

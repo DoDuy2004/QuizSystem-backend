@@ -1,9 +1,13 @@
-﻿namespace QuizSystem_backend.Models
+﻿using QuizSystem_backend.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.AspNetCore.Http.HttpResults;
+namespace QuizSystem_backend.Models
 {
     public class Student: User
     {
         public string StudentCode { get; set; } = string.Empty;
-        public bool isFirstTimeLogin { get; set; }
+        public bool IsFirstTimeLogin { get; set; }
         public int ClassId { get; set; }
 
         // Navigation

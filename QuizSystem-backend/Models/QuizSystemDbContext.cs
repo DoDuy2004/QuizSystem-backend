@@ -11,16 +11,15 @@ namespace QuizSystem_backend.Models
         public virtual DbSet<Teacher> Teachers { get; set; }
         public virtual DbSet<Class> Classes { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
-        public virtual DbSet<Exam> Exams { get; set; }  
+        public virtual DbSet<Exam> Exams { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<Answer> Answers { get; set; }  
+        public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
         public virtual DbSet<ExamSessionSubject> ExamSessionSubjects { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public DbSet<ExamSession> ExamSessions { get; set; }
         public DbSet<TeacherSubjectClass> TeacherSubjectClasses { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -61,9 +60,6 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("phone_number")
                     .HasMaxLength(15);
 
-                // Nếu bạn muốn số điện thoại unique:
-                // entity.HasIndex(e => e.PhoneNumber).IsUnique();
-
                 entity.Property(e => e.Gender)
                     .HasColumnName("gender");
 
@@ -91,7 +87,7 @@ namespace QuizSystem_backend.Models
                     .IsRequired();
 
                 entity.HasOne(e => e.Role)
-                    .WithMany(r => r.Users) // assuming Role has public ICollection<User> Users
+                    .WithMany(r => r.Users)
                     .HasForeignKey(e => e.RoleId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
@@ -107,7 +103,7 @@ namespace QuizSystem_backend.Models
                 entity.Property(e => e.Content)
                     .HasColumnName("content")
                     .IsRequired()
-                    .HasMaxLength(1000); // Bạn có thể chọn 500 nếu muốn
+                    .HasMaxLength(1000);
 
                 entity.Property(e => e.IsCorrect)
                     .HasColumnName("is_correct");
@@ -123,9 +119,9 @@ namespace QuizSystem_backend.Models
                     .IsRequired();
 
                 entity.HasOne(e => e.Question)
-                    .WithMany(q => q.Answers) // nhớ thêm trong Question: ICollection<Answer> Answers
+                    .WithMany(q => q.Answers)
                     .HasForeignKey(e => e.QuestionId)
-                    .OnDelete(DeleteBehavior.Cascade); // Khi xoá Question, xoá luôn Answer
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Class>(entity =>
@@ -157,11 +153,9 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("status");
 
                 entity.HasOne(e => e.Department)
-                    .WithMany(d => d.Classes) // cần thêm ICollection<Class> Classes trong Department
+                    .WithMany(d => d.Classes)
                     .HasForeignKey(e => e.DepartmentId)
                     .OnDelete(DeleteBehavior.Restrict);
-
-                // Navigation với Student đã ok (Collection), không cần cấu hình gì thêm nếu để default.
             });
 
             modelBuilder.Entity<Department>(entity =>
@@ -188,7 +182,6 @@ namespace QuizSystem_backend.Models
                 entity.Property(e => e.Status)
                     .HasColumnName("status");
 
-                // Navigation properties:
                 entity.HasMany(e => e.Teachers)
                     .WithOne(t => t.Department)
                     .HasForeignKey(t => t.DepartmentId)
@@ -237,6 +230,10 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("total_score")
                     .IsRequired();
 
+                entity.Property(e => e.ExamSessionId)
+                    .HasColumnName("exam_session_id") // Sửa từ examsession_id thành exam_session_id
+                    .IsRequired();
+
                 entity.Property(e => e.SubjectId)
                     .HasColumnName("subject_id")
                     .IsRequired();
@@ -245,9 +242,14 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("status");
 
                 entity.HasOne(e => e.Subject)
-                    .WithMany(s => s.Exams) // cần thêm ICollection<Exam> Exams trong Subject
+                    .WithMany(s => s.Exams)
                     .HasForeignKey(e => e.SubjectId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.ExamSession)
+                    .WithMany(es => es.Exams)
+                    .HasForeignKey(e => e.ExamSessionId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasMany(e => e.ExamQuestions)
                     .WithOne(eq => eq.Exam)
@@ -257,7 +259,7 @@ namespace QuizSystem_backend.Models
 
             modelBuilder.Entity<ExamQuestion>(entity =>
             {
-                entity.HasKey(eq => new { eq.ExamId, eq.QuestionId }); // composite PK
+                entity.HasKey(eq => new { eq.ExamId, eq.QuestionId });
 
                 entity.Property(eq => eq.Order)
                     .HasColumnName("order")
@@ -281,6 +283,10 @@ namespace QuizSystem_backend.Models
             modelBuilder.Entity<ExamSession>(entity =>
             {
                 entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
@@ -321,11 +327,15 @@ namespace QuizSystem_backend.Models
 
             modelBuilder.Entity<Question>(entity =>
             {
-                entity.HasKey(q => q.Id); 
+                entity.HasKey(q => q.Id);
+
+                entity.Property(q => q.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(q => q.Content)
                     .HasColumnName("content")
-                    .IsRequired(false) 
+                    .IsRequired(false)
                     .HasMaxLength(1000);
 
                 entity.Property(q => q.CreatedBy)
@@ -338,13 +348,13 @@ namespace QuizSystem_backend.Models
                     .HasMaxLength(50);
 
                 entity.Property(q => q.Difficulty)
-                    .HasColumnName("difficutly")
+                    .HasColumnName("difficulty") // Sửa từ difficutly thành difficulty
                     .IsRequired(false)
                     .HasMaxLength(50);
 
                 entity.Property(q => q.Status)
                     .HasColumnName("status")
-                    .IsRequired(); 
+                    .IsRequired();
 
                 entity.HasOne(q => q.Teacher)
                     .WithMany(t => t.Questions)
@@ -356,16 +366,19 @@ namespace QuizSystem_backend.Models
                     .HasForeignKey(eq => eq.QuestionId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                // Mối quan hệ với Answer (một-nhiều)
                 entity.HasMany(q => q.Answers)
-                    .WithOne(a => a.Question) 
+                    .WithOne(a => a.Question)
                     .HasForeignKey(a => a.QuestionId)
-                    .OnDelete(DeleteBehavior.Cascade); // Xóa cascade nếu Question bị xóa
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.HasKey(r => r.Id);
+
+                entity.Property(r => r.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(r => r.Name)
                     .HasColumnName("name")
@@ -382,14 +395,13 @@ namespace QuizSystem_backend.Models
             {
                 entity.ToTable("Students"); // Cấu hình rõ TPT
                 modelBuilder.Entity<Student>().HasBaseType<User>();
-                //entity.HasKey(s => s.Id); // Kế thừa Id từ User
 
                 entity.Property(s => s.StudentCode)
                     .HasColumnName("student_code")
                     .IsRequired(false)
                     .HasMaxLength(50);
 
-                entity.Property(s => s.isFirstTimeLogin)
+                entity.Property(s => s.IsFirstTimeLogin)
                     .HasColumnName("is_first_time_login")
                     .IsRequired();
 
@@ -398,7 +410,7 @@ namespace QuizSystem_backend.Models
                     .IsRequired();
 
                 entity.HasOne(s => s.Class)
-                    .WithMany(c => c.Students) // Giả định Class có ICollection<Student> Students
+                    .WithMany(c => c.Students)
                     .HasForeignKey(s => s.ClassId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
@@ -406,6 +418,10 @@ namespace QuizSystem_backend.Models
             modelBuilder.Entity<Subject>(entity =>
             {
                 entity.HasKey(s => s.Id);
+
+                entity.Property(s => s.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(s => s.SubjectCode)
                     .HasColumnName("subject_code")
@@ -449,16 +465,14 @@ namespace QuizSystem_backend.Models
             modelBuilder.Entity<Teacher>(entity =>
             {
                 entity.ToTable("Teachers"); // Cấu hình rõ TPT
-                modelBuilder.Entity<Student>().HasBaseType<User>();
-                //entity.HasKey(t => t.Id); // Kế thừa Id từ User
-
+                modelBuilder.Entity<Teacher>().HasBaseType<User>(); // Sửa từ Student thành Teacher
 
                 entity.Property(t => t.TeacherCode)
                     .HasColumnName("teacher_code")
                     .IsRequired(false)
                     .HasMaxLength(50);
 
-                entity.Property(t => t.isFirstTimeLogin)
+                entity.Property(t => t.IsFirstTimeLogin)
                     .HasColumnName("is_first_time_login")
                     .IsRequired();
 
@@ -467,12 +481,12 @@ namespace QuizSystem_backend.Models
                     .IsRequired();
 
                 entity.HasMany(t => t.Questions)
-                    .WithOne(q => q.Teacher) // Giả định Question có Teacher
-                    .HasForeignKey(q => q.CreatedBy) // Giả định CreatedBy là khóa ngoại
+                    .WithOne(q => q.Teacher)
+                    .HasForeignKey(q => q.CreatedBy)
                     .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(t => t.Department)
-                    .WithMany(d => d.Teachers) // Giả định Department có ICollection<Teacher> Teachers
+                    .WithMany(d => d.Teachers)
                     .HasForeignKey(t => t.DepartmentId)
                     .OnDelete(DeleteBehavior.Restrict);
 

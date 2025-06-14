@@ -11,7 +11,8 @@
         // Navigation
         public virtual ICollection<Exam> Exams { get; set; } = new List<Exam>();
         public virtual Department Department { get; set; } = null!;
-        public ICollection<ExamSessionSubject> ExamSessionSubjects { get; set; } = new List<ExamSessionSubject>();
+        public virtual ICollection<RoomExamSubject> RoomExamSubjects { get; set; } = new List<RoomExamSubject>();
         public virtual ICollection<TeacherSubjectClass> TeacherSubjectClasses { get; set; } = new List<TeacherSubjectClass>();
+        public virtual ICollection<QuestionBank> QuestionBanks { get; set; } = null!;
     }
 }

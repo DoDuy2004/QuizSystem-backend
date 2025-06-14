@@ -136,12 +136,12 @@ namespace QuizSystem_backend.Models
                     context.SaveChanges();
                 }
 
-                // Seed ExamSessions
-                if (!context.ExamSessions.Any())
+                // Seed RoomExams
+                if (!context.RoomExams.Any())
                 {
                     var examSessions = new[]
                     {
-                        new ExamSession
+                        new RoomExam
                         {
                             Name = "Midterm June 2025",
                             StartDate = new DateTime(2025, 6, 15),
@@ -149,7 +149,7 @@ namespace QuizSystem_backend.Models
                             Status = 1
                         }
                     };
-                    context.ExamSessions.AddRange(examSessions);
+                    context.RoomExams.AddRange(examSessions);
                     context.SaveChanges();
                 }
 
@@ -160,7 +160,7 @@ namespace QuizSystem_backend.Models
                     {
                         new Exam
                         {
-                            ExamCode = "EXM001",
+                            //ExamCode = "EXM001",
                             Name = "Programming Exam",
                             StartDate = new DateTime(2025, 6, 15, 9, 0, 0),
                             DurationMinutes = 90,
@@ -168,7 +168,7 @@ namespace QuizSystem_backend.Models
                             TotalScore = 100,
                             SubjectId = 1, // Giả định SubjectId khớp
                             Status = 1,
-                            ExamSessionId = 1 // Giả định ExamSessionId khớp
+                            RoomExamId = 1 // Giả định ExamSessionId khớp
                         }
                     };
                     context.Exams.AddRange(exams);
@@ -217,18 +217,18 @@ namespace QuizSystem_backend.Models
                 }
 
                 // Seed ExamSessionSubjects
-                if (!context.ExamSessionSubjects.Any())
+                if (!context.RoomExamSubjects.Any())
                 {
                     var examSessionSubjects = new[]
                     {
-                        new ExamSessionSubject
+                        new RoomExamSubject
                         {
-                            ExamSessionId = 1,
+                            RoomExamId = 1,
                             SubjectId = 1,
                             ExamDate = new DateTime(2025, 6, 15)
                         }
                     };
-                    context.ExamSessionSubjects.AddRange(examSessionSubjects);
+                    context.RoomExamSubjects.AddRange(examSessionSubjects);
                     context.SaveChanges();
                 }
 

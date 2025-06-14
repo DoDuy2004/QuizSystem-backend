@@ -8,6 +8,8 @@
         public int AnswerOrder { get; set; }
         public int Status { get; set; }
 
+        //public bool isChoose { get; set; }
+
         public int QuestionId { get; set; }
 
         // Navigation

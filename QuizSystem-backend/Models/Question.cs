@@ -9,12 +9,14 @@
 
         public string Difficulty { get; set; } = string.Empty;
         public int Status { get; set; }
+        public int QuestionBankId { get; set; }
 
+        public string Topic { get; set; } = null!;
         // Navigation
-        public Teacher Teacher { get; set; } = null!;
+        public virtual Teacher Teacher { get; set; } = null!;
         //public QuestionType QuestionType { get; set; } = null!;
         public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = new List<ExamQuestion>();
-
+        public virtual QuestionBank QuestionBank { get; set; } = null!;
         public virtual ICollection<Answer> Answers { get; set; } = new List<Answer>();
     }
 }

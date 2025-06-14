@@ -65,6 +65,6 @@ app.UseSession();
 
 app.MapControllers();
 
-SeedData.Initialize(app.Services);
+//SeedData.Initialize(app.Services);
 
 app.Run();

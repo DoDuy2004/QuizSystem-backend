@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.Models
 {
@@ -16,9 +17,9 @@ namespace QuizSystem_backend.Models
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
-        public virtual DbSet<ExamSessionSubject> ExamSessionSubjects { get; set; }
+        public virtual DbSet<RoomExamSubject> RoomExamSubjects { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
-        public DbSet<ExamSession> ExamSessions { get; set; }
+        public DbSet<RoomExam> RoomExams { get; set; }
         public DbSet<TeacherSubjectClass> TeacherSubjectClasses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -201,13 +202,13 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("id")
                     .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.ExamCode)
-                    .HasColumnName("exam_code")
-                    .IsRequired()
-                    .HasMaxLength(20);
+                //entity.Property(e => e.ExamCode)
+                //    .HasColumnName("exam_code")
+                //    .IsRequired()
+                //    .HasMaxLength(20);
 
-                entity.HasIndex(e => e.ExamCode)
-                    .IsUnique();
+                //entity.HasIndex(e => e.ExamCode)
+                //    .IsUnique();
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
@@ -230,8 +231,8 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("total_score")
                     .IsRequired();
 
-                entity.Property(e => e.ExamSessionId)
-                    .HasColumnName("exam_session_id") // Sửa từ examsession_id thành exam_session_id
+                entity.Property(e => e.RoomExamId)
+                    .HasColumnName("room_exam_id") // Sửa từ examsession_id thành exam_session_id
                     .IsRequired();
 
                 entity.Property(e => e.SubjectId)
@@ -246,9 +247,9 @@ namespace QuizSystem_backend.Models
                     .HasForeignKey(e => e.SubjectId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(e => e.ExamSession)
+                entity.HasOne(e => e.RoomExam)
                     .WithMany(es => es.Exams)
-                    .HasForeignKey(e => e.ExamSessionId)
+                    .HasForeignKey(e => e.RoomExamId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasMany(e => e.ExamQuestions)
@@ -269,6 +270,13 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("score")
                     .IsRequired();
 
+                entity.Property(eq => eq.QuestionId)
+                    .HasColumnName("question_id")
+                    .IsRequired();
+                entity.Property(eq => eq.ExamId)
+                    .HasColumnName("exam_id")
+                    .IsRequired();
+
                 entity.HasOne(eq => eq.Exam)
                     .WithMany(e => e.ExamQuestions)
                     .HasForeignKey(eq => eq.ExamId)
@@ -280,7 +288,7 @@ namespace QuizSystem_backend.Models
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<ExamSession>(entity =>
+            modelBuilder.Entity<RoomExam>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
@@ -306,21 +314,29 @@ namespace QuizSystem_backend.Models
                     .IsRequired();
             });
 
-            modelBuilder.Entity<ExamSessionSubject>(entity =>
+            modelBuilder.Entity<RoomExamSubject>(entity =>
             {
-                entity.HasKey(e => new { e.ExamSessionId, e.SubjectId });
+                entity.HasKey(e => new { e.RoomExamId, e.SubjectId });
 
                 entity.Property(e => e.ExamDate)
                     .HasColumnName("exam_date")
                     .IsRequired();
 
-                entity.HasOne(e => e.ExamSession)
-                    .WithMany(es => es.ExamSessionSubjects)
-                    .HasForeignKey(e => e.ExamSessionId)
+                entity.Property(e => e.RoomExamId)
+                    .HasColumnName("room_exam_id")
+                    .IsRequired();
+
+                entity.Property(e => e.SubjectId)
+                    .HasColumnName("subject_id")
+                    .IsRequired();
+
+                entity.HasOne(e => e.RoomExam)
+                    .WithMany(es => es.RoomExamSubjects)
+                    .HasForeignKey(e => e.RoomExamId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(e => e.Subject)
-                    .WithMany(s => s.ExamSessionSubjects)
+                    .WithMany(s => s.RoomExamSubjects)
                     .HasForeignKey(e => e.SubjectId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
@@ -337,6 +353,11 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("content")
                     .IsRequired(false)
                     .HasMaxLength(1000);
+
+                entity.Property(q => q.Topic)
+                    .HasColumnName("topic")
+                    .IsRequired(false)
+                    .HasMaxLength(255);
 
                 entity.Property(q => q.CreatedBy)
                     .HasColumnName("created_by")
@@ -451,7 +472,7 @@ namespace QuizSystem_backend.Models
                     .HasForeignKey(s => s.DepartmentId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasMany(s => s.ExamSessionSubjects)
+                entity.HasMany(s => s.RoomExamSubjects)
                     .WithOne(ess => ess.Subject)
                     .HasForeignKey(ess => ess.SubjectId)
                     .OnDelete(DeleteBehavior.Cascade);
@@ -500,6 +521,18 @@ namespace QuizSystem_backend.Models
             {
                 entity.HasKey(tsc => new { tsc.TeacherId, tsc.SubjectId, tsc.ClassId });
 
+                entity.Property(eq => eq.SubjectId)
+                    .HasColumnName("subject_id")
+                    .IsRequired();
+
+                entity.Property(eq => eq.ClassId)
+                    .HasColumnName("class_id")
+                    .IsRequired();
+
+                entity.Property(eq => eq.ClassId)
+                    .HasColumnName("class_id")
+                    .IsRequired();
+
                 entity.HasOne(tsc => tsc.Teacher)
                     .WithMany(t => t.TeacherSubjectClasses)
                     .HasForeignKey(tsc => tsc.TeacherId)
@@ -515,6 +548,34 @@ namespace QuizSystem_backend.Models
                     .HasForeignKey(tsc => tsc.ClassId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
+            modelBuilder.Entity<QuestionBank>(entity =>
+            {
+                entity.HasKey(qb => qb.Id);
+
+                entity.Property(qb => qb.Name)
+                      .HasColumnName("name")
+                      .IsRequired()
+                      .HasMaxLength(255);
+
+                entity.Property(qb => qb.Description)
+                      .HasColumnName("description")
+                      .HasMaxLength(1000);
+
+                entity.Property(qb => qb.SubjectId)
+                      .IsRequired()
+                      .HasColumnName("subject_id");
+
+                entity.HasMany(qb => qb.questions)
+                      .WithOne(q => q.QuestionBank)
+                      .HasForeignKey(q => q.QuestionBankId);
+
+                entity.HasOne(qb => qb.Subject)
+                      .WithMany(s => s.QuestionBanks)
+                      .HasForeignKey(qb => qb.SubjectId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
         }
+        public DbSet<QuizSystem_backend.Models.GeneratedExam> GeneratedExam { get; set; } = default!;
     }
 }

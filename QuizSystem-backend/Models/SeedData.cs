@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using QuizSystem_backend.Models;
+using QuizSystem_backend.Enums;
+using System;
 
 namespace QuizSystem_backend.Models
 {
@@ -11,7 +14,6 @@ namespace QuizSystem_backend.Models
             {
                 var context = scope.ServiceProvider.GetRequiredService<QuizSystemDbContext>();
 
-                // Áp dụng migration nếu có migration chưa được thực thi
                 if (context.Database.GetPendingMigrations().Any())
                 {
                     context.Database.Migrate();
@@ -19,109 +21,44 @@ namespace QuizSystem_backend.Models
 
                 var currentDate = DateTime.UtcNow;
 
-                // Seed Roles
-                if (!context.Roles.Any())
-                {
-                    var roles = new[]
-                    {
-                        new Role { Name = "Admin" },
-                        new Role { Name = "Teacher" },
-                        new Role { Name = "Student" }
-                    };
-                    context.Roles.AddRange(roles);
-                    context.SaveChanges();
-                }
-
-                // Seed Departments
-                if (!context.Departments.Any())
-                {
-                    var departments = new[]
-                    {
-                        new Department { DepartmentCode = "CS", Name = "Computer Science", Status = 1 },
-                        new Department { DepartmentCode = "MATH", Name = "Mathematics", Status = 1 }
-                    };
-                    context.Departments.AddRange(departments);
-                    context.SaveChanges();
-                }
-
-                // Seed Users
                 if (!context.Users.Any())
                 {
-                    var adminUser = new User
+                    var users = new[]
                     {
-                        Username = "admin1",
-                        FullName = "Admin User",
-                        Email = "admin@example.com",
-                        PhoneNumber = "1234567890",
-                        Gender = true,
-                        DateOfBirth = new DateTime(1990, 1, 1),
-                        AvatarUrl = "http://example.com/admin.jpg",
-                        Status = true,
-                        PasswordHash = "hashedpassword1",
-                        CreatedAt = currentDate,
-                        RoleId = 1 // Giả định RoleId khớp với thứ tự chèn
+                        new User
+                        {
+                            Id =  Guid.NewGuid(),
+                            Username = "admin1",
+                            FullName = "Admin User",
+                            Email = "admin@example.com",
+                            PhoneNumber = "1234567890",
+                            Gender = true,
+                            DateOfBirth = new DateTime(1990, 1, 1),
+                            AvatarUrl = "http://example.com/admin.jpg",
+                            Status = Status.ACTIVE,
+                            PasswordHash = "hashedpassword1",
+                            CreatedAt = currentDate,
+                            Role = Role.ADMIN
+                        },
                     };
-
-                    context.Users.AddRange(adminUser);
+                    context.Users.AddRange(users);
                     context.SaveChanges();
                 }
 
-                // Seed Classes
-                if (!context.Classes.Any())
+                // Seed Facutlies
+                if (!context.Facutlies.Any())
                 {
-                    var classes = new[]
+                    var facutlies = new[]
                     {
-                        new Class { ClassCode = "CS101", Name = "Intro to CS", DepartmentId = 1, Status = 1 }
+                        new Facutly
+                        {
+                            Id = Guid.NewGuid(),
+                            FacutlyCode = "CS",
+                            Name = "Computer Science",
+                            Status = Status.ACTIVE
+                        }
                     };
-                    context.Classes.AddRange(classes);
-                    context.SaveChanges();
-                }
-
-                // Seed Students
-                if (!context.Students.Any())
-                {
-                    var student = new Student
-                    {
-                        Username = "student1",
-                        FullName = "Student One",
-                        Email = "student1@example.com",
-                        PhoneNumber = "0987654321",
-                        Gender = false,
-                        DateOfBirth = new DateTime(2003, 5, 15),
-                        AvatarUrl = "http://example.com/student1.jpg",
-                        Status = true,
-                        PasswordHash = "hashedpassword2",
-                        CreatedAt = currentDate,
-                        RoleId = 3,
-                        StudentCode = "STU001",
-                        IsFirstTimeLogin = true,
-                        ClassId = 1 // Giả định ClassId sẽ được chèn sau
-                    };
-                    context.Students.Add(student);
-                    context.SaveChanges();
-                }
-
-                // Seed Teachers
-                if (!context.Teachers.Any())
-                {
-                    var teacher = new Teacher
-                    {
-                        Username = "teacher1",
-                        FullName = "Teacher One",
-                        Email = "teacher1@example.com",
-                        PhoneNumber = "0123456789",
-                        Gender = true,
-                        DateOfBirth = new DateTime(1985, 3, 10),
-                        AvatarUrl = "http://example.com/teacher1.jpg",
-                        Status = true,
-                        PasswordHash = "hashedpassword3",
-                        CreatedAt = currentDate,
-                        RoleId = 2,
-                        TeacherCode = "TCH001",
-                        IsFirstTimeLogin = true,
-                        DepartmentId = 1 // Giả định DepartmentId sẽ được chèn trước
-                    };
-                    context.Teachers.Add(teacher);
+                    context.Facutlies.AddRange(facutlies);
                     context.SaveChanges();
                 }
 
@@ -130,48 +67,101 @@ namespace QuizSystem_backend.Models
                 {
                     var subjects = new[]
                     {
-                        new Subject { SubjectCode = "CS101", Name = "Programming 101", DepartmentId = 1, Status = 1 }
+                        new Subject
+                        {
+                            Id = Guid.NewGuid(),
+                            SubjectCode = "CS101",
+                            Name = "Introduction to Programming",
+                            FacutlyId = context.Facutlies.First().Id,
+                            Status = Status.ACTIVE
+                        }
                     };
                     context.Subjects.AddRange(subjects);
                     context.SaveChanges();
                 }
 
-                // Seed RoomExams
-                if (!context.RoomExams.Any())
+                // Seed Teachers
+                if (!context.Teachers.Any())
                 {
-                    var examSessions = new[]
+                    var teachers = new[]
                     {
-                        new RoomExam
+                        new Teacher
                         {
-                            Name = "Midterm June 2025",
-                            StartDate = new DateTime(2025, 6, 15),
-                            EndDate = new DateTime(2025, 6, 20),
-                            Status = 1
+                            Id = Guid.NewGuid(),
+                            Username = "teacher1",
+                            FullName = "Teacher One",
+                            Email = "teacher1@example.com",
+                            PhoneNumber = "0987654321",
+                            Gender = true,
+                            DateOfBirth = new DateTime(1985, 3, 10),
+                            AvatarUrl = "http://example.com/teacher1.jpg",
+                            Status = Status.ACTIVE,
+                            PasswordHash = "hashedpassword2",
+                            CreatedAt = currentDate,
+                            Role = Role.TEACHER
                         }
                     };
-                    context.RoomExams.AddRange(examSessions);
+                    context.Teachers.AddRange(teachers);
                     context.SaveChanges();
                 }
 
-                // Seed Exams
-                if (!context.Exams.Any())
+                // Seed Students
+                if (!context.Students.Any())
                 {
-                    var exams = new[]
+                    var students = new[]
                     {
-                        new Exam
+                        new Student
                         {
-                            //ExamCode = "EXM001",
-                            Name = "Programming Exam",
-                            StartDate = new DateTime(2025, 6, 15, 9, 0, 0),
-                            DurationMinutes = 90,
-                            NumberOfQuestions = 10,
-                            TotalScore = 100,
-                            SubjectId = 1, // Giả định SubjectId khớp
-                            Status = 1,
-                            RoomExamId = 1 // Giả định ExamSessionId khớp
+                            Id = Guid.NewGuid(),
+                            Username = "student1",
+                            FullName = "Student One",
+                            Email = "student1@example.com",
+                            PhoneNumber = "0123456789",
+                            Gender = false,
+                            DateOfBirth = new DateTime(2003, 5, 15),
+                            AvatarUrl = "http://example.com/student1.jpg",
+                            Status = Status.ACTIVE,
+                            PasswordHash = "hashedpassword3",
+                            CreatedAt = currentDate
                         }
                     };
-                    context.Exams.AddRange(exams);
+                    context.Students.AddRange(students);
+                    context.SaveChanges();
+                }
+
+                // Seed Chapters
+                if (!context.Chapters.Any())
+                {
+                    var chapters = new[]
+                    {
+                        new Chapter
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Chapter 1: Basics",
+                            Description = "Introduction to Programming",
+                            Status = Status.ACTIVE,
+                            SubjectId = context.Subjects.First().Id
+                        }
+                    };
+                    context.Chapters.AddRange(chapters);
+                    context.SaveChanges();
+                }
+
+                // Seed QuestionBanks
+                if (!context.QuestionBanks.Any())
+                {
+                    var questionBanks = new[]
+                    {
+                        new QuestionBank
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Programming Basics",
+                            Description = "Basic programming questions",
+                            Status = Status.ACTIVE,
+                            SubjectId = context.Subjects.First().Id
+                        }
+                    };
+                    context.QuestionBanks.AddRange(questionBanks);
                     context.SaveChanges();
                 }
 
@@ -182,11 +172,16 @@ namespace QuizSystem_backend.Models
                     {
                         new Question
                         {
+                            Id = Guid.NewGuid(),
                             Content = "What is a variable?",
-                            CreatedBy = 3, // Giả định TeacherId = 3
+                            Image = "",
+                            CreatedBy = context.Teachers.First().Id,
                             Type = "Multiple Choice",
                             Difficulty = "Easy",
-                            Status = 1
+                            Status = Status.ACTIVE,
+                            Topic = "Variables",
+                            QuestionBankId = context.QuestionBanks.First().Id,
+                            ChapterId = context.Chapters.First().Id
                         }
                     };
                     context.Questions.AddRange(questions);
@@ -198,10 +193,87 @@ namespace QuizSystem_backend.Models
                 {
                     var answers = new[]
                     {
-                        new Answer { Content = "A storage location", IsCorrect = true, AnswerOrder = 1, Status = 1, QuestionId = 1 },
-                        new Answer { Content = "A function", IsCorrect = false, AnswerOrder = 2, Status = 1, QuestionId = 1 }
+                        new Answer
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "A storage location",
+                            IsCorrect = true,
+                            AnswerOrder = 1,
+                            Status = Status.ACTIVE,
+                            QuestionId = context.Questions.First().Id
+                        },
+                        new Answer
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "A function",
+                            IsCorrect = false,
+                            AnswerOrder = 2,
+                            Status = Status.ACTIVE,
+                            QuestionId = context.Questions.First().Id
+                        }
                     };
                     context.Answers.AddRange(answers);
+                    context.SaveChanges();
+                }
+
+                // Seed CourseClasses
+                if (!context.CourseClasses.Any())
+                {
+                    var courseClasses = new[]
+                    {
+                        new CourseClass
+                        {
+                            Id = Guid.NewGuid(),
+                            ClassCode = "CS101-2025",
+                            Name = "Programming 101",
+                            Credit = 3,
+                            Status = Status.ACTIVE, // Sử dụng int thay vì enum trực tiếp
+                            TeacherId = context.Teachers.First().Id,
+                            SubjectId = context.Subjects.First().Id
+                        }
+                    };
+                    context.CourseClasses.AddRange(courseClasses);
+                    context.SaveChanges();
+                }
+
+                // Seed RoomExams
+                if (!context.RoomExams.Any())
+                {
+                    var roomExams = new[]
+                    {
+                        new RoomExam
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Room 101",
+                            StartDate = new DateTime(2025, 6, 20),
+                            EndDate = new DateTime(2025, 6, 20, 12, 0, 0),
+                            Status = Status.ACTIVE,
+                            CourseClassId = context.CourseClasses.First().Id
+                        }
+                    };
+                    context.RoomExams.AddRange(roomExams);
+                    context.SaveChanges();
+                }
+
+                // Seed Exams
+                if (!context.Exams.Any())
+                {
+                    var exams = new[]
+                    {
+                        new Exam
+                        {
+                            Id = Guid.NewGuid(),
+                            ExamCode = "EXM001",
+                            Name = "Midterm Exam",
+                            StartDate = new DateTime(2025, 6, 20, 10, 0, 0),
+                            DurationMinutes = 90,
+                            NumberOfQuestions = 10,
+                            TotalScore = 100,
+                            RoomExamId = context.RoomExams.First().Id,
+                            Status = Status.ACTIVE
+                        }
+                    };
+                    context.Exams.AddRange(exams);
                     context.SaveChanges();
                 }
 
@@ -210,41 +282,68 @@ namespace QuizSystem_backend.Models
                 {
                     var examQuestions = new[]
                     {
-                        new ExamQuestion { ExamId = 1, QuestionId = 1, Order = 1, Score = 10 }
+                        new ExamQuestion
+                        {
+                            ExamId = context.Exams.First().Id,
+                            QuestionId = context.Questions.First().Id,
+                            Order = 1,
+                            Score = 10
+                        }
                     };
                     context.ExamQuestions.AddRange(examQuestions);
                     context.SaveChanges();
                 }
 
-                // Seed ExamSessionSubjects
-                if (!context.RoomExamSubjects.Any())
+                // Seed StudentCourseClasses
+                if (!context.StudentCourseClasses.Any())
                 {
-                    var examSessionSubjects = new[]
+                    var studentCourseClasses = new[]
                     {
-                        new RoomExamSubject
+                        new StudentCourseClass
                         {
-                            RoomExamId = 1,
-                            SubjectId = 1,
-                            ExamDate = new DateTime(2025, 6, 15)
+                            StudentId = context.Students.First().Id,
+                            CourseClass = context.CourseClasses.First().Id,
+                            Grade = null,
+                            note = "Good student",
+                            Status = Status.ACTIVE
                         }
                     };
-                    context.RoomExamSubjects.AddRange(examSessionSubjects);
+                    context.StudentCourseClasses.AddRange(studentCourseClasses);
                     context.SaveChanges();
                 }
 
-                // Seed TeacherSubjectClasses
-                if (!context.TeacherSubjectClasses.Any())
+                // Seed StudentExams
+                if (!context.StudentExams.Any())
                 {
-                    var teacherSubjectClasses = new[]
+                    var studentExams = new[]
                     {
-                        new TeacherSubjectClass
+                        new StudentExam
                         {
-                            TeacherId = 3,
-                            SubjectId = 1,
-                            ClassId = 1
+                            Id = Guid.NewGuid(),
+                            StudentId = context.StudentCourseClasses.First().StudentId,
+                            CourseClass = context.StudentCourseClasses.First().CourseClass,
+                            ExamId = context.Exams.First().Id,
+                            DurationMinutes = 90,
+                            Status = Status.ACTIVE
                         }
                     };
-                    context.TeacherSubjectClasses.AddRange(teacherSubjectClasses);
+                    context.StudentExams.AddRange(studentExams);
+                    context.SaveChanges();
+                }
+
+                // Seed StudentExamDetails
+                if (!context.StudentExamDetails.Any())
+                {
+                    var studentExamDetails = new[]
+                    {
+                        new StudentExamDetail
+                        {
+                            AnswerId = context.Answers.First(a => a.IsCorrect).Id,
+                            QuestionId = context.Questions.First().Id,
+                            StudentExamId = context.StudentExams.First().StudentId // Giả sử dùng StudentId làm khóa
+                        }
+                    };
+                    context.StudentExamDetails.AddRange(studentExamDetails);
                     context.SaveChanges();
                 }
             }

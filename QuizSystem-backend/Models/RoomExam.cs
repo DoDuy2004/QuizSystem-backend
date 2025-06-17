@@ -1,16 +1,19 @@
-﻿namespace QuizSystem_backend.Models
+﻿using QuizSystem_backend.Enums;
+
+namespace QuizSystem_backend.Models
 {
     public class RoomExam
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public int Status { get; set; }
+        public Status Status { get; set; }
+        public Guid CourseClassId { get; set; }
 
-        // Navigation
-        public virtual ICollection<Exam> Exams { get; set; } = new List<Exam>();
-        public virtual ICollection<RoomExamSubject> RoomExamSubjects { get; set; } = new List<RoomExamSubject>();
+        // Navigation   
+        public virtual CourseClass Course { get; set; } = null!;
+        public virtual ICollection<Exam> Exams { get; set; } = null!;
     }
 }

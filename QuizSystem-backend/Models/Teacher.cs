@@ -4,11 +4,11 @@
     {
         public string TeacherCode { get; set; } = string.Empty;
         public bool IsFirstTimeLogin { get; set; }
-        public int DepartmentId { get; set; }
+        public Guid FacutlyId { get; set; }
 
         // Navigation
         public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
-        public virtual Department Department { get; set; } = null!;
-        public virtual ICollection<TeacherSubjectClass> TeacherSubjectClasses { get; set; } = new List<TeacherSubjectClass>();
+        public virtual Facutly Department { get; set; } = null!;
+        public virtual ICollection<CourseClass> CourseClasses { get; set; } = null!;
     }
 }

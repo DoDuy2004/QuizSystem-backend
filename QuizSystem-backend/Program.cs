@@ -3,6 +3,7 @@ using QuizSystem_backend.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Session;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Text.Json;
 //using QuizSystem_backend.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,7 @@ builder.Services.AddSession(options =>
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });
 
 builder.Services.AddCors(options =>

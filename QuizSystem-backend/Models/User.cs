@@ -1,10 +1,11 @@
-﻿using System.Data;
+﻿using QuizSystem_backend.Enums;
+using System.Data;
 
 namespace QuizSystem_backend.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Username { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
@@ -12,12 +13,10 @@ namespace QuizSystem_backend.Models
         public bool Gender { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string AvatarUrl { get; set; } = string.Empty;
-        public bool Status { get; set; }
+        public Status Status { get; set; }
         public string PasswordHash { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
-        public int RoleId { get; set; }
+        public Role Role { get; set; }
 
-        // Navigation
-        public virtual Role Role { get; set; } = null!;
     }
 }

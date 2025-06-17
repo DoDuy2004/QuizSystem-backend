@@ -12,7 +12,7 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250614163753_Initial")]
+    [Migration("20250617114102_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,12 +27,10 @@ namespace QuizSystem_backend.Migrations
 
             modelBuilder.Entity("QuizSystem_backend.Models.Answer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AnswerOrder")
                         .HasColumnType("int")
@@ -48,8 +46,8 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("is_correct");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("question_id");
 
                     b.Property<int>("Status")
@@ -60,17 +58,49 @@ namespace QuizSystem_backend.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("answers", (string)null);
                 });
 
-            modelBuilder.Entity("QuizSystem_backend.Models.Class", b =>
+            modelBuilder.Entity("QuizSystem_backend.Models.Chapter", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("subject_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("chapters", (string)null);
+                });
+
+            modelBuilder.Entity("QuizSystem_backend.Models.CourseClass", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<string>("ClassCode")
                         .IsRequired()
@@ -78,9 +108,9 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasColumnName("class_code");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int>("Credit")
                         .HasColumnType("int")
-                        .HasColumnName("department_id");
+                        .HasColumnName("credit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -91,58 +121,33 @@ namespace QuizSystem_backend.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int")
                         .HasColumnName("status");
+
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("subject_id");
+
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("teacher_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClassCode")
                         .IsUnique();
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("SubjectId");
 
-                    b.ToTable("Classes");
-                });
+                    b.HasIndex("TeacherId");
 
-            modelBuilder.Entity("QuizSystem_backend.Models.Department", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("DepartmentCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasColumnName("department_code");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("name");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int")
-                        .HasColumnName("status");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentCode")
-                        .IsUnique();
-
-                    b.ToTable("Departments");
+                    b.ToTable("course_classes", (string)null);
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Exam", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DurationMinutes")
                         .HasColumnType("int")
@@ -164,8 +169,8 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("number_of_questions");
 
-                    b.Property<int>("RoomExamId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("RoomExamId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("room_exam_id");
 
                     b.Property<DateTime>("StartDate")
@@ -176,12 +181,8 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("status");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int")
-                        .HasColumnName("subject_id");
-
-                    b.Property<double>("TotalScore")
-                        .HasColumnType("float")
+                    b.Property<float>("TotalScore")
+                        .HasColumnType("real")
                         .HasColumnName("total_score");
 
                     b.HasKey("Id");
@@ -191,19 +192,17 @@ namespace QuizSystem_backend.Migrations
 
                     b.HasIndex("RoomExamId");
 
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("Exams");
+                    b.ToTable("exams", (string)null);
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.ExamQuestion", b =>
                 {
-                    b.Property<int>("ExamId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("ExamId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("exam_id");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("question_id");
 
                     b.Property<int>("Order")
@@ -218,116 +217,148 @@ namespace QuizSystem_backend.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("ExamQuestions");
+                    b.ToTable("exam_questions", (string)null);
+                });
+
+            modelBuilder.Entity("QuizSystem_backend.Models.Facutly", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
+
+                    b.Property<string>("FacutlyCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("facutly_code");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FacutlyCode")
+                        .IsUnique();
+
+                    b.ToTable("facutlies", (string)null);
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Question", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("ChapterId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("chapter_id");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)")
                         .HasColumnName("content");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int")
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("created_by");
 
                     b.Property<string>("Difficulty")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("difficulty");
 
-                    b.Property<int>("QuestionBankId")
-                        .HasColumnType("int");
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("image");
+
+                    b.Property<Guid>("QuestionBankId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("question_bank_id");
 
                     b.Property<int>("Status")
                         .HasColumnType("int")
                         .HasColumnName("status");
 
                     b.Property<string>("Topic")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("topic");
 
                     b.Property<string>("Type")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("type");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ChapterId");
+
                     b.HasIndex("CreatedBy");
 
                     b.HasIndex("QuestionBankId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("questions", (string)null);
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.QuestionBank", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
                         .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("name");
 
-                    b.Property<int>("SubjectId")
+                    b.Property<int>("Status")
                         .HasColumnType("int")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("subject_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("QuestionBank");
-                });
-
-            modelBuilder.Entity("QuizSystem_backend.Models.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
+                    b.ToTable("question_banks", (string)null);
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.RoomExam", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("CourseClassId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("course_class_id");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2")
@@ -335,8 +366,8 @@ namespace QuizSystem_backend.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("name");
 
                     b.Property<DateTime>("StartDate")
@@ -349,46 +380,115 @@ namespace QuizSystem_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoomExams");
+                    b.HasIndex("CourseClassId");
+
+                    b.ToTable("room_exams", (string)null);
                 });
 
-            modelBuilder.Entity("QuizSystem_backend.Models.RoomExamSubject", b =>
+            modelBuilder.Entity("QuizSystem_backend.Models.StudentCourseClass", b =>
                 {
-                    b.Property<int>("RoomExamId")
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("student_id");
+
+                    b.Property<Guid>("CourseClass")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("course_class_id");
+
+                    b.Property<float?>("Grade")
+                        .HasColumnType("real")
+                        .HasColumnName("grade");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int")
-                        .HasColumnName("room_exam_id");
+                        .HasColumnName("status");
 
-                    b.Property<int>("SubjectId")
+                    b.Property<string>("note")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("note");
+
+                    b.HasKey("StudentId", "CourseClass");
+
+                    b.HasIndex("CourseClass");
+
+                    b.ToTable("student_course_classes", (string)null);
+                });
+
+            modelBuilder.Entity("QuizSystem_backend.Models.StudentExam", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CourseClass")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("course_class");
+
+                    b.Property<int>("DurationMinutes")
                         .HasColumnType("int")
-                        .HasColumnName("subject_id");
+                        .HasColumnName("duration_minutes");
 
-                    b.Property<DateTime>("ExamDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("exam_date");
+                    b.Property<Guid>("ExamId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("exam_id");
 
-                    b.HasKey("RoomExamId", "SubjectId");
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("status");
 
-                    b.HasIndex("SubjectId");
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("student_id");
 
-                    b.ToTable("RoomExamSubjects");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExamId");
+
+                    b.HasIndex("StudentId", "CourseClass");
+
+                    b.ToTable("student_exams", (string)null);
+                });
+
+            modelBuilder.Entity("QuizSystem_backend.Models.StudentExamDetail", b =>
+                {
+                    b.Property<Guid>("AnswerId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("answer_id");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("question_id");
+
+                    b.Property<Guid>("StudentExamId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("student_exam_id");
+
+                    b.HasKey("AnswerId", "QuestionId", "StudentExamId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("StudentExamId");
+
+                    b.ToTable("student_exam_details", (string)null);
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Subject", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int")
-                        .HasColumnName("department_id");
+                    b.Property<Guid>("FacutlyId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("facutly_id");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("name");
 
                     b.Property<int>("Status")
@@ -396,47 +496,24 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnName("status");
 
                     b.Property<string>("SubjectCode")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
                         .HasColumnName("subject_code");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("FacutlyId");
 
-                    b.ToTable("Subjects");
-                });
-
-            modelBuilder.Entity("QuizSystem_backend.Models.TeacherSubjectClass", b =>
-                {
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int")
-                        .HasColumnName("subject_id");
-
-                    b.Property<int>("ClassId")
-                        .HasColumnType("int")
-                        .HasColumnName("class_id");
-
-                    b.HasKey("TeacherId", "SubjectId", "ClassId");
-
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("TeacherSubjectClasses");
+                    b.ToTable("subjects", (string)null);
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AvatarUrl")
                         .IsRequired()
@@ -480,12 +557,12 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(15)")
                         .HasColumnName("phone_number");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int>("Role")
                         .HasColumnType("int")
-                        .HasColumnName("role_id");
+                        .HasColumnName("role");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit")
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
                         .HasColumnName("status");
 
                     b.Property<string>("Username")
@@ -499,12 +576,10 @@ namespace QuizSystem_backend.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("RoleId");
-
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("users", (string)null);
 
                     b.UseTptMappingStrategy();
                 });
@@ -513,30 +588,31 @@ namespace QuizSystem_backend.Migrations
                 {
                     b.HasBaseType("QuizSystem_backend.Models.User");
 
-                    b.Property<int>("ClassId")
-                        .HasColumnType("int")
-                        .HasColumnName("class_id");
+                    b.Property<Guid>("FacutlyId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("facutly_id");
 
                     b.Property<bool>("IsFirstTimeLogin")
                         .HasColumnType("bit")
                         .HasColumnName("is_first_time_login");
 
                     b.Property<string>("StudentCode")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("student_code");
 
-                    b.HasIndex("ClassId");
+                    b.HasIndex("FacutlyId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("students", (string)null);
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Teacher", b =>
                 {
                     b.HasBaseType("QuizSystem_backend.Models.User");
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("FacutlyId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("department_id");
 
                     b.Property<bool>("IsFirstTimeLogin")
@@ -544,13 +620,14 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnName("is_first_time_login");
 
                     b.Property<string>("TeacherCode")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("teacher_code");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("FacutlyId");
 
-                    b.ToTable("Teachers", (string)null);
+                    b.ToTable("teachers", (string)null);
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Answer", b =>
@@ -564,15 +641,34 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("QuizSystem_backend.Models.Class", b =>
+            modelBuilder.Entity("QuizSystem_backend.Models.Chapter", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.Department", "Department")
-                        .WithMany("Classes")
-                        .HasForeignKey("DepartmentId")
+                    b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
+                        .WithMany("Chapters")
+                        .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Department");
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("QuizSystem_backend.Models.CourseClass", b =>
+                {
+                    b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
+                        .WithMany("Courses")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QuizSystem_backend.Models.Teacher", "Teacher")
+                        .WithMany("CourseClasses")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Exam", b =>
@@ -583,15 +679,7 @@ namespace QuizSystem_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
-                        .WithMany("Exams")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("RoomExam");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.ExamQuestion", b =>
@@ -615,6 +703,12 @@ namespace QuizSystem_backend.Migrations
 
             modelBuilder.Entity("QuizSystem_backend.Models.Question", b =>
                 {
+                    b.HasOne("QuizSystem_backend.Models.Chapter", "Chapter")
+                        .WithMany("Question")
+                        .HasForeignKey("ChapterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("QuizSystem_backend.Models.Teacher", "Teacher")
                         .WithMany("Questions")
                         .HasForeignKey("CreatedBy")
@@ -626,6 +720,8 @@ namespace QuizSystem_backend.Migrations
                         .HasForeignKey("QuestionBankId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Chapter");
 
                     b.Navigation("QuestionBank");
 
@@ -643,79 +739,98 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("QuizSystem_backend.Models.RoomExamSubject", b =>
+            modelBuilder.Entity("QuizSystem_backend.Models.RoomExam", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.RoomExam", "RoomExam")
-                        .WithMany("RoomExamSubjects")
-                        .HasForeignKey("RoomExamId")
+                    b.HasOne("QuizSystem_backend.Models.CourseClass", "Course")
+                        .WithMany("RoomExams")
+                        .HasForeignKey("CourseClassId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("QuizSystem_backend.Models.StudentCourseClass", b =>
+                {
+                    b.HasOne("QuizSystem_backend.Models.CourseClass", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseClass")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QuizSystem_backend.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("QuizSystem_backend.Models.StudentExam", b =>
+                {
+                    b.HasOne("QuizSystem_backend.Models.Exam", "Exam")
+                        .WithMany()
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QuizSystem_backend.Models.StudentCourseClass", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId", "CourseClass")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("QuizSystem_backend.Models.StudentExamDetail", b =>
+                {
+                    b.HasOne("QuizSystem_backend.Models.Answer", "Answer")
+                        .WithMany()
+                        .HasForeignKey("AnswerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QuizSystem_backend.Models.Question", "Question")
+                        .WithMany("StudentExamDetails")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QuizSystem_backend.Models.StudentExam", "StudentExam")
+                        .WithMany("StudentExamDetails")
+                        .HasForeignKey("StudentExamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
-                        .WithMany("RoomExamSubjects")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Answer");
 
-                    b.Navigation("RoomExam");
+                    b.Navigation("Question");
 
-                    b.Navigation("Subject");
+                    b.Navigation("StudentExam");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Subject", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.Department", "Department")
+                    b.HasOne("QuizSystem_backend.Models.Facutly", "Facutly")
                         .WithMany("Subjects")
-                        .HasForeignKey("DepartmentId")
+                        .HasForeignKey("FacutlyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("QuizSystem_backend.Models.TeacherSubjectClass", b =>
-                {
-                    b.HasOne("QuizSystem_backend.Models.Class", "Class")
-                        .WithMany("TeacherSubjectClasses")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
-                        .WithMany("TeacherSubjectClasses")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("QuizSystem_backend.Models.Teacher", "Teacher")
-                        .WithMany("TeacherSubjectClasses")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Class");
-
-                    b.Navigation("Subject");
-
-                    b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("QuizSystem_backend.Models.User", b =>
-                {
-                    b.HasOne("QuizSystem_backend.Models.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
+                    b.Navigation("Facutly");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Student", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.Class", "Class")
+                    b.HasOne("QuizSystem_backend.Models.Facutly", "Facutly")
                         .WithMany("Students")
-                        .HasForeignKey("ClassId")
+                        .HasForeignKey("FacutlyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -725,14 +840,14 @@ namespace QuizSystem_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Class");
+                    b.Navigation("Facutly");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Teacher", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.Department", "Department")
+                    b.HasOne("QuizSystem_backend.Models.Facutly", "Department")
                         .WithMany("Teachers")
-                        .HasForeignKey("DepartmentId")
+                        .HasForeignKey("FacutlyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -745,20 +860,14 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("QuizSystem_backend.Models.Class", b =>
+            modelBuilder.Entity("QuizSystem_backend.Models.Chapter", b =>
                 {
-                    b.Navigation("Students");
-
-                    b.Navigation("TeacherSubjectClasses");
+                    b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("QuizSystem_backend.Models.Department", b =>
+            modelBuilder.Entity("QuizSystem_backend.Models.CourseClass", b =>
                 {
-                    b.Navigation("Classes");
-
-                    b.Navigation("Subjects");
-
-                    b.Navigation("Teachers");
+                    b.Navigation("RoomExams");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Exam", b =>
@@ -766,11 +875,22 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("ExamQuestions");
                 });
 
+            modelBuilder.Entity("QuizSystem_backend.Models.Facutly", b =>
+                {
+                    b.Navigation("Students");
+
+                    b.Navigation("Subjects");
+
+                    b.Navigation("Teachers");
+                });
+
             modelBuilder.Entity("QuizSystem_backend.Models.Question", b =>
                 {
                     b.Navigation("Answers");
 
                     b.Navigation("ExamQuestions");
+
+                    b.Navigation("StudentExamDetails");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.QuestionBank", b =>
@@ -778,34 +898,30 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("questions");
                 });
 
-            modelBuilder.Entity("QuizSystem_backend.Models.Role", b =>
-                {
-                    b.Navigation("Users");
-                });
-
             modelBuilder.Entity("QuizSystem_backend.Models.RoomExam", b =>
                 {
                     b.Navigation("Exams");
+                });
 
-                    b.Navigation("RoomExamSubjects");
+            modelBuilder.Entity("QuizSystem_backend.Models.StudentExam", b =>
+                {
+                    b.Navigation("StudentExamDetails");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Subject", b =>
                 {
-                    b.Navigation("Exams");
+                    b.Navigation("Chapters");
+
+                    b.Navigation("Courses");
 
                     b.Navigation("QuestionBanks");
-
-                    b.Navigation("RoomExamSubjects");
-
-                    b.Navigation("TeacherSubjectClasses");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Teacher", b =>
                 {
-                    b.Navigation("Questions");
+                    b.Navigation("CourseClasses");
 
-                    b.Navigation("TeacherSubjectClasses");
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

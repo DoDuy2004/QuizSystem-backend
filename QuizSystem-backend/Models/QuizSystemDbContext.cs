@@ -1,35 +1,38 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.Models
 {
     public class QuizSystemDbContext : DbContext
     {
-        public QuizSystemDbContext(DbContextOptions<QuizSystemDbContext> options) : base(options) { }
+        public QuizSystemDbContext(DbContextOptions<QuizSystemDbContext> options)
+            : base(options)
+        {
+        }
 
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Student> Students { get; set; }
-        public virtual DbSet<Teacher> Teachers { get; set; }
-        public virtual DbSet<Class> Classes { get; set; }
-        public virtual DbSet<Department> Departments { get; set; }
-        public virtual DbSet<Exam> Exams { get; set; }
-        public virtual DbSet<Subject> Subjects { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<Answer> Answers { get; set; }
-        public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
-        public virtual DbSet<RoomExamSubject> RoomExamSubjects { get; set; }
-        public virtual DbSet<Question> Questions { get; set; }
+        // DbSets cho các entity
+        public DbSet<User> Users { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<Chapter> Chapters { get; set; }
+        public DbSet<CourseClass> CourseClasses { get; set; }
+        public DbSet<Exam> Exams { get; set; }
+        public DbSet<ExamQuestion> ExamQuestions { get; set; }
+        public DbSet<Facutly> Facutlies { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<QuestionBank> QuestionBanks { get; set; }
         public DbSet<RoomExam> RoomExams { get; set; }
-        public DbSet<TeacherSubjectClass> TeacherSubjectClasses { get; set; }
+        public DbSet<StudentCourseClass> StudentCourseClasses { get; set; }
+        public DbSet<StudentExam> StudentExams { get; set; }
+        public DbSet<StudentExamDetail> StudentExamDetails { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
+            // User
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("Users"); // Cấu hình rõ TPT
-
+                entity.ToTable("users");
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Id)
@@ -71,7 +74,7 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("avatar_url")
                     .HasMaxLength(255);
 
-                entity.Property(e => e.Status)
+                entity.Property(s => s.Status)
                     .HasColumnName("status");
 
                 entity.Property(e => e.PasswordHash)
@@ -83,18 +86,71 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("created_at")
                     .IsRequired();
 
-                entity.Property(e => e.RoleId)
-                    .HasColumnName("role_id")
+                entity.Property(e => e.Role)
+                    .HasColumnName("role")
+                    .IsRequired();
+            });
+
+            // Student (TPT inheritance from User)
+            modelBuilder.Entity<Student>(entity =>
+            {
+                entity.ToTable("students");
+                entity.HasBaseType<User>();
+
+                entity.Property(s => s.StudentCode)
+                    .HasColumnName("student_code")
+                    .HasMaxLength(50);
+
+                entity.Property(s => s.IsFirstTimeLogin)
+                    .HasColumnName("is_first_time_login");
+
+                entity.Property(s => s.FacutlyId)
+                    .HasColumnName("facutly_id")
                     .IsRequired();
 
-                entity.HasOne(e => e.Role)
-                    .WithMany(r => r.Users)
-                    .HasForeignKey(e => e.RoleId)
+                entity.HasOne(s => s.Facutly)
+                    .WithMany(f => f.Students)
+                    .HasForeignKey(s => s.FacutlyId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
+            // Teacher (TPT inheritance from User)
+            modelBuilder.Entity<Teacher>(entity =>
+            {
+                entity.ToTable("teachers");
+                entity.HasBaseType<User>();
+
+                entity.Property(t => t.TeacherCode)
+                    .HasColumnName("teacher_code")
+                    .HasMaxLength(50);
+
+                entity.Property(t => t.IsFirstTimeLogin)
+                    .HasColumnName("is_first_time_login");
+
+                entity.Property(t => t.FacutlyId)
+                    .HasColumnName("department_id")
+                    .IsRequired();
+
+                entity.HasOne(t => t.Department)
+                    .WithMany(f => f.Teachers)
+                    .HasForeignKey(t => t.FacutlyId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(t => t.Questions)
+                    .WithOne(q => q.Teacher)
+                    .HasForeignKey(q => q.CreatedBy)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(t => t.CourseClasses)
+                    .WithOne(cc => cc.Teacher)
+                    .HasForeignKey(cc => cc.TeacherId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Answer
             modelBuilder.Entity<Answer>(entity =>
             {
+                entity.ToTable("answers");
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Id)
@@ -112,7 +168,7 @@ namespace QuizSystem_backend.Models
                 entity.Property(e => e.AnswerOrder)
                     .HasColumnName("answer_order");
 
-                entity.Property(e => e.Status)
+                entity.Property(s => s.Status)
                     .HasColumnName("status");
 
                 entity.Property(e => e.QuestionId)
@@ -125,8 +181,47 @@ namespace QuizSystem_backend.Models
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<Class>(entity =>
+            // Chapter
+            modelBuilder.Entity<Chapter>(entity =>
             {
+                entity.ToTable("chapters");
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Description)
+                    .HasColumnName("description")
+                    .HasMaxLength(500);
+
+                entity.Property(s => s.Status)
+                    .HasColumnName("status");
+
+                entity.Property(e => e.SubjectId)
+                    .HasColumnName("subject_id")
+                    .IsRequired();
+
+                entity.HasOne(e => e.Subject)
+                    .WithMany(s => s.Chapters)
+                    .HasForeignKey(e => e.SubjectId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.Question)
+                    .WithOne(q => q.Chapter)
+                    .HasForeignKey(q => q.ChapterId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // CourseClass
+            modelBuilder.Entity<CourseClass>(entity =>
+            {
+                entity.ToTable("course_classes");
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Id)
@@ -146,69 +241,53 @@ namespace QuizSystem_backend.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.DepartmentId)
-                    .HasColumnName("department_id")
-                    .IsRequired();
+                entity.Property(e => e.Credit)
+                    .HasColumnName("credit");
 
-                entity.Property(e => e.Status)
+                entity.Property(s => s.Status)
                     .HasColumnName("status");
 
-                entity.HasOne(e => e.Department)
-                    .WithMany(d => d.Classes)
-                    .HasForeignKey(e => e.DepartmentId)
+                entity.Property(e => e.TeacherId)
+                    .HasColumnName("teacher_id")
+                    .IsRequired();
+
+                entity.Property(e => e.SubjectId)
+                    .HasColumnName("subject_id")
+                    .IsRequired();
+
+                entity.HasOne(e => e.Teacher)
+                    .WithMany(t => t.CourseClasses)
+                    .HasForeignKey(e => e.TeacherId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Subject)
+                    .WithMany(s => s.Courses)
+                    .HasForeignKey(e => e.SubjectId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.RoomExams)
+                    .WithOne(re => re.Course)
+                    .HasForeignKey(re => re.CourseClassId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<Department>(entity =>
+            // Exam
+            modelBuilder.Entity<Exam>(entity =>
             {
+                entity.ToTable("exams");
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.DepartmentCode)
-                    .HasColumnName("department_code")
+                entity.Property(e => e.ExamCode)
+                    .HasColumnName("exam_code")
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.HasIndex(e => e.DepartmentCode)
+                entity.HasIndex(e => e.ExamCode)
                     .IsUnique();
-
-                entity.Property(e => e.Name)
-                    .HasColumnName("name")
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.Status)
-                    .HasColumnName("status");
-
-                entity.HasMany(e => e.Teachers)
-                    .WithOne(t => t.Department)
-                    .HasForeignKey(t => t.DepartmentId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasMany(e => e.Classes)
-                    .WithOne(c => c.Department)
-                    .HasForeignKey(c => c.DepartmentId)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
-
-            modelBuilder.Entity<Exam>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedOnAdd();
-
-                //entity.Property(e => e.ExamCode)
-                //    .HasColumnName("exam_code")
-                //    .IsRequired()
-                //    .HasMaxLength(20);
-
-                //entity.HasIndex(e => e.ExamCode)
-                //    .IsUnique();
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
@@ -220,35 +299,23 @@ namespace QuizSystem_backend.Models
                     .IsRequired();
 
                 entity.Property(e => e.DurationMinutes)
-                    .HasColumnName("duration_minutes")
-                    .IsRequired();
+                    .HasColumnName("duration_minutes");
 
                 entity.Property(e => e.NumberOfQuestions)
-                    .HasColumnName("number_of_questions")
-                    .IsRequired();
+                    .HasColumnName("number_of_questions");
 
                 entity.Property(e => e.TotalScore)
-                    .HasColumnName("total_score")
-                    .IsRequired();
+                    .HasColumnName("total_score");
 
                 entity.Property(e => e.RoomExamId)
-                    .HasColumnName("room_exam_id") // Sửa từ examsession_id thành exam_session_id
+                    .HasColumnName("room_exam_id")
                     .IsRequired();
 
-                entity.Property(e => e.SubjectId)
-                    .HasColumnName("subject_id")
-                    .IsRequired();
-
-                entity.Property(e => e.Status)
+                entity.Property(s => s.Status)
                     .HasColumnName("status");
 
-                entity.HasOne(e => e.Subject)
-                    .WithMany(s => s.Exams)
-                    .HasForeignKey(e => e.SubjectId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
                 entity.HasOne(e => e.RoomExam)
-                    .WithMany(es => es.Exams)
+                    .WithMany(re => re.Exams)
                     .HasForeignKey(e => e.RoomExamId)
                     .OnDelete(DeleteBehavior.Cascade);
 
@@ -258,23 +325,24 @@ namespace QuizSystem_backend.Models
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+            // ExamQuestion
             modelBuilder.Entity<ExamQuestion>(entity =>
             {
+                entity.ToTable("exam_questions");
                 entity.HasKey(eq => new { eq.ExamId, eq.QuestionId });
 
                 entity.Property(eq => eq.Order)
-                    .HasColumnName("order")
-                    .IsRequired();
+                    .HasColumnName("order");
 
                 entity.Property(eq => eq.Score)
-                    .HasColumnName("score")
+                    .HasColumnName("score");
+
+                entity.Property(eq => eq.ExamId)
+                    .HasColumnName("exam_id")
                     .IsRequired();
 
                 entity.Property(eq => eq.QuestionId)
                     .HasColumnName("question_id")
-                    .IsRequired();
-                entity.Property(eq => eq.ExamId)
-                    .HasColumnName("exam_id")
                     .IsRequired();
 
                 entity.HasOne(eq => eq.Exam)
@@ -288,61 +356,52 @@ namespace QuizSystem_backend.Models
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<RoomExam>(entity =>
+            // Facutly
+            modelBuilder.Entity<Facutly>(entity =>
             {
+                entity.ToTable("facutlies");
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .ValueGeneratedOnAdd();
 
+                entity.Property(e => e.FacutlyCode)
+                    .HasColumnName("facutly_code")
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.HasIndex(e => e.FacutlyCode)
+                    .IsUnique();
+
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
                     .IsRequired()
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.StartDate)
-                    .HasColumnName("start_date")
-                    .IsRequired();
-
-                entity.Property(e => e.EndDate)
-                    .HasColumnName("end_date")
-                    .IsRequired();
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Status)
-                    .HasColumnName("status")
-                    .IsRequired();
+                    .HasColumnName("status");
+
+                entity.HasMany(e => e.Subjects)
+                    .WithOne(s => s.Facutly)
+                    .HasForeignKey(s => s.FacutlyId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.Teachers)
+                    .WithOne(t => t.Department)
+                    .HasForeignKey(t => t.FacutlyId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.Students)
+                    .WithOne(s => s.Facutly)
+                    .HasForeignKey(s => s.FacutlyId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<RoomExamSubject>(entity =>
-            {
-                entity.HasKey(e => new { e.RoomExamId, e.SubjectId });
-
-                entity.Property(e => e.ExamDate)
-                    .HasColumnName("exam_date")
-                    .IsRequired();
-
-                entity.Property(e => e.RoomExamId)
-                    .HasColumnName("room_exam_id")
-                    .IsRequired();
-
-                entity.Property(e => e.SubjectId)
-                    .HasColumnName("subject_id")
-                    .IsRequired();
-
-                entity.HasOne(e => e.RoomExam)
-                    .WithMany(es => es.RoomExamSubjects)
-                    .HasForeignKey(e => e.RoomExamId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasOne(e => e.Subject)
-                    .WithMany(s => s.RoomExamSubjects)
-                    .HasForeignKey(e => e.SubjectId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
+            // Question
             modelBuilder.Entity<Question>(entity =>
             {
+                entity.ToTable("questions");
                 entity.HasKey(q => q.Id);
 
                 entity.Property(q => q.Id)
@@ -351,12 +410,10 @@ namespace QuizSystem_backend.Models
 
                 entity.Property(q => q.Content)
                     .HasColumnName("content")
-                    .IsRequired(false)
                     .HasMaxLength(1000);
 
-                entity.Property(q => q.Topic)
-                    .HasColumnName("topic")
-                    .IsRequired(false)
+                entity.Property(q => q.Image)
+                    .HasColumnName("image")
                     .HasMaxLength(255);
 
                 entity.Property(q => q.CreatedBy)
@@ -365,16 +422,25 @@ namespace QuizSystem_backend.Models
 
                 entity.Property(q => q.Type)
                     .HasColumnName("type")
-                    .IsRequired(false)
                     .HasMaxLength(50);
 
                 entity.Property(q => q.Difficulty)
-                    .HasColumnName("difficulty") // Sửa từ difficutly thành difficulty
-                    .IsRequired(false)
+                    .HasColumnName("difficulty")
                     .HasMaxLength(50);
 
-                entity.Property(q => q.Status)
-                    .HasColumnName("status")
+                entity.Property(s => s.Status)
+                    .HasColumnName("status");
+
+                entity.Property(q => q.Topic)
+                    .HasColumnName("topic")
+                    .HasMaxLength(255);
+
+                entity.Property(q => q.QuestionBankId)
+                    .HasColumnName("question_bank_id")
+                    .IsRequired();
+
+                entity.Property(q => q.ChapterId)
+                    .HasColumnName("chapter_id")
                     .IsRequired();
 
                 entity.HasOne(q => q.Teacher)
@@ -387,57 +453,222 @@ namespace QuizSystem_backend.Models
                     .HasForeignKey(eq => eq.QuestionId)
                     .OnDelete(DeleteBehavior.Cascade);
 
+                entity.HasMany(q => q.StudentExamDetails)
+                    .WithOne(sed => sed.Question)
+                    .HasForeignKey(sed => sed.QuestionId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(q => q.QuestionBank)
+                    .WithMany(qb => qb.questions)
+                    .HasForeignKey(q => q.QuestionBankId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(q => q.Chapter)
+                    .WithMany(c => c.Question)
+                    .HasForeignKey(q => q.ChapterId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
                 entity.HasMany(q => q.Answers)
                     .WithOne(a => a.Question)
                     .HasForeignKey(a => a.QuestionId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<Role>(entity =>
+            // QuestionBank
+            modelBuilder.Entity<QuestionBank>(entity =>
             {
-                entity.HasKey(r => r.Id);
+                entity.ToTable("question_banks");
+                entity.HasKey(qb => qb.Id);
 
-                entity.Property(r => r.Id)
+                entity.Property(qb => qb.Id)
                     .HasColumnName("id")
                     .ValueGeneratedOnAdd();
 
-                entity.Property(r => r.Name)
+                entity.Property(qb => qb.Name)
                     .HasColumnName("name")
-                    .IsRequired(false)
+                    .IsRequired()
                     .HasMaxLength(100);
 
-                entity.HasMany(r => r.Users)
-                    .WithOne(u => u.Role)
-                    .HasForeignKey(u => u.RoleId)
+                entity.Property(qb => qb.Description)
+                    .HasColumnName("description")
+                    .HasMaxLength(500);
+
+                entity.Property(s => s.Status)
+                    .HasColumnName("status");
+
+                entity.Property(qb => qb.SubjectId)
+                    .HasColumnName("subject_id")
+                    .IsRequired();
+
+                entity.HasMany(qb => qb.questions)
+                    .WithOne(q => q.QuestionBank)
+                    .HasForeignKey(q => q.QuestionBankId)
                     .OnDelete(DeleteBehavior.Cascade);
-            });
 
-            modelBuilder.Entity<Student>(entity =>
-            {
-                entity.ToTable("Students"); // Cấu hình rõ TPT
-                modelBuilder.Entity<Student>().HasBaseType<User>();
-
-                entity.Property(s => s.StudentCode)
-                    .HasColumnName("student_code")
-                    .IsRequired(false)
-                    .HasMaxLength(50);
-
-                entity.Property(s => s.IsFirstTimeLogin)
-                    .HasColumnName("is_first_time_login")
-                    .IsRequired();
-
-                entity.Property(s => s.ClassId)
-                    .HasColumnName("class_id")
-                    .IsRequired();
-
-                entity.HasOne(s => s.Class)
-                    .WithMany(c => c.Students)
-                    .HasForeignKey(s => s.ClassId)
+                entity.HasOne(qb => qb.Subject)
+                    .WithMany(s => s.QuestionBanks)
+                    .HasForeignKey(qb => qb.SubjectId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
+            // RoomExam
+            modelBuilder.Entity<RoomExam>(entity =>
+            {
+                entity.ToTable("room_exams");
+                entity.HasKey(re => re.Id);
+
+                entity.Property(re => re.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(re => re.Name)
+                    .HasColumnName("name")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(re => re.StartDate)
+                    .HasColumnName("start_date")
+                    .IsRequired();
+
+                entity.Property(re => re.EndDate)
+                    .HasColumnName("end_date")
+                    .IsRequired();
+
+                entity.Property(s => s.Status)
+                    .HasColumnName("status");
+
+                entity.Property(re => re.CourseClassId)
+                    .HasColumnName("course_class_id")
+                    .IsRequired();
+
+                entity.HasOne(re => re.Course)
+                    .WithMany(cc => cc.RoomExams)
+                    .HasForeignKey(re => re.CourseClassId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(re => re.Exams)
+                    .WithOne(e => e.RoomExam)
+                    .HasForeignKey(e => e.RoomExamId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // StudentCourseClass
+            modelBuilder.Entity<StudentCourseClass>(entity =>
+            {
+                entity.ToTable("student_course_classes");
+                entity.HasKey(scc => new { scc.StudentId, scc.CourseClass });
+
+                entity.Property(scc => scc.StudentId)
+                    .HasColumnName("student_id")
+                    .IsRequired();
+
+                entity.Property(scc => scc.CourseClass)
+                    .HasColumnName("course_class_id")
+                    .IsRequired();
+
+                entity.Property(scc => scc.Grade)
+                    .HasColumnName("grade");
+
+                entity.Property(scc => scc.note)
+                    .HasColumnName("note")
+                    .HasMaxLength(255);
+
+                entity.Property(s => s.Status)
+                    .HasColumnName("status");
+
+                entity.HasOne(scc => scc.Student)
+                    .WithMany()
+                    .HasForeignKey(scc => scc.StudentId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(scc => scc.Course)
+                    .WithMany()
+                    .HasForeignKey(scc => scc.CourseClass)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // StudentExam
+            modelBuilder.Entity<StudentExam>(entity =>
+            {
+                entity.ToTable("student_exams");
+                entity.HasKey(se => se.Id);
+
+                entity.Property(se => se.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(se => se.StudentId)
+                    .HasColumnName("student_id")
+                    .IsRequired();
+
+                entity.Property(se => se.CourseClass)
+                    .HasColumnName("course_class")
+                    .IsRequired();
+
+                entity.Property(se => se.ExamId)
+                    .HasColumnName("exam_id")
+                    .IsRequired();
+
+                entity.Property(se => se.DurationMinutes)
+                    .HasColumnName("duration_minutes");
+
+                entity.Property(s => s.Status)
+                    .HasColumnName("status");
+
+                entity.HasOne(se => se.Student)
+                    .WithMany()
+                    .HasForeignKey(se => new { se.StudentId, se.CourseClass })
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(se => se.Exam)
+                    .WithMany()
+                    .HasForeignKey(se => se.ExamId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(se => se.StudentExamDetails)
+                    .WithOne(sed => sed.StudentExam)
+                    .HasForeignKey(sed => sed.StudentExamId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // StudentExamDetail
+            modelBuilder.Entity<StudentExamDetail>(entity =>
+            {
+                entity.ToTable("student_exam_details");
+                entity.HasKey(sed => new { sed.AnswerId, sed.QuestionId, sed.StudentExamId });
+
+                entity.Property(sed => sed.AnswerId)
+                    .HasColumnName("answer_id")
+                    .IsRequired();
+
+                entity.Property(sed => sed.QuestionId)
+                    .HasColumnName("question_id")
+                    .IsRequired();
+
+                entity.Property(sed => sed.StudentExamId)
+                    .HasColumnName("student_exam_id")
+                    .IsRequired();
+
+                entity.HasOne(sed => sed.Answer)
+                    .WithMany()
+                    .HasForeignKey(sed => sed.AnswerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(sed => sed.Question)
+                    .WithMany(q => q.StudentExamDetails)
+                    .HasForeignKey(sed => sed.QuestionId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(sed => sed.StudentExam)
+                    .WithMany(se => se.StudentExamDetails)
+                    .HasForeignKey(sed => sed.StudentExamId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Subject
             modelBuilder.Entity<Subject>(entity =>
             {
+                entity.ToTable("subjects");
                 entity.HasKey(s => s.Id);
 
                 entity.Property(s => s.Id)
@@ -446,136 +677,39 @@ namespace QuizSystem_backend.Models
 
                 entity.Property(s => s.SubjectCode)
                     .HasColumnName("subject_code")
-                    .IsRequired(false)
-                    .HasMaxLength(50);
+                    .HasMaxLength(20);
 
                 entity.Property(s => s.Name)
                     .HasColumnName("name")
-                    .IsRequired(false)
-                    .HasMaxLength(200);
+                    .HasMaxLength(100);
 
-                entity.Property(s => s.DepartmentId)
-                    .HasColumnName("department_id")
+                entity.Property(s => s.FacutlyId)
+                    .HasColumnName("facutly_id")
                     .IsRequired();
 
                 entity.Property(s => s.Status)
-                    .HasColumnName("status")
-                    .IsRequired();
+                    .HasColumnName("status");
 
-                entity.HasMany(s => s.Exams)
-                    .WithOne(e => e.Subject)
-                    .HasForeignKey(e => e.SubjectId)
+                entity.HasOne(s => s.Facutly)
+                    .WithMany(f => f.Subjects)
+                    .HasForeignKey(s => s.FacutlyId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(s => s.Department)
-                    .WithMany(d => d.Subjects)
-                    .HasForeignKey(s => s.DepartmentId)
+                entity.HasMany(s => s.Courses)
+                    .WithOne(cc => cc.Subject)
+                    .HasForeignKey(cc => cc.SubjectId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasMany(s => s.RoomExamSubjects)
-                    .WithOne(ess => ess.Subject)
-                    .HasForeignKey(ess => ess.SubjectId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasMany(s => s.TeacherSubjectClasses)
-                    .WithOne(tsc => tsc.Subject)
-                    .HasForeignKey(tsc => tsc.SubjectId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<Teacher>(entity =>
-            {
-                entity.ToTable("Teachers"); // Cấu hình rõ TPT
-                modelBuilder.Entity<Teacher>().HasBaseType<User>(); // Sửa từ Student thành Teacher
-
-                entity.Property(t => t.TeacherCode)
-                    .HasColumnName("teacher_code")
-                    .IsRequired(false)
-                    .HasMaxLength(50);
-
-                entity.Property(t => t.IsFirstTimeLogin)
-                    .HasColumnName("is_first_time_login")
-                    .IsRequired();
-
-                entity.Property(t => t.DepartmentId)
-                    .HasColumnName("department_id")
-                    .IsRequired();
-
-                entity.HasMany(t => t.Questions)
-                    .WithOne(q => q.Teacher)
-                    .HasForeignKey(q => q.CreatedBy)
+                entity.HasMany(s => s.QuestionBanks)
+                    .WithOne(qb => qb.Subject)
+                    .HasForeignKey(qb => qb.SubjectId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(t => t.Department)
-                    .WithMany(d => d.Teachers)
-                    .HasForeignKey(t => t.DepartmentId)
+                entity.HasMany(s => s.Chapters)
+                    .WithOne(c => c.Subject)
+                    .HasForeignKey(c => c.SubjectId)
                     .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasMany(t => t.TeacherSubjectClasses)
-                    .WithOne(tsc => tsc.Teacher)
-                    .HasForeignKey(tsc => tsc.TeacherId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<TeacherSubjectClass>(entity =>
-            {
-                entity.HasKey(tsc => new { tsc.TeacherId, tsc.SubjectId, tsc.ClassId });
-
-                entity.Property(eq => eq.SubjectId)
-                    .HasColumnName("subject_id")
-                    .IsRequired();
-
-                entity.Property(eq => eq.ClassId)
-                    .HasColumnName("class_id")
-                    .IsRequired();
-
-                entity.Property(eq => eq.ClassId)
-                    .HasColumnName("class_id")
-                    .IsRequired();
-
-                entity.HasOne(tsc => tsc.Teacher)
-                    .WithMany(t => t.TeacherSubjectClasses)
-                    .HasForeignKey(tsc => tsc.TeacherId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(tsc => tsc.Subject)
-                    .WithMany(s => s.TeacherSubjectClasses)
-                    .HasForeignKey(tsc => tsc.SubjectId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(tsc => tsc.Class)
-                    .WithMany(c => c.TeacherSubjectClasses)
-                    .HasForeignKey(tsc => tsc.ClassId)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
-
-            modelBuilder.Entity<QuestionBank>(entity =>
-            {
-                entity.HasKey(qb => qb.Id);
-
-                entity.Property(qb => qb.Name)
-                      .HasColumnName("name")
-                      .IsRequired()
-                      .HasMaxLength(255);
-
-                entity.Property(qb => qb.Description)
-                      .HasColumnName("description")
-                      .HasMaxLength(1000);
-
-                entity.Property(qb => qb.SubjectId)
-                      .IsRequired()
-                      .HasColumnName("subject_id");
-
-                entity.HasMany(qb => qb.questions)
-                      .WithOne(q => q.QuestionBank)
-                      .HasForeignKey(q => q.QuestionBankId);
-
-                entity.HasOne(qb => qb.Subject)
-                      .WithMany(s => s.QuestionBanks)
-                      .HasForeignKey(qb => qb.SubjectId)
-                      .OnDelete(DeleteBehavior.Restrict);
             });
         }
-        public DbSet<QuizSystem_backend.Models.GeneratedExam> GeneratedExam { get; set; } = default!;
     }
 }

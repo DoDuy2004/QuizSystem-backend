@@ -5,9 +5,9 @@ namespace QuizSystem_backend.Models
 {
     public class ExamQuestion
     {
-        public int ExamId { get; set; }
+        public Guid ExamId { get; set; }
 
-        public int QuestionId { get; set; }
+        public Guid QuestionId { get; set; }
         public int Order { get; set; } // thứ tự trong Exam
         public float Score { get; set; }
 

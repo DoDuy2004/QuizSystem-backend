@@ -8,9 +8,9 @@ namespace QuizSystem_backend.Models
     {
         public string StudentCode { get; set; } = string.Empty;
         public bool IsFirstTimeLogin { get; set; }
-        public int ClassId { get; set; }
+        public Guid FacutlyId { get; set; }
 
         // Navigation
-        public virtual Class Class { get; set; } = null!;
+        public virtual Facutly Facutly { get; set; } = null!;
     }
 }

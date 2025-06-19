@@ -11,11 +11,13 @@ namespace QuizSystem_backend.Models
         public int Credit { get; set; } // số tín chỉ
         public Status Status { get; set; }
         public Guid TeacherId { get; set; }
-        public Guid SubjectId { get; set; }
+        public string Subject { get; set; } = null!;
 
         // Navigation
         public virtual Teacher Teacher { get; set; } = null!;
-        public virtual Subject Subject { get; set; } = null!;
+        //public virtual Subject Subject { get; set; } = null!;
+        public virtual ICollection<Chapter> Chapters { get; set; } = null!;
+        public virtual ICollection<QuestionBank> QuestionBanks { get; set; } = null!;
         public virtual ICollection<RoomExam> RoomExams { get; set;} = null!;
 
     }

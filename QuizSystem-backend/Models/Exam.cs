@@ -10,9 +10,10 @@ namespace QuizSystem_backend.Models
         public DateTime StartDate { get; set; }
         public int DurationMinutes { get; set; }
         public int NumberOfQuestions { get; set; }
-        public float TotalScore { get; set; }
+        //public float TotalScore { get; set; }
         public Guid RoomExamId { get; set; }
         public Status Status { get; set; }
+        //public string Subject { get; set; } = null!;
 
         // Navigation
         public virtual RoomExam RoomExam { get; set; } = null!;

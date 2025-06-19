@@ -10,8 +10,6 @@ namespace QuizSystem_backend.Models
         public int AnswerOrder { get; set; }
         public Status Status { get; set; }
 
-        //public bool isChoose { get; set; }
-
         public Guid QuestionId { get; set; }
 
         // Navigation

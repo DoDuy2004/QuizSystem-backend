@@ -6,7 +6,7 @@ namespace QuizSystem_backend.Models
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid StudentId { get; set; }
-        public Guid CourseClass { get; set; }
+        public Guid CourseClassId { get; set; }
         public Guid ExamId { get; set; }
         public int DurationMinutes { get; set; }
         public Status Status { get; set; }

@@ -5,11 +5,11 @@ namespace QuizSystem_backend.Models
     public class StudentCourseClass
     {
         public Guid StudentId { get; set; }
-        public Guid CourseClass { get; set; }
+        public Guid CourseClassId { get; set; }
 
         public float? Grade { get; set; }
 
-        public string? note { get; set; } = string.Empty;
+        public string? Note { get; set; } = string.Empty;
 
         public Status Status { get; set; }
 

@@ -8,8 +8,10 @@ namespace QuizSystem_backend.Models
         public string Name { get; set; } = string.Empty;
         public string Description {  get; set; } = string.Empty;
         public Status Status { get; set; }
-        public Guid SubjectId { get; set; }
+        //public string Subject { get; set; } = null!;
+        public Guid CourseClassId { get; set; }
         public virtual ICollection<Question> questions { get; set; } = null!;
-        public virtual Subject Subject { get; set; } = null!;
+        //public virtual Subject Subject { get; set; } = null!;
+        public virtual CourseClass Course { get; set; } = null!;
     }
 }

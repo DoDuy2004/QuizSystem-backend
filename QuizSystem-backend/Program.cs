@@ -4,11 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Session;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Text.Json;
+using QuizSystem_backend.repositories;
+using QuizSystem_backend.services;
 //using QuizSystem_backend.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -67,6 +71,6 @@ app.UseSession();
 
 app.MapControllers();
 
-//SeedData.Initialize(app.Services);
+SeedData.Initialize(app.Services);
 
 app.Run();

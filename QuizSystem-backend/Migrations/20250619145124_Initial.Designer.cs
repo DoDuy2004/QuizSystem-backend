@@ -12,7 +12,7 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250619135804_Initial")]
+    [Migration("20250619145124_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -88,14 +88,9 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("trang_thai");
 
-                    b.Property<Guid?>("SubjectId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CourseClassId");
-
-                    b.HasIndex("SubjectId");
 
                     b.ToTable("Chuong", (string)null);
                 });
@@ -132,9 +127,6 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("mon_hoc");
 
-                    b.Property<Guid?>("SubjectId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("TeacherId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("ma_giao_vien");
@@ -143,8 +135,6 @@ namespace QuizSystem_backend.Migrations
 
                     b.HasIndex("ClassCode")
                         .IsUnique();
-
-                    b.HasIndex("SubjectId");
 
                     b.HasIndex("TeacherId");
 
@@ -223,28 +213,6 @@ namespace QuizSystem_backend.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("ChiTietDeThi", (string)null);
-                });
-
-            modelBuilder.Entity("QuizSystem_backend.Models.Facutly", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FacutlyCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Facutlies");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Question", b =>
@@ -338,14 +306,9 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("trang_thai");
 
-                    b.Property<Guid?>("SubjectId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CourseClassId");
-
-                    b.HasIndex("SubjectId");
 
                     b.ToTable("NganHangCauHoi", (string)null);
                 });
@@ -475,33 +438,6 @@ namespace QuizSystem_backend.Migrations
                     b.ToTable("ChiTietKetQuaBaiThi", (string)null);
                 });
 
-            modelBuilder.Entity("QuizSystem_backend.Models.Subject", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FacutlyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SubjectCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FacutlyId");
-
-                    b.ToTable("Subjects");
-                });
-
             modelBuilder.Entity("QuizSystem_backend.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -588,9 +524,6 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("khoa");
 
-                    b.Property<Guid?>("FacutlyId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsFirstTimeLogin")
                         .HasColumnType("bit")
                         .HasColumnName("dang_nhap_lan_dau");
@@ -600,8 +533,6 @@ namespace QuizSystem_backend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ma_sinh_vien");
-
-                    b.HasIndex("FacutlyId");
 
                     b.ToTable("SinhVien", (string)null);
                 });
@@ -616,9 +547,6 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("khoa");
 
-                    b.Property<Guid?>("FacutlyId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsFirstTimeLogin")
                         .HasColumnType("bit")
                         .HasColumnName("dang_nhap_lan_dau");
@@ -628,8 +556,6 @@ namespace QuizSystem_backend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ma_giao_vien");
-
-                    b.HasIndex("FacutlyId");
 
                     b.ToTable("GiangVien", (string)null);
                 });
@@ -653,19 +579,11 @@ namespace QuizSystem_backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("QuizSystem_backend.Models.Subject", null)
-                        .WithMany("Chapters")
-                        .HasForeignKey("SubjectId");
-
                     b.Navigation("Course");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.CourseClass", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.Subject", null)
-                        .WithMany("Courses")
-                        .HasForeignKey("SubjectId");
-
                     b.HasOne("QuizSystem_backend.Models.Teacher", "Teacher")
                         .WithMany("CourseClasses")
                         .HasForeignKey("TeacherId")
@@ -739,10 +657,6 @@ namespace QuizSystem_backend.Migrations
                         .HasForeignKey("CourseClassId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("QuizSystem_backend.Models.Subject", null)
-                        .WithMany("QuestionBanks")
-                        .HasForeignKey("SubjectId");
 
                     b.Navigation("Course");
                 });
@@ -823,23 +737,8 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("StudentExam");
                 });
 
-            modelBuilder.Entity("QuizSystem_backend.Models.Subject", b =>
-                {
-                    b.HasOne("QuizSystem_backend.Models.Facutly", "Facutly")
-                        .WithMany("Subjects")
-                        .HasForeignKey("FacutlyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Facutly");
-                });
-
             modelBuilder.Entity("QuizSystem_backend.Models.Student", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.Facutly", null)
-                        .WithMany("Students")
-                        .HasForeignKey("FacutlyId");
-
                     b.HasOne("QuizSystem_backend.Models.User", null)
                         .WithOne()
                         .HasForeignKey("QuizSystem_backend.Models.Student", "Id")
@@ -849,10 +748,6 @@ namespace QuizSystem_backend.Migrations
 
             modelBuilder.Entity("QuizSystem_backend.Models.Teacher", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.Facutly", null)
-                        .WithMany("Teachers")
-                        .HasForeignKey("FacutlyId");
-
                     b.HasOne("QuizSystem_backend.Models.User", null)
                         .WithOne()
                         .HasForeignKey("QuizSystem_backend.Models.Teacher", "Id")
@@ -879,15 +774,6 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("ExamQuestions");
                 });
 
-            modelBuilder.Entity("QuizSystem_backend.Models.Facutly", b =>
-                {
-                    b.Navigation("Students");
-
-                    b.Navigation("Subjects");
-
-                    b.Navigation("Teachers");
-                });
-
             modelBuilder.Entity("QuizSystem_backend.Models.Question", b =>
                 {
                     b.Navigation("Answers");
@@ -910,15 +796,6 @@ namespace QuizSystem_backend.Migrations
             modelBuilder.Entity("QuizSystem_backend.Models.StudentExam", b =>
                 {
                     b.Navigation("StudentExamDetails");
-                });
-
-            modelBuilder.Entity("QuizSystem_backend.Models.Subject", b =>
-                {
-                    b.Navigation("Chapters");
-
-                    b.Navigation("Courses");
-
-                    b.Navigation("QuestionBanks");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Teacher", b =>

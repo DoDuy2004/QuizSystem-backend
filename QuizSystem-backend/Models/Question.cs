@@ -1,9 +1,25 @@
-﻿using QuizSystem_backend.Enums;
+﻿using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Enums;
 
 namespace QuizSystem_backend.Models
 {
     public class Question
     {
+        public Question() { }
+
+        public Question(QuestionDto dto) 
+        {
+            Id = dto.Id;
+            Content = dto.Content;
+            Image = dto.Image!;
+            Difficulty = dto.Difficulty;
+            CreatedBy = dto.Teacher.Id;
+            Type = dto.Type;
+            Topic = dto.Topic;
+            ChapterId = dto.Chapter.Id;
+            QuestionBankId = dto.QuestionBank.Id;
+        }
+
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Content { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
@@ -21,7 +37,7 @@ namespace QuizSystem_backend.Models
         public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = null!;
         public virtual ICollection<StudentExamDetail> StudentExamDetails { get; set; } = null!;
         public virtual QuestionBank QuestionBank { get; set; } = null!;
-        public virtual ICollection<Answer> Answers { get; set; } = new List<Answer>();
+        public virtual ICollection<Answer> Answers { get; set; } = null!;
         public virtual Chapter Chapter { get; set; } = null!;
     }
 }

@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuizSystem_backend.DTOs;
 using QuizSystem_backend.Models;
+using QuizSystem_backend.services;
 
 namespace QuizSystem_backend.Controllers
 {
@@ -13,95 +15,123 @@ namespace QuizSystem_backend.Controllers
     [ApiController]
     public class QuestionsController : ControllerBase
     {
-        private readonly QuizSystemDbContext _context;
+        //private readonly QuizSystemDbContext _context;
+        private readonly IQuestionService _questionService;
 
-        public QuestionsController(QuizSystemDbContext context)
+        public QuestionsController(IQuestionService questionService)
         {
-            _context = context;
+            _questionService = questionService;
         }
 
         // GET: api/Questions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
+        public async Task<ActionResult> GetQuestions()
         {
-            return await _context.Questions.ToListAsync();
+            try
+            {
+                var result = await _questionService.GetQuestionsAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
         }
 
         // GET: api/Questions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Question>> GetQuestion(Guid id)
+        public async Task<ActionResult> GetQuestion(Guid id)
         {
-            var question = await _context.Questions.FindAsync(id);
-
-            if (question == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == Guid.Empty)
+                {
+                    return BadRequest(new { message = "Invalid question ID." });
+                }
 
-            return question;
+                var question = await _questionService.GetQuestionByIdAsync(id);
+
+                if (question == null)
+                {
+                    return NotFound(new { message = $"Question with ID {id} not found." });
+                }
+
+                return Ok(question);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
         }
 
         // PUT: api/Questions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutQuestion(Guid id, Question question)
+        public async Task<ActionResult> PutQuestion(Guid id, [FromBody] QuestionDto dto)
         {
-            if (id != question.Id)
+            if (!ModelState.IsValid || id != dto.Id)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
-
-            _context.Entry(question).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                var updatedQuestion = await _questionService.UpdateQuestionAsync(id, dto);
+                if (updatedQuestion == null)
+                {
+                    return NotFound(new { message = $"Question with ID {id} not found." });
+                }
+
+                return Ok(updatedQuestion);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!QuestionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return StatusCode(409, new { message = "Concurrency conflict occurred while updating." });
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error.", error = ex.Message });
+            }
         }
+
 
         // POST: api/Questions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Question>> PostQuestion(Question question)
+        public async Task<ActionResult> PostQuestion([FromBody] QuestionDto dto)
         {
-            _context.Questions.Add(question);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return CreatedAtAction("GetQuestion", new { id = question.Id }, question);
+            try
+            {
+                var newQuestion = await _questionService.AddQuestionAsync(dto);
+
+                return Ok(newQuestion);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error.", error = ex.Message });
+            }
         }
+
 
         // DELETE: api/Questions/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(Guid id)
         {
-            var question = await _context.Questions.FindAsync(id);
-            if (question == null)
-            {
-                return NotFound();
-            }
+            //var question = await _context.Questions.FindAsync(id);
+            //if (question == null)
+            //{
+            //    return NotFound();
+            //}
 
-            _context.Questions.Remove(question);
-            await _context.SaveChangesAsync();
+            //_context.Questions.Remove(question);
+            //await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool QuestionExists(Guid id)
-        {
-            return _context.Questions.Any(e => e.Id == id);
         }
     }
 }

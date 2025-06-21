@@ -1142,8 +1142,7 @@ namespace QuizSystem_backend.Models
                     .HasMaxLength(255);
 
                 entity.Property(q => q.CreatedBy)
-                    .HasColumnName("ma_nguoi_tao")
-                    .IsRequired();
+                    .HasColumnName("ma_nguoi_tao");
 
                 entity.Property(q => q.Type)
                     .HasColumnName("loai_cau_hoi")
@@ -1161,12 +1160,10 @@ namespace QuizSystem_backend.Models
                     .HasMaxLength(255);
 
                 entity.Property(q => q.QuestionBankId)
-                    .HasColumnName("ma_ngan_hang_cau_hoi")
-                    .IsRequired();
+                    .HasColumnName("ma_ngan_hang_cau_hoi");
 
                 entity.Property(q => q.ChapterId)
-                    .HasColumnName("ma_chuong")
-                    .IsRequired();
+                    .HasColumnName("ma_chuong");
 
                 entity.HasOne(q => q.Teacher)
                     .WithMany(t => t.Questions)

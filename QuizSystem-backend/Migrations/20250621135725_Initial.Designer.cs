@@ -12,7 +12,7 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250619145124_Initial")]
+    [Migration("20250621135725_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -222,7 +222,7 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("ChapterId")
+                    b.Property<Guid?>("ChapterId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("ma_chuong");
 
@@ -232,7 +232,7 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(1000)")
                         .HasColumnName("noi_dung");
 
-                    b.Property<Guid>("CreatedBy")
+                    b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("ma_nguoi_tao");
 
@@ -248,7 +248,7 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("hinh_anh");
 
-                    b.Property<Guid>("QuestionBankId")
+                    b.Property<Guid?>("QuestionBankId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("ma_ngan_hang_cau_hoi");
 
@@ -628,20 +628,17 @@ namespace QuizSystem_backend.Migrations
                     b.HasOne("QuizSystem_backend.Models.Chapter", "Chapter")
                         .WithMany("Question")
                         .HasForeignKey("ChapterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("QuizSystem_backend.Models.Teacher", "Teacher")
                         .WithMany("Questions")
                         .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("QuizSystem_backend.Models.QuestionBank", "QuestionBank")
                         .WithMany("questions")
                         .HasForeignKey("QuestionBankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Chapter");
 

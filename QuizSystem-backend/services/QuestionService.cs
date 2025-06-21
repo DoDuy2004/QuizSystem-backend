@@ -33,7 +33,9 @@ namespace QuizSystem_backend.services
 
             await _questionRepository.AddAsync(newQuestion);
 
-            return new QuestionDto(newQuestion);
+            var inserted = await _questionRepository.GetByIdAsync(newQuestion.Id);
+
+            return new QuestionDto(inserted);
         } 
 
         public async Task<QuestionDto> UpdateQuestionAsync(Guid id, QuestionDto dto)
@@ -48,11 +50,19 @@ namespace QuizSystem_backend.services
             updatedQuestion.Content = dto.Content;
             updatedQuestion.Image = dto.Image!;
             updatedQuestion.Difficulty = dto.Difficulty;
-            updatedQuestion.CreatedBy = dto.Teacher.Id;
-            updatedQuestion.ChapterId = dto.Chapter.Id;
+            updatedQuestion.CreatedBy = dto.Teacher!.Id;
+            updatedQuestion.ChapterId = dto.Chapter!.Id;
             updatedQuestion.Type = dto.Type;
             updatedQuestion.Topic = dto.Topic;
-            updatedQuestion.QuestionBankId = dto.QuestionBank.Id;
+            updatedQuestion.QuestionBankId = dto.QuestionBank!.Id;
+            updatedQuestion.Answers = dto.Answers!.Select(a => new Answer
+            {
+                Id = a.Id,
+                Content = a.Content,
+                IsCorrect = a.IsCorrect,
+                AnswerOrder = a.AnswerOrder,
+                QuestionId = dto.Id,
+            }).ToList();
 
             await _questionRepository.SaveChangesAsync();
 

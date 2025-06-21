@@ -1,6 +1,8 @@
 ﻿using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
+using System.Formats.Asn1;
 
 namespace QuizSystem_backend.services
 {
@@ -67,6 +69,20 @@ namespace QuizSystem_backend.services
             await _questionRepository.SaveChangesAsync();
 
             return new QuestionDto(updatedQuestion);
+        }
+
+        public async Task<bool> DeleteQuestionAsync(Guid id)
+        {
+            var question = await _questionRepository.GetByIdAsync(id);
+
+            if (question == null)
+                return false;
+
+            question.Status = Status.DELETED;
+
+            await _questionRepository.SaveChangesAsync();
+
+            return true;
         }
     }
 }

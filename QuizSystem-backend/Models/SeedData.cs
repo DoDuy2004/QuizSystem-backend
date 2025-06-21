@@ -59,6 +59,7 @@ namespace QuizSystem_backend.Models
                         Status = Status.ACTIVE,
                         PasswordHash = "hashedpassword2",
                         CreatedAt = currentDate,
+                        Facutly = "Công Nghệ Thông Tin",
                         Role = Role.TEACHER
                     };
                     context.Teachers.Add(teacher);
@@ -75,13 +76,14 @@ namespace QuizSystem_backend.Models
                         {
                             Id = Guid.NewGuid(),
                             Username = $"student{i}",
-                            FullName = $"Sinh viên {i} - Nguyễn Văn {i}",
+                            FullName = $"Đỗ Đình Duy {i}",
                             Email = $"student{i}@example.com",
                             PhoneNumber = $"01234567{i:00}",
                             Gender = i % 2 == 0, // Alternating gender
                             DateOfBirth = new DateTime(2003, i % 12 + 1, 15),
                             AvatarUrl = $"http://example.com/student{i}.jpg",
                             Status = Status.ACTIVE,
+                            Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = $"hashedpassword{i}",
                             CreatedAt = currentDate
                         };
@@ -100,9 +102,10 @@ namespace QuizSystem_backend.Models
                     {
                         Id = Guid.NewGuid(),
                         ClassCode = "CDTH22WEBC - PPLTHDT",
-                        Name = "Lập trình hướng đối tượng",
+                        Name = "CDTH22WEBC - PPLTHDT",
                         Credit = 3,
                         Status = Status.ACTIVE,
+                        Subject = "Lập trình hướng đối tượng",
                         TeacherId = teacherId
                     };
                     context.CourseClasses.Add(courseClass);

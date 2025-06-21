@@ -735,14 +735,14 @@ namespace QuizSystem_backend.Models
         public DbSet<CourseClass> CourseClasses { get; set; }
         public DbSet<Exam> Exams { get; set; }
         public DbSet<ExamQuestion> ExamQuestions { get; set; }
-        public DbSet<Facutly> Facutlies { get; set; }
+        //public DbSet<Facutly> Facutlies { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionBank> QuestionBanks { get; set; }
         public DbSet<RoomExam> RoomExams { get; set; }
         public DbSet<StudentCourseClass> StudentCourseClasses { get; set; }
         public DbSet<StudentExam> StudentExams { get; set; }
         public DbSet<StudentExamDetail> StudentExamDetails { get; set; }
-        public DbSet<Subject> Subjects { get; set; }
+        //public DbSet<Subject> Subjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

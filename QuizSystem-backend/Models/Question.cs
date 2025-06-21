@@ -17,6 +17,7 @@ namespace QuizSystem_backend.Models
             Type = dto.Type;
             Topic = dto.Topic;
             ChapterId = dto.Chapter!.Id;
+            Status = dto.Status;
             QuestionBankId = dto.QuestionBank!.Id;
             Answers = dto.Answers!.Select(a => new Answer
             {

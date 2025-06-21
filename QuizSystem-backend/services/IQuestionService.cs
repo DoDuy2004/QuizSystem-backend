@@ -9,5 +9,6 @@ namespace QuizSystem_backend.services
         Task<QuestionDto> AddQuestionAsync(QuestionDto dto);
         Task<QuestionDto> UpdateQuestionAsync(Guid id, QuestionDto dto);
         Task<QuestionDto> GetQuestionByIdAsync(Guid id);
+        Task<bool> DeleteQuestionAsync(Guid id);
     };
 }

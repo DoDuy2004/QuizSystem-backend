@@ -134,16 +134,26 @@ namespace QuizSystem_backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(Guid id)
         {
-            //var question = await _context.Questions.FindAsync(id);
-            //if (question == null)
-            //{
-            //    return NotFound();
-            //}
+            if (id == Guid.Empty)
+            {
+                return BadRequest();
+            }
 
-            //_context.Questions.Remove(question);
-            //await _context.SaveChangesAsync();
+            try
+            {
+                bool isDeleted = await _questionService.DeleteQuestionAsync(id);
 
-            return NoContent();
+                if(!isDeleted)
+                {
+                    return NotFound();
+                }
+
+                return Ok(new { message = "Deleted Successful" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error.", error = ex.Message });
+            }
         }
     }
 }

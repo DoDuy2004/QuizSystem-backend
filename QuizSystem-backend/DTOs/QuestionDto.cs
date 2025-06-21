@@ -1,4 +1,5 @@
 ﻿using Humanizer;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.DTOs
@@ -13,6 +14,7 @@ namespace QuizSystem_backend.DTOs
             Difficulty = question.Difficulty;
             Type = question.Type;
             Topic = question.Topic;
+            Status = question.Status;
             Teacher = new TeacherDto
             {
                 Id = question.Teacher.Id,
@@ -49,6 +51,7 @@ namespace QuizSystem_backend.DTOs
         public string Type { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string? Image { get; set; }
+        public Status Status { get; set; } = Status.ACTIVE;
         public string Difficulty { get; set; } = string.Empty;
         public TeacherDto? Teacher { get; set; } = null!;
         public ChapterDto? Chapter { get; set; } = null!;

@@ -4,7 +4,7 @@
     {
         public string TeacherCode { get; set; } = string.Empty;
         public bool IsFirstTimeLogin { get; set; }
-        public string Facutly { get; set; } = null!;
+        public string Facutly { get; set; } = string.Empty;
 
         // Navigation
         public virtual ICollection<Question> Questions { get; set; } = new List<Question>();

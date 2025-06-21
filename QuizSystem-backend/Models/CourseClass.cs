@@ -11,7 +11,7 @@ namespace QuizSystem_backend.Models
         public int Credit { get; set; } // số tín chỉ
         public Status Status { get; set; }
         public Guid TeacherId { get; set; }
-        public string Subject { get; set; } = null!;
+        public string Subject { get; set; } = string.Empty;
 
         // Navigation
         public virtual Teacher Teacher { get; set; } = null!;

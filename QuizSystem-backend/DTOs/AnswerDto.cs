@@ -6,5 +6,7 @@
         public string Content { get; set; } = string.Empty;
         public bool IsCorrect { get; set; }
         public int AnswerOrder { get; set; }
+
+        public Guid QuestionId { get; set; }
     }
 }

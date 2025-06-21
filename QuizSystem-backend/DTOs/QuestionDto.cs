@@ -40,18 +40,19 @@ namespace QuizSystem_backend.DTOs
                 Id = a.Id,
                 Content = a.Content,
                 IsCorrect = a.IsCorrect,
-                AnswerOrder = a.AnswerOrder
+                AnswerOrder = a.AnswerOrder,
+                QuestionId = a.QuestionId,
             }).ToList();
         }
         public Guid Id { get; set; }
-        public string Topic { get; set; } = null!;
-        public string Type { get; set; } = null!;
+        public string Topic { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string? Image { get; set; }
         public string Difficulty { get; set; } = string.Empty;
-        public TeacherDto Teacher { get; set; } = null!;
-        public ChapterDto Chapter { get; set; } = null!;
-        public QuestionBankDto QuestionBank { get; set; } = null!;
-        public List<AnswerDto> Answers { get; set; } = null!;
+        public TeacherDto? Teacher { get; set; } = null!;
+        public ChapterDto? Chapter { get; set; } = null!;
+        public QuestionBankDto? QuestionBank { get; set; } = null!;
+        public List<AnswerDto>? Answers { get; set; } = null!;
     }
 }

@@ -194,13 +194,13 @@ namespace QuizSystem_backend.Migrations
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     noi_dung = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     hinh_anh = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    ma_nguoi_tao = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ma_nguoi_tao = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     loai_cau_hoi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     do_kho = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     trang_thai = table.Column<int>(type: "int", nullable: false),
                     chu_de = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    ma_ngan_hang_cau_hoi = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ma_chuong = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ma_ngan_hang_cau_hoi = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ma_chuong = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {

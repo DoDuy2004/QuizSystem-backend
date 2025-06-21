@@ -15,6 +15,6 @@ namespace QuizSystem_backend.DTOs
         public Status Status { get; set; }
         public Role Role { get; set; }
         public bool IsFirstTimeLogin { get; set; }
-        public string Facutly { get; set; } = null!;
+        public string Facutly { get; set; } = string.Empty;
     }
 }

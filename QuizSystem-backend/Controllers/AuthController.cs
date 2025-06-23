@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuizSystem_backend.DTOs;
@@ -46,6 +47,17 @@ namespace QuizSystem_backend.Controllers
                     token,
                     user = new UserDto(user)
                 }
+            });
+        }
+
+        [HttpPost("logout")]
+        [Authorize]
+        public ActionResult Logout()
+        {
+            return Ok(new
+            {
+                code = 200,
+                message = "Đăng xuất thành công"
             });
         }
     }

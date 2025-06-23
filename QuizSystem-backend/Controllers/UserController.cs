@@ -41,6 +41,6 @@ namespace QuizSystem_backend.Controllers
                 message = "Success",
                 data = userDto
             });
-        } 
+        }
     }
 }

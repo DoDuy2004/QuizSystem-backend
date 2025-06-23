@@ -6,6 +6,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Text.Json;
 using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
+using Mono.TextTemplating;
+using Microsoft.AspNetCore.Identity;
+using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
 //using QuizSystem_backend.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +20,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IQuestionBankService, QuestionBankService>();
+builder.Services.AddScoped<IQuestionBankRepository, QuestionBankRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<TokenService>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -29,6 +42,7 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
+    options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull; // Hide field nulll
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });
@@ -43,6 +57,50 @@ builder.Services.AddCors(options =>
                    .AllowAnyHeader();
         });
 });
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var config = builder.Configuration;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = config["Jwt:Issuer"],
+            ValidAudience = config["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!)),
+            RoleClaimType = ClaimTypes.Role
+
+        };
+
+        // 👇 Thêm đoạn này để xử lý lỗi trả về 401 thay vì 500
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                context.NoResult();
+                context.Response.StatusCode = 401;
+                context.Response.ContentType = "application/json";
+                return context.Response.WriteAsync("{\"message\": \"Authentication failed\"}");
+            },
+            OnChallenge = context =>
+            {
+                context.HandleResponse();
+                context.Response.StatusCode = 401;
+                context.Response.ContentType = "application/json";
+                return context.Response.WriteAsync("{\"message\": \"Unauthorized\"}");
+            },
+            OnForbidden = context =>
+            {
+                context.Response.StatusCode = 403;
+                context.Response.ContentType = "application/json";
+                return context.Response.WriteAsync("{\"message\": \"Forbidden\"}");
+            }
+        };
+    });
+
 
 
 builder.Services.AddDbContext<QuizSystemDbContext>(options =>
@@ -65,6 +123,8 @@ app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.UseSession();
@@ -72,5 +132,23 @@ app.UseSession();
 app.MapControllers();
 
 SeedData.Initialize(app.Services);
+
+using var scope = app.Services.CreateScope();
+var db = scope.ServiceProvider.GetRequiredService<QuizSystemDbContext>();
+
+var hasher = new PasswordHasher<User>();
+
+var users = await db.Users.ToListAsync();
+
+foreach (var user in users)
+{
+    if (!user.PasswordHash.StartsWith("$"))
+    {
+        user.PasswordHash = hasher.HashPassword(user, "123456789");
+    }
+}
+
+await db.SaveChangesAsync();
+
 
 app.Run();

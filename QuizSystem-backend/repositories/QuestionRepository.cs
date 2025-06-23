@@ -11,7 +11,7 @@ namespace QuizSystem_backend.repositories
         {
             _context = context;
         }
-        public async Task<IEnumerable<Question>> GetQuestions()
+        public async Task<IEnumerable<Question>> GetQuestionsAsync()
         {
             var result = await _context.Questions
                 .Include(q => q.Teacher)

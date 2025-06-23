@@ -17,7 +17,7 @@ namespace QuizSystem_backend.services
 
         public async Task<IEnumerable<QuestionDto>> GetQuestionsAsync()
         {
-            var questions = await _questionRepository.GetQuestions();
+            var questions = await _questionRepository.GetQuestionsAsync();
 
             return questions.Select(q => new QuestionDto(q));
         }

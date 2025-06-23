@@ -1,4 +1,5 @@
 ﻿using QuizSystem_backend.Enums;
+using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.DTOs
 {

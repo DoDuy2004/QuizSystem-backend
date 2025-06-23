@@ -84,7 +84,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = $"http://example.com/student{i}.jpg",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = $"hashedpassword{i}",
+                            PasswordHash = "123456789",
                             CreatedAt = currentDate
                         };
                     }

@@ -24,7 +24,6 @@ namespace QuizSystem_backend.DTOs
                 PhoneNumber = question.Teacher.PhoneNumber,
                 Gender = question.Teacher.Gender,
                 DateOfBirth = question.Teacher.DateOfBirth,
-                Facutly = question.Teacher.Facutly
             };
             Chapter = new ChapterDto
             {

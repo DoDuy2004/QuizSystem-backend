@@ -3,8 +3,8 @@
     public class ChapterDto
     {
         public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = null!;
 
-        public string Subject { get; set; } = string.Empty;
+        public string Subject { get; set; } = null!;
     }
 }

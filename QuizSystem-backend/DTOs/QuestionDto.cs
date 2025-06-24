@@ -35,6 +35,7 @@ namespace QuizSystem_backend.DTOs
             {
                 Id = question.QuestionBank.Id,
                 Name = question.QuestionBank.Name,
+                CourseClassId = question.QuestionBank.CourseClassId,
             };
             Answers = question.Answers.Select(a => new AnswerDto
             {
@@ -46,12 +47,12 @@ namespace QuizSystem_backend.DTOs
             }).ToList();
         }
         public Guid Id { get; set; }
-        public string Topic { get; set; } = string.Empty;
-        public string Type { get; set; } = string.Empty;
-        public string Content { get; set; } = string.Empty;
+        public string Topic { get; set; }
+        public string Type { get; set; }
+        public string Content { get; set; }
         public string? Image { get; set; }
         public Status Status { get; set; } = Status.ACTIVE;
-        public string Difficulty { get; set; } = string.Empty;
+        public string Difficulty { get; set; } = null!;
         public TeacherDto? Teacher { get; set; } = null!;
         public ChapterDto? Chapter { get; set; } = null!;
         public QuestionBankDto? QuestionBank { get; set; } = null!;

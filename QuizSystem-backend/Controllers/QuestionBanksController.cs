@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuizSystem_backend.DTOs;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
@@ -14,7 +16,7 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize(Roles = "TEACHER")]
     public class QuestionBanksController : ControllerBase
     {
         private readonly IQuestionBankService _questionBankService;
@@ -32,7 +34,12 @@ namespace QuizSystem_backend.Controllers
             {
                 var questionBanks = await _questionBankService.GetQuestionBanksAsync();
 
-                return Ok(questionBanks);
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = questionBanks
+                });
             } 
             catch (Exception ex)
             {
@@ -40,81 +47,156 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
-        // GET: api/QuestionBanks/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<QuestionBank>> GetQuestionBank(Guid id)
-        //{
-        //    var questionBank = await _context.QuestionBanks.FindAsync(id);
+        //GET: api/QuestionBanks/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetQuestionBank(Guid id)
+        {
+            if(Guid.Empty == id)
+            {
+                return BadRequest();      
+            }
 
-        //    if (questionBank == null)
-        //    {
-        //        return NotFound();
-        //    }
+            try
+            {
+                var questionBank = await _questionBankService.GetQuestionBankByIdAsync(id);
 
-        //    return questionBank;
-        //}
+                if (questionBank == null)
+                {
+                    return NotFound(new { message = $"Question bank with ID {id} not found." });
+                }
 
-        //// PUT: api/QuestionBanks/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutQuestionBank(Guid id, QuestionBank questionBank)
-        //{
-        //    if (id != questionBank.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = questionBank
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+        [HttpGet("{id}/questions")]
+        public async Task<ActionResult> GetQuestionsByQuestionBank(Guid id)
+        {
+            if(Guid.Empty == id)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                var questionBank = await _questionBankService.GetQuestionBankByIdAsync(id);
 
-        //    _context.Entry(questionBank).State = EntityState.Modified;
+                if (questionBank == null)
+                {
+                    return NotFound(new { message = $"Question bank with ID {id} not found." });
+                }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!QuestionBankExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+                var questions = await _questionBankService.GetQuestionsByQuestionBankAsync(id);
 
-        //    return NoContent();
-        //}
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = questions
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
 
-        //// POST: api/QuestionBanks
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<QuestionBank>> PostQuestionBank(QuestionBank questionBank)
-        //{
-        //    _context.QuestionBanks.Add(questionBank);
-        //    await _context.SaveChangesAsync();
+        // PUT: api/QuestionBanks/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<ActionResult> PutQuestionBank(Guid id, QuestionBankDto dto)
+        {
+            if (Guid.Empty == id || !ModelState.IsValid || id != dto.Id)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    return CreatedAtAction("GetQuestionBank", new { id = questionBank.Id }, questionBank);
-        //}
+            try
+            {
+                var updatedQuestionBank = await _questionBankService.UpdateQuestionBankAsync(id, dto);
 
-        //// DELETE: api/QuestionBanks/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteQuestionBank(Guid id)
-        //{
-        //    var questionBank = await _context.QuestionBanks.FindAsync(id);
-        //    if (questionBank == null)
-        //    {
-        //        return NotFound();
-        //    }
+                if (updatedQuestionBank == null)
+                {
+                    return NotFound(new { message = $"Question bank with ID {id} not found." });
+                }
 
-        //    _context.QuestionBanks.Remove(questionBank);
-        //    await _context.SaveChangesAsync();
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = updatedQuestionBank
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
 
-        //    return NoContent();
-        //}
+        // POST: api/QuestionBanks
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult> PostQuestionBank(QuestionBankDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                    .Where(x => x.Value?.Errors.Count > 0)
+                    .ToDictionary(
+                        kvp => kvp.Key,
+                        kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                return BadRequest(errors);
+            }
 
-        //private bool QuestionBankExists(Guid id)
-        //{
-        //    return _context.QuestionBanks.Any(e => e.Id == id);
-        //}
+            try
+            {
+                var newQuestionBank = await _questionBankService.AddQuestionBankAsync(dto);
+
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = newQuestionBank
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error.", error = ex.Message });
+            }
+        }
+
+        // DELETE: api/QuestionBanks/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteQuestionBank(Guid id)
+        {
+            if(Guid.Empty == id)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var isDeleted = await _questionBankService.DeleteQuestionBankAsync(id);
+
+                if(!isDeleted)
+                {
+                    return NotFound(new { message = $"Question bank with ID {id} not found." });
+                }
+
+                return Ok(new { message = "Deleted Successful" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error.", error = ex.Message });
+            }
+        }
     }
 }

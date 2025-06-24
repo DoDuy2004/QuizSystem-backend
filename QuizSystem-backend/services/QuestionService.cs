@@ -75,7 +75,7 @@ namespace QuizSystem_backend.services
         {
             var question = await _questionRepository.GetByIdAsync(id);
 
-            if (question == null)
+            if (question == null || question.Status == Status.DELETED)
                 return false;
 
             question.Status = Status.DELETED;

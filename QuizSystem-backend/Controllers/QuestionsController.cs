@@ -55,7 +55,7 @@ namespace QuizSystem_backend.Controllers
 
                 if (question == null)
                 {
-                    return NotFound(new { message = $"Question with ID {id} not found." });
+                        
                 }
 
                 return Ok(question);
@@ -71,7 +71,7 @@ namespace QuizSystem_backend.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PutQuestion(Guid id, [FromBody] QuestionDto dto)
         {
-            if (!ModelState.IsValid || id != dto.Id)
+            if (Guid.Empty == id || !ModelState.IsValid || id != dto.Id)
             {
                 var errors = ModelState
                     .Where(x => x.Value?.Errors.Count > 0)

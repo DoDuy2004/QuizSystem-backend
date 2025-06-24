@@ -21,7 +21,7 @@ namespace QuizSystem_backend.Models
             QuestionBankId = dto.QuestionBank!.Id;
             Answers = dto.Answers!.Select(a => new Answer
             {
-                Id = Guid.NewGuid(),
+                Id = a.Id == Guid.Empty ? Guid.NewGuid() : a.Id,
                 Content = a.Content,
                 IsCorrect = a.IsCorrect,
                 AnswerOrder = a.AnswerOrder,

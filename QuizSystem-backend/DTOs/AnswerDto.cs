@@ -3,7 +3,7 @@
     public class AnswerDto
     {
         public Guid Id { get; set; }
-        public string Content { get; set; } = string.Empty;
+        public string Content { get; set; } = null!;
         public bool IsCorrect { get; set; }
         public int AnswerOrder { get; set; }
 

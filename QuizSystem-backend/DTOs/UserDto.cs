@@ -2,8 +2,9 @@
 using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.DTOs
-{    public class UserDto
+{   public class UserDto
     {
+        public UserDto() { }
         public UserDto(User user)
         {
             string userRole = ((Role)user.Role).ToString();
@@ -28,10 +29,10 @@ namespace QuizSystem_backend.DTOs
         public string PhoneNumber { get; set; } = null!;
         public bool Gender { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public string AvatarUrl { get; set; } = null!;
-        public string Status { get; set; }
+        public string? AvatarUrl { get; set; } = null!;
+        public string? Status { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
-        public string Role { get; set; }
+        public string? Role { get; set; } = null!;
     }
 
 }

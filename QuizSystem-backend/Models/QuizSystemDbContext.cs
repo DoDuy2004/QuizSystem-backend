@@ -833,6 +833,10 @@ namespace QuizSystem_backend.Models
                 //    .WithMany(f => f.Students)
                 //    .HasForeignKey(s => s.FacutlyId)
                 //    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasMany(e => e.Courses)
+                    .WithOne(scc => scc.Student)
+                    .HasForeignKey(scc => scc.StudentId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Teacher (TPT inheritance from User)
@@ -956,7 +960,7 @@ namespace QuizSystem_backend.Models
                 entity.Property(e => e.ClassCode)
                     .HasColumnName("ma_lop")
                     .IsRequired()
-                    .HasMaxLength(20);
+                    .HasMaxLength(50);
 
                 entity.HasIndex(e => e.ClassCode)
                     .IsUnique();
@@ -994,6 +998,11 @@ namespace QuizSystem_backend.Models
                     .WithOne(re => re.Course)
                     .HasForeignKey(re => re.CourseClassId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.Students)
+                    .WithOne(scc => scc.Course)
+                    .HasForeignKey(scc => scc.CourseClassId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Exam
@@ -1303,16 +1312,6 @@ namespace QuizSystem_backend.Models
 
                 entity.Property(scc => scc.Status)
                     .HasColumnName("trang_thai");
-
-                entity.HasOne(scc => scc.Student)
-                    .WithMany()
-                    .HasForeignKey(scc => scc.StudentId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(scc => scc.Course)
-                    .WithMany()
-                    .HasForeignKey(scc => scc.CourseClassId)
-                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // StudentExam

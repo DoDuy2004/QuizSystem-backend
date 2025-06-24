@@ -14,7 +14,7 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "TEACHER")]
+    //[Authorize(Roles = "TEACHER")]
     public class QuestionsController : ControllerBase
     {
         //private readonly QuizSystemDbContext _context;
@@ -32,7 +32,12 @@ namespace QuizSystem_backend.Controllers
             try
             {
                 var result = await _questionService.GetQuestionsAsync();
-                return Ok(result);
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = result
+                });
             }
             catch (Exception ex)
             {
@@ -55,10 +60,15 @@ namespace QuizSystem_backend.Controllers
 
                 if (question == null)
                 {
-                        
+                    return NotFound(new { message = $"Question with ID {id} not found." });
                 }
 
-                return Ok(question);
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = question
+                });
             }
             catch (Exception ex)
             {
@@ -85,12 +95,18 @@ namespace QuizSystem_backend.Controllers
             try
             {
                 var updatedQuestion = await _questionService.UpdateQuestionAsync(id, dto);
+
                 if (updatedQuestion == null)
                 {
                     return NotFound(new { message = $"Question with ID {id} not found." });
                 }
 
-                return Ok(updatedQuestion);
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = updatedQuestion
+                });
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -123,7 +139,17 @@ namespace QuizSystem_backend.Controllers
             {
                 var newQuestion = await _questionService.AddQuestionAsync(dto);
 
-                return Ok(newQuestion);
+                if (newQuestion == null)
+                {
+                    return StatusCode(500, new { message = "Internal server error.", error = "Failed to add new question" });
+                }
+
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = newQuestion
+                });
             }
             catch (Exception ex)
             {

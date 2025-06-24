@@ -160,6 +160,11 @@ namespace QuizSystem_backend.Controllers
             {
                 var newQuestionBank = await _questionBankService.AddQuestionBankAsync(dto);
 
+                if (newQuestionBank == null)
+                {
+                    return StatusCode(500, new { message = "Internal server error.", error = "Failed to add new question bank" });
+                }
+
                 return Ok(new
                 {
                     code = 200,

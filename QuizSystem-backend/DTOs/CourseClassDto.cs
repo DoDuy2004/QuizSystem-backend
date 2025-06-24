@@ -8,6 +8,8 @@ namespace QuizSystem_backend.DTOs
         public CourseClassDto() { }
         public CourseClassDto(CourseClass course) 
         {
+            var teacher = course.Teacher != null ? new TeacherDto(course.Teacher) : null;
+
             Id = course.Id;
             ClassCode = course.ClassCode;
             Name = course.Name;
@@ -15,6 +17,7 @@ namespace QuizSystem_backend.DTOs
             Status = course.Status;
             TeacherId = course.TeacherId;
             Subject = course.Subject;
+            Teacher = teacher;
         }
         public Guid Id { get; set; } = Guid.NewGuid();
         public string ClassCode { get; set; } = null!;

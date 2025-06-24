@@ -12,7 +12,7 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250621135725_Initial")]
+    [Migration("20250624185223_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -104,8 +104,8 @@ namespace QuizSystem_backend.Migrations
 
                     b.Property<string>("ClassCode")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("ma_lop");
 
                     b.Property<int>("Credit")
@@ -636,7 +636,7 @@ namespace QuizSystem_backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("QuizSystem_backend.Models.QuestionBank", "QuestionBank")
-                        .WithMany("questions")
+                        .WithMany("Questions")
                         .HasForeignKey("QuestionBankId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -672,15 +672,15 @@ namespace QuizSystem_backend.Migrations
             modelBuilder.Entity("QuizSystem_backend.Models.StudentCourseClass", b =>
                 {
                     b.HasOne("QuizSystem_backend.Models.CourseClass", "Course")
-                        .WithMany()
+                        .WithMany("Students")
                         .HasForeignKey("CourseClassId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("QuizSystem_backend.Models.Student", "Student")
-                        .WithMany()
+                        .WithMany("Courses")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -764,6 +764,8 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("QuestionBanks");
 
                     b.Navigation("RoomExams");
+
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Exam", b =>
@@ -782,7 +784,7 @@ namespace QuizSystem_backend.Migrations
 
             modelBuilder.Entity("QuizSystem_backend.Models.QuestionBank", b =>
                 {
-                    b.Navigation("questions");
+                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.RoomExam", b =>
@@ -793,6 +795,11 @@ namespace QuizSystem_backend.Migrations
             modelBuilder.Entity("QuizSystem_backend.Models.StudentExam", b =>
                 {
                     b.Navigation("StudentExamDetails");
+                });
+
+            modelBuilder.Entity("QuizSystem_backend.Models.Student", b =>
+                {
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Teacher", b =>

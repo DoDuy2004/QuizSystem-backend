@@ -22,7 +22,7 @@ namespace QuizSystem_backend.DTOs
         }
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
-        public string Description { get; set; } = null!;
+        public string? Description { get; set; } = null!;
         public Status Status { get; set; }
         public Guid CourseClassId { get; set; }
 

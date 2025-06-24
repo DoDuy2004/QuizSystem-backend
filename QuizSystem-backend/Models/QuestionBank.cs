@@ -12,7 +12,7 @@ namespace QuizSystem_backend.Models
 
             Id = dto.Id;
             Name = dto.Name;
-            Description = dto.Description;
+            Description = dto.Description!;
             Status = dto.Status;
             Questions = this.Questions;
             Course = this.Course;

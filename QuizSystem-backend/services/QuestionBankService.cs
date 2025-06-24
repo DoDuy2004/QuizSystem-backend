@@ -42,7 +42,7 @@ namespace QuizSystem_backend.services
         {
             var questionBank = await _questionBankRepository.GetQuestionBankByIdAsync(id);
 
-            questionBank.Description = dto.Description;
+            questionBank.Description = dto.Description!;
             questionBank.Name = dto.Name;
             questionBank.Status = dto.Status;
             questionBank.CourseClassId = dto.CourseClassId;

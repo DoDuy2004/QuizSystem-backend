@@ -78,7 +78,7 @@ namespace QuizSystem_backend.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ma_lop = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    ma_lop = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ten_lop = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     so_tin_chi = table.Column<int>(type: "int", nullable: false),
                     trang_thai = table.Column<int>(type: "int", nullable: false),
@@ -178,13 +178,13 @@ namespace QuizSystem_backend.Migrations
                         column: x => x.ma_lop_hoc_phan,
                         principalTable: "LopHocPhan",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SinhVienLopHocPhan_SinhVien_ma_sinh_vien",
                         column: x => x.ma_sinh_vien,
                         principalTable: "SinhVien",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

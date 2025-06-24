@@ -15,6 +15,7 @@ namespace QuizSystem_backend.Models
             Status = dto.Status;
             TeacherId = dto.TeacherId;
             Subject = dto.Subject;
+            Teacher = this.Teacher;
         }
         public Guid Id { get; set; } = Guid.NewGuid();
         public string ClassCode { get; set; } = string.Empty;
@@ -31,6 +32,8 @@ namespace QuizSystem_backend.Models
         public virtual ICollection<Chapter> Chapters { get; set; } = null!;
         public virtual ICollection<QuestionBank> QuestionBanks { get; set; } = null!;
         public virtual ICollection<RoomExam> RoomExams { get; set;} = null!;
+        public ICollection<StudentCourseClass> Students { get; set; } = null!;
+
 
     }
 }

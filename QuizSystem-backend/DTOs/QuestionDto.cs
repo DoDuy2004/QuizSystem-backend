@@ -6,7 +6,7 @@ namespace QuizSystem_backend.DTOs
 {
     public class QuestionDto
     {
-        public QuestionDto() { }
+        public QuestionDto () { }
         public QuestionDto(Question question) {
             Id = question.Id;
             Content = question.Content;
@@ -47,12 +47,15 @@ namespace QuizSystem_backend.DTOs
             }).ToList();
         }
         public Guid Id { get; set; }
-        public string Topic { get; set; }
-        public string Type { get; set; }
-        public string Content { get; set; }
-        public string? Image { get; set; }
+        public string Topic { get; set; } = null!;
+        public string Type { get; set; } = null!;
+        public string Content { get; set; } = null!;
+        public string? Image { get; set; } = null!;
         public Status Status { get; set; } = Status.ACTIVE;
         public string Difficulty { get; set; } = null!;
+        public Guid? ChapterId { get; set; }
+        public Guid? QuestionBankId { get; set; }
+        public Guid? CreatedBy { get; set; }
         public TeacherDto? Teacher { get; set; } = null!;
         public ChapterDto? Chapter { get; set; } = null!;
         public QuestionBankDto? QuestionBank { get; set; } = null!;

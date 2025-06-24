@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.repositories
@@ -14,16 +15,45 @@ namespace QuizSystem_backend.repositories
         public async Task<IEnumerable<QuestionBank>> GetQuestionBanksAsync()
         {
             var questionBanks = await _context.QuestionBanks
-                .Include(qb => qb.Questions)
-                    .ThenInclude(q => q.Teacher)
-                .Include(qb => qb.Questions)
-                    .ThenInclude(q => q.Chapter)
-                .Include(qb => qb.Questions)
-                    .ThenInclude(q => q.Answers)
                 .Include(qb => qb.Course)
                 .ToListAsync();
 
             return questionBanks;
+        }
+
+        public async Task<QuestionBank> GetQuestionBankByIdAsync(Guid id)
+        {
+            var questionBank = await _context.QuestionBanks
+                .Include(qb => qb.Course)
+                .FirstOrDefaultAsync(q => q.Id == id); ;
+
+            return questionBank!;
+        }
+        public async Task<QuestionBank> AddAsync(QuestionBank questionBank)
+        {
+            _context.QuestionBanks.Add(questionBank);
+
+            await _context.SaveChangesAsync();
+
+            return questionBank;
+        }
+
+        public async Task<IEnumerable<Question>> GetQuestionsByQuestionBankAsync(Guid id)
+        {
+            var questions = await _context.Questions
+                .Include(q => q.Teacher)
+                .Include(q => q.Chapter)
+                .Include(q => q.QuestionBank).ThenInclude(qb => qb.Course)
+                .Include(q => q.Answers)
+                .Where(q => q.QuestionBank.Id == id)
+                .ToListAsync();
+
+            return questions;
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -25,6 +25,10 @@ builder.Services.AddScoped<IQuestionBankRepository, QuestionBankRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<ICourseClassRepository, CourseClassRepository>();
+builder.Services.AddScoped<ICourseClassService, CourseClassService>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 
 builder.Services.AddControllers();

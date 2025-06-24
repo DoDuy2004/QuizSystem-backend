@@ -9,19 +9,25 @@ namespace QuizSystem_backend.Models
 
         public Question(QuestionDto dto) 
         {
+            var chapterId = dto.Chapter != null ? dto.Chapter.Id : dto.ChapterId;
+            var createdBy = dto.Teacher != null ? dto.Teacher.Id : dto.CreatedBy;
+            var questionBankId = dto.QuestionBank != null ? dto.QuestionBank.Id : dto.QuestionBankId;
+
             Id = dto.Id == Guid.Empty ? Guid.NewGuid() : dto.Id;
             Content = dto.Content;
             Image = dto.Image!;
             Difficulty = dto.Difficulty;
-            CreatedBy = dto.Teacher!.Id;
+            CreatedBy = createdBy;
             Type = dto.Type;
             Topic = dto.Topic;
-            ChapterId = dto.Chapter!.Id;
+            //ChapterId = dto.Chapter!.Id;
+            ChapterId = chapterId;
             Status = dto.Status;
-            QuestionBankId = dto.QuestionBank!.Id;
+            //QuestionBankId = dto.QuestionBank!.Id;
+            QuestionBankId = questionBankId;
             Answers = dto.Answers!.Select(a => new Answer
             {
-                Id = Guid.NewGuid(),
+                Id = a.Id == Guid.Empty ? Guid.NewGuid() : a.Id,
                 Content = a.Content,
                 IsCorrect = a.IsCorrect,
                 AnswerOrder = a.AnswerOrder,

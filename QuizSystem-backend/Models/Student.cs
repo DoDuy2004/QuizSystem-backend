@@ -10,7 +10,9 @@ namespace QuizSystem_backend.Models
         public bool IsFirstTimeLogin { get; set; }
         public string Facutly { get; set; } = string.Empty;
 
-        // Navigation
+        //Navigation
         //public virtual Facutly Facutly { get; set; } = null!;
+        public ICollection<StudentCourseClass> Courses { get; set; } = null!;
+
     }
 }

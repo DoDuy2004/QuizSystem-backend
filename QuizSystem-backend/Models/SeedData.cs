@@ -28,14 +28,14 @@ namespace QuizSystem_backend.Models
                     {
                         Id = Guid.NewGuid(),
                         Username = "admin1",
-                        FullName = "Admin Nguyễn Văn A",
+                        FullName = "Đỗ Đình Duy",
                         Email = "admin@example.com",
                         PhoneNumber = "0987654321",
                         Gender = true,
-                        DateOfBirth = new DateTime(1980, 5, 15),
-                        AvatarUrl = "http://example.com/admin.jpg",
+                        DateOfBirth = new DateTime(2004, 6, 20),
+                        AvatarUrl = "",
                         Status = Status.ACTIVE,
-                        PasswordHash = "hashedpassword1",
+                        PasswordHash = "123456789",
                         CreatedAt = currentDate,
                         Role = Role.ADMIN
                     };
@@ -49,15 +49,15 @@ namespace QuizSystem_backend.Models
                     var teacher = new Teacher
                     {
                         Id = Guid.NewGuid(),
-                        Username = "teacher1",
-                        FullName = "Thầy Trần Văn B",
-                        Email = "teacher1@example.com",
+                        Username = "ndduy",
+                        FullName = "Nguyễn Đức Duy",
+                        Email = "ndduy@gmail.com",
                         PhoneNumber = "0912345678",
                         Gender = true,
                         DateOfBirth = new DateTime(1985, 3, 10),
-                        AvatarUrl = "http://example.com/teacher1.jpg",
+                        AvatarUrl = "",
                         Status = Status.ACTIVE,
-                        PasswordHash = "hashedpassword2",
+                        PasswordHash = "123456789",
                         CreatedAt = currentDate,
                         Facutly = "Công Nghệ Thông Tin",
                         Role = Role.TEACHER
@@ -69,25 +69,21 @@ namespace QuizSystem_backend.Models
                 // Seed 20 Students
                 if (!context.Students.Any())
                 {
-                    var students = new Student[20];
-                    for (int i = 1; i <= 20; i++)
+                    var students = new Student
                     {
-                        students[i - 1] = new Student
-                        {
-                            Id = Guid.NewGuid(),
-                            Username = $"student{i}",
-                            FullName = $"Đỗ Đình Duy {i}",
-                            Email = $"student{i}@example.com",
-                            PhoneNumber = $"01234567{i:00}",
-                            Gender = i % 2 == 0, // Alternating gender
-                            DateOfBirth = new DateTime(2003, i % 12 + 1, 15),
-                            AvatarUrl = $"http://example.com/student{i}.jpg",
-                            Status = Status.ACTIVE,
-                            Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
-                            CreatedAt = currentDate
-                        };
-                    }
+                        Id = Guid.NewGuid(),
+                        Username = "duy0604",
+                        FullName = "Đỗ Đình Duy",
+                        Email = "duy2004.gi@gmail.com",
+                        PhoneNumber = "0918557317",
+                        Gender = true, // Alternating gender
+                        DateOfBirth = new DateTime(2004, 06, 20),
+                        AvatarUrl = "",
+                        Status = Status.ACTIVE,
+                        Facutly = "Công Nghệ Thông Tin",
+                        PasswordHash = "123456789",
+                        CreatedAt = currentDate
+                    };
                     context.Students.AddRange(students);
                     context.SaveChanges();
                 }

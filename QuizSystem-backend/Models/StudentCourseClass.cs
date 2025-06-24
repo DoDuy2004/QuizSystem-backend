@@ -1,9 +1,19 @@
-﻿using QuizSystem_backend.Enums;
+﻿using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Enums;
 
 namespace QuizSystem_backend.Models
 {
     public class StudentCourseClass
     {
+        public StudentCourseClass() { }
+        public StudentCourseClass(StudentCourseClassDto dto) 
+        {
+            StudentId = dto.StudentId;
+            CourseClassId = dto.CourseClassId;
+            Grade = dto.Grade;
+            Note = dto.Note;
+            Status = dto.Status;
+        }
         public Guid StudentId { get; set; }
         public Guid CourseClassId { get; set; }
 

@@ -43,6 +43,9 @@ namespace QuizSystem_backend.services
         public async Task<QuestionDto> UpdateQuestionAsync(Guid id, QuestionDto dto)
         {
             var updatedQuestion = await _questionRepository.GetByIdAsync(id);
+            var chapterId = dto.Chapter != null ? dto.Chapter.Id : dto.ChapterId;
+            var createdBy = dto.Teacher != null ? dto.Teacher.Id : dto.CreatedBy;
+            var questionBankId = dto.QuestionBank != null ? dto.QuestionBank.Id : dto.QuestionBankId;
 
             if (updatedQuestion == null)
             {
@@ -52,11 +55,11 @@ namespace QuizSystem_backend.services
             updatedQuestion.Content = dto.Content;
             updatedQuestion.Image = dto.Image!;
             updatedQuestion.Difficulty = dto.Difficulty;
-            updatedQuestion.CreatedBy = dto.Teacher!.Id;
-            updatedQuestion.ChapterId = dto.Chapter!.Id;
+            updatedQuestion.CreatedBy = createdBy;
+            updatedQuestion.ChapterId = chapterId;
             updatedQuestion.Type = dto.Type;
             updatedQuestion.Topic = dto.Topic;
-            updatedQuestion.QuestionBankId = dto.QuestionBank!.Id;
+            updatedQuestion.QuestionBankId = questionBankId;
             updatedQuestion.Answers = dto.Answers!.Select(a => new Answer
             {
                 Id = a.Id,
@@ -75,7 +78,7 @@ namespace QuizSystem_backend.services
         {
             var question = await _questionRepository.GetByIdAsync(id);
 
-            if (question == null)
+            if (question == null || question.Status == Status.DELETED)
                 return false;
 
             question.Status = Status.DELETED;

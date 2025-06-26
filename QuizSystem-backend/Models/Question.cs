@@ -37,7 +37,7 @@ namespace QuizSystem_backend.Models
 
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Content { get; set; } = string.Empty;
-        public string Image { get; set; } = string.Empty;
+        public string? Image { get; set; } = string.Empty;
         public Guid? CreatedBy { get; set; }
         public string Type { get; set; } = null!;
 

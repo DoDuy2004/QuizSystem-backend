@@ -102,7 +102,7 @@ namespace QuizSystem_backend.Models
                         Credit = 3,
                         Status = Status.ACTIVE,
                         Subject = "Lập trình hướng đối tượng",
-                        TeacherId = teacherId
+                        TeacherId = teacherId,
                     };
                     context.CourseClasses.Add(courseClass);
                     context.SaveChanges();
@@ -147,7 +147,9 @@ namespace QuizSystem_backend.Models
                             Name = "Ngân hàng câu hỏi OOP",
                             Description = "Câu hỏi liên quan đến Lập trình hướng đối tượng",
                             Status = Status.ACTIVE,
-                            CourseClassId = courseClassId
+                            Subject = "Phương pháp lập trình hướng đối tượng",
+                            //CourseClassId = courseClassId
+                            TeacherId = teacherId
                         }
                     };
                     context.QuestionBanks.AddRange(questionBanks);

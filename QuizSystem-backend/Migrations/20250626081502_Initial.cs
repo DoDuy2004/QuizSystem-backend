@@ -97,6 +97,28 @@ namespace QuizSystem_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NganHangCauHoi",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ten_ngan_hang = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    mo_ta = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    trang_thai = table.Column<int>(type: "int", nullable: false),
+                    ma_giang_vien = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    mon_hoc = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NganHangCauHoi", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_NganHangCauHoi_GiangVien_ma_giang_vien",
+                        column: x => x.ma_giang_vien,
+                        principalTable: "GiangVien",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Chuong",
                 columns: table => new
                 {
@@ -112,27 +134,6 @@ namespace QuizSystem_backend.Migrations
                     table.ForeignKey(
                         name: "FK_Chuong_LopHocPhan_ma_mon_hoc",
                         column: x => x.ma_mon_hoc,
-                        principalTable: "LopHocPhan",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "NganHangCauHoi",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ten_ngan_hang = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    mo_ta = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    trang_thai = table.Column<int>(type: "int", nullable: false),
-                    mon_hoc = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NganHangCauHoi", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_NganHangCauHoi_LopHocPhan_mon_hoc",
-                        column: x => x.mon_hoc,
                         principalTable: "LopHocPhan",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -429,9 +430,9 @@ namespace QuizSystem_backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_NganHangCauHoi_mon_hoc",
+                name: "IX_NganHangCauHoi_ma_giang_vien",
                 table: "NganHangCauHoi",
-                column: "mon_hoc");
+                column: "ma_giang_vien");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PhongThi_ma_lop_hoc_phan",

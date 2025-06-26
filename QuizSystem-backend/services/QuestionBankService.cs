@@ -45,7 +45,8 @@ namespace QuizSystem_backend.services
             questionBank.Description = dto.Description!;
             questionBank.Name = dto.Name;
             questionBank.Status = dto.Status;
-            questionBank.CourseClassId = dto.CourseClassId;
+            questionBank.Subject = dto.Subject!;
+            //questionBank.CourseClassId = dto.CourseClassId;
 
             await _questionBankRepository.SaveChangesAsync();
 

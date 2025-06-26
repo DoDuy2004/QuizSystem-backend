@@ -30,7 +30,7 @@ namespace QuizSystem_backend.Models
         public virtual Teacher Teacher { get; set; } = null!;
         //public virtual Subject Subject { get; set; } = null!;
         public virtual ICollection<Chapter> Chapters { get; set; } = null!;
-        public virtual ICollection<QuestionBank> QuestionBanks { get; set; } = null!;
+        //public virtual ICollection<QuestionBank> QuestionBanks { get; set; } = null!;
         public virtual ICollection<RoomExam> RoomExams { get; set;} = null!;
         public ICollection<StudentCourseClass> Students { get; set; } = null!;
 

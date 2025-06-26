@@ -79,6 +79,26 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
+        [HttpGet("subjects")]
+        public async Task<ActionResult> GetSubjects()
+        {
+            try
+            {
+                var subjects = await _courseClassService.GetSubjectsAsync();
+
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = subjects
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
         // PUT: api/CourseClasses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

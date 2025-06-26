@@ -8,6 +8,28 @@ namespace QuizSystem_backend.DTOs
     {
         public QuestionDto () { }
         public QuestionDto(Question question) {
+            var answers = question.Answers != null ? question.Answers.Select(a => new AnswerDto
+            {
+                Id = a.Id,
+                Content = a.Content,
+                IsCorrect = a.IsCorrect,
+                AnswerOrder = a.AnswerOrder,
+                QuestionId = a.QuestionId,
+            }).ToList() : null;
+
+            var teacher = question.Teacher != null ? new TeacherDto
+            {
+                Id = question!.Teacher.Id,
+                FullName = question.Teacher.FullName,
+                Username = question.Teacher.Username,
+                Email = question.Teacher.Email,
+                PhoneNumber = question.Teacher.PhoneNumber,
+                Gender = question.Teacher.Gender,
+                DateOfBirth = question.Teacher.DateOfBirth,
+            } : null;
+
+            var chapter = question.Chapter != null ? new ChapterDto(question.Chapter) : null;
+
             Id = question.Id;
             Content = question.Content;
             Image = question.Image;
@@ -15,36 +37,15 @@ namespace QuizSystem_backend.DTOs
             Type = question.Type;
             Topic = question.Topic;
             Status = question.Status;
-            Teacher = new TeacherDto
-            {
-                Id = question.Teacher.Id,
-                FullName = question.Teacher.FullName,
-                Username = question.Teacher.Username,
-                Email = question.Teacher.Email,
-                PhoneNumber = question.Teacher.PhoneNumber,
-                Gender = question.Teacher.Gender,
-                DateOfBirth = question.Teacher.DateOfBirth,
-            };
-            Chapter = new ChapterDto
-            {
-                Id = question.Chapter.Id,
-                Name = question.Chapter.Name,
-                Subject = question.Chapter.Course.Subject
-            };
+            Teacher = teacher;
+            Chapter = chapter;
             QuestionBank = new QuestionBankDto
             {
                 Id = question.QuestionBank.Id,
                 Name = question.QuestionBank.Name,
                 CourseClassId = question.QuestionBank.CourseClassId,
             };
-            Answers = question.Answers.Select(a => new AnswerDto
-            {
-                Id = a.Id,
-                Content = a.Content,
-                IsCorrect = a.IsCorrect,
-                AnswerOrder = a.AnswerOrder,
-                QuestionId = a.QuestionId,
-            }).ToList();
+            Answers = answers;
         }
         public Guid Id { get; set; }
         public string Topic { get; set; } = null!;

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Common;
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
@@ -49,6 +50,47 @@ namespace QuizSystem_backend.Controllers
                 }
             });
         }
+        [HttpPost("token")]
+        [Authorize]
+        public async Task<ActionResult> AuthenticateByToken()
+        {
+            // Lấy userId từ token
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new
+                {
+                    code = 401,
+                    message = "Token không hợp lệ hoặc đã hết hạn"
+                });
+            }
+
+            // Lấy thông tin người dùng từ CSDL
+            var user = await _userService.GetUserByIdAsync(Guid.Parse(userId));
+            if (user == null)
+            {
+                return Unauthorized(new
+                {
+                    code = 401,
+                    message = "Người dùng không tồn tại"
+                });
+            }
+
+            var token = _tokenService.CreateToken(user);
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Authenticated by token",
+                data = new
+                {
+                    token,
+                    user = new UserDto(user)
+                }
+            });
+        }
+
 
         [HttpPost("logout")]
         [Authorize]

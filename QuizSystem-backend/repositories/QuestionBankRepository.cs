@@ -16,6 +16,7 @@ namespace QuizSystem_backend.repositories
         {
             var questionBanks = await _context.QuestionBanks
                 .Include(qb => qb.Course)
+                .Include(qb => qb.Questions)
                 .ToListAsync();
 
             return questionBanks;
@@ -25,6 +26,7 @@ namespace QuizSystem_backend.repositories
         {
             var questionBank = await _context.QuestionBanks
                 .Include(qb => qb.Course)
+                .Include(qb => qb.Questions)
                 .FirstOrDefaultAsync(q => q.Id == id); ;
 
             return questionBank!;

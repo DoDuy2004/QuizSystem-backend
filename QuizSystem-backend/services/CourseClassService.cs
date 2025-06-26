@@ -98,5 +98,11 @@ namespace QuizSystem_backend.services
 
             return new CourseClassDto(updatedCourseClass);
         }
+        public async Task<IEnumerable<string>> GetSubjectsAsync()
+        {
+            var subjects = await _courseClassRepository.GetSubjectsAsync();
+
+            return subjects;
+        }
     }
 }

@@ -43,7 +43,9 @@ namespace QuizSystem_backend.DTOs
             {
                 Id = question.QuestionBank.Id,
                 Name = question.QuestionBank.Name,
-                CourseClassId = question.QuestionBank.CourseClassId,
+                Subject = question.QuestionBank.Subject,
+                TeacherId = question.QuestionBank.TeacherId
+                //CourseClassId = question.QuestionBank.CourseClassId,
             };
             Answers = answers;
         }

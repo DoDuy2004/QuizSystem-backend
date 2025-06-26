@@ -51,5 +51,13 @@ namespace QuizSystem_backend.repositories
 
             return cc;
         }
+        public async Task<IEnumerable<string>> GetSubjectsAsync()
+        {
+            var subjects = new List<string>();
+
+            subjects = await _context.CourseClasses.Select(cc => cc.Subject).ToListAsync();
+
+            return subjects;
+        }
     }
 }

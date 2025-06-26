@@ -868,12 +868,17 @@ namespace QuizSystem_backend.Models
                 entity.HasMany(t => t.Questions)
                     .WithOne(q => q.Teacher)
                     .HasForeignKey(q => q.CreatedBy)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasMany(t => t.CourseClasses)
                     .WithOne(cc => cc.Teacher)
                     .HasForeignKey(cc => cc.TeacherId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(t => t.QuestionBanks)
+                    .WithOne(q => q.Teacher)
+                    .HasForeignKey(qb => qb.TeacherId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Answer
@@ -1227,8 +1232,16 @@ namespace QuizSystem_backend.Models
                 entity.Property(qb => qb.Status)
                     .HasColumnName("trang_thai");
 
-                entity.Property(qb => qb.CourseClassId)
+                //entity.Property(qb => qb.CourseClassId)
+                //    .HasColumnName("mon_hoc")
+                //    .IsRequired();
+
+                entity.Property(qb => qb.Subject)
                     .HasColumnName("mon_hoc")
+                    .IsRequired();
+
+                entity.Property(qb => qb.TeacherId)
+                    .HasColumnName("ma_giang_vien")
                     .IsRequired();
 
                 entity.HasMany(qb => qb.Questions)
@@ -1236,11 +1249,15 @@ namespace QuizSystem_backend.Models
                     .HasForeignKey(q => q.QuestionBankId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-
-                entity.HasOne(qb => qb.Course)
+                entity.HasOne(qb => qb.Teacher)
                     .WithMany(s => s.QuestionBanks)
-                    .HasForeignKey(qb => qb.CourseClassId)
+                    .HasForeignKey(qb => qb.TeacherId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                //entity.HasOne(qb => qb.Course)
+                //    .WithMany(s => s.QuestionBanks)
+                //    .HasForeignKey(qb => qb.CourseClassId)
+                //    .OnDelete(DeleteBehavior.Restrict);
 
                 //entity.HasOne(qb => qb.Subject)
                 //    .WithMany(s => s.QuestionBanks)

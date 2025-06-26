@@ -16,7 +16,9 @@ namespace QuizSystem_backend.repositories
             var result = await _context.Questions
                 .Include(q => q.Teacher)
                 .Include(q => q.Chapter)
-                .Include(q => q.QuestionBank).ThenInclude(qb => qb.Course)
+                    .ThenInclude(c => c.Course)
+                .Include(q => q.QuestionBank)
+                    .ThenInclude(qb => qb.Teacher)
                 .Include(q => q.Answers)
                 .ToListAsync();
 
@@ -42,7 +44,9 @@ namespace QuizSystem_backend.repositories
             var question = await _context.Questions
                 .Include(q => q.Teacher)
                 .Include(q => q.Chapter)
-                .Include(q => q.QuestionBank).ThenInclude(qb => qb.Course)
+                    .ThenInclude(c => c.Course)
+                .Include(q => q.QuestionBank)
+                    .ThenInclude(qb => qb.Teacher)
                 .Include(q => q.Answers)
                 .FirstOrDefaultAsync(q => q.Id == id);
 

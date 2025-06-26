@@ -10,5 +10,6 @@ namespace QuizSystem_backend.repositories
         Task SaveChangesAsync();
         Task<Student> AddStudentToCourseAsync(StudentCourseClass scc);
         Task<IEnumerable<Student>> GetStudentByCourseClassAsync(Guid id);
+        Task<IEnumerable<string>> GetSubjectsAsync();
     }
 }

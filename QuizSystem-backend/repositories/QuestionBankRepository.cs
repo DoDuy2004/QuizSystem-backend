@@ -15,7 +15,7 @@ namespace QuizSystem_backend.repositories
         public async Task<IEnumerable<QuestionBank>> GetQuestionBanksAsync()
         {
             var questionBanks = await _context.QuestionBanks
-                .Include(qb => qb.Course)
+                //.Include(qb => qb.Course)
                 .Include(qb => qb.Questions)
                 .ToListAsync();
 
@@ -25,7 +25,7 @@ namespace QuizSystem_backend.repositories
         public async Task<QuestionBank> GetQuestionBankByIdAsync(Guid id)
         {
             var questionBank = await _context.QuestionBanks
-                .Include(qb => qb.Course)
+                //.Include(qb => qb.Course)
                 .Include(qb => qb.Questions)
                 .FirstOrDefaultAsync(q => q.Id == id); ;
 
@@ -45,7 +45,7 @@ namespace QuizSystem_backend.repositories
             var questions = await _context.Questions
                 .Include(q => q.Teacher)
                 .Include(q => q.Chapter)
-                .Include(q => q.QuestionBank).ThenInclude(qb => qb.Course)
+                    .ThenInclude(qb => qb.Course)
                 .Include(q => q.Answers)
                 .Where(q => q.QuestionBank.Id == id)
                 .ToListAsync();

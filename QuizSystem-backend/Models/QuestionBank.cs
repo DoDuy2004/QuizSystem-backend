@@ -15,8 +15,10 @@ namespace QuizSystem_backend.Models
             Description = dto.Description!;
             Status = dto.Status;
             Questions = this.Questions;
-            Course = this.Course;
-            CourseClassId = dto.CourseClassId;
+            //Course = this.Course;
+            Subject = dto.Subject!;
+            //CourseClassId = dto.CourseClassId;
+            TeacherId = dto.TeacherId;
         }
 
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -24,9 +26,11 @@ namespace QuizSystem_backend.Models
         public string Description {  get; set; } = string.Empty;
         public Status Status { get; set; }
         //public string Subject { get; set; } = null!;
-        public Guid CourseClassId { get; set; }
+        public Guid TeacherId { get; set; }
+        public string Subject { get; set; } = null!;
         public virtual ICollection<Question>? Questions { get; set; } = null!;
+        public virtual Teacher Teacher { get; set; } = null!;
         //public virtual Subject Subject { get; set; } = null!;
-        public virtual CourseClass Course { get; set; } = null!;
+        //public virtual CourseClass Course { get; set; } = null!;
     }
 }

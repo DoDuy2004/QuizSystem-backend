@@ -13,6 +13,7 @@ namespace QuizSystem_backend.DTOs
         }
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
+        public Guid CourseClassId { get; set; } 
 
         public string Subject { get; set; } = null!;    
     }

@@ -25,7 +25,6 @@ namespace QuizSystem_backend.Models
         public string Name { get; set; } = string.Empty;
         public string Description {  get; set; } = string.Empty;
         public Status Status { get; set; }
-        //public string Subject { get; set; } = null!;
         public Guid TeacherId { get; set; }
         public string Subject { get; set; } = null!;
         public virtual ICollection<Question>? Questions { get; set; } = null!;

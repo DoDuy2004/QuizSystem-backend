@@ -13,6 +13,6 @@ namespace QuizSystem_backend.services
         Task<CourseClassDto> UpdateCourseClassAsync(Guid id, CourseClassDto dto);
         Task<bool> DeleteCourseClassAsync(Guid id);
 
-        Task<IEnumerable<string>> GetSubjectsAsync();
+        Task<IEnumerable<SubjectDto>> GetSubjectsAsync();
     }
 }

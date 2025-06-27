@@ -98,11 +98,11 @@ namespace QuizSystem_backend.services
 
             return new CourseClassDto(updatedCourseClass);
         }
-        public async Task<IEnumerable<string>> GetSubjectsAsync()
+        public async Task<IEnumerable<SubjectDto>> GetSubjectsAsync()
         {
             var subjects = await _courseClassRepository.GetSubjectsAsync();
 
-            return subjects;
+            return subjects.Select(s => new SubjectDto(s));
         }
     }
 }

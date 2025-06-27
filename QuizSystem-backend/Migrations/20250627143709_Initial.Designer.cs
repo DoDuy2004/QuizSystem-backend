@@ -12,7 +12,7 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250626081502_Initial")]
+    [Migration("20250627143709_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -68,9 +68,8 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("CourseClassId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ma_mon_hoc");
+                    b.Property<Guid?>("CourseClassId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -88,9 +87,15 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("trang_thai");
 
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ma_mon_hoc");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CourseClassId");
+
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("Chuong", (string)null);
                 });
@@ -122,10 +127,9 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("trang_thai");
 
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("mon_hoc");
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ma_mon_hoc");
 
                     b.Property<Guid>("TeacherId")
                         .HasColumnType("uniqueidentifier")
@@ -135,6 +139,8 @@ namespace QuizSystem_backend.Migrations
 
                     b.HasIndex("ClassCode")
                         .IsUnique();
+
+                    b.HasIndex("SubjectId");
 
                     b.HasIndex("TeacherId");
 
@@ -243,7 +249,6 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnName("do_kho");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("hinh_anh");
@@ -443,6 +448,34 @@ namespace QuizSystem_backend.Migrations
                     b.ToTable("ChiTietKetQuaBaiThi", (string)null);
                 });
 
+            modelBuilder.Entity("QuizSystem_backend.Models.Subject", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ma_mon_hoc");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("ten_mon_hoc");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("trang_thai");
+
+                    b.Property<string>("SubjectCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("ma_mon_hoc_code");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MonHoc", (string)null);
+                });
+
             modelBuilder.Entity("QuizSystem_backend.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -578,22 +611,34 @@ namespace QuizSystem_backend.Migrations
 
             modelBuilder.Entity("QuizSystem_backend.Models.Chapter", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.CourseClass", "Course")
+                    b.HasOne("QuizSystem_backend.Models.CourseClass", null)
                         .WithMany("Chapters")
-                        .HasForeignKey("CourseClassId")
+                        .HasForeignKey("CourseClassId");
+
+                    b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
+                        .WithMany("Chapters")
+                        .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.CourseClass", b =>
                 {
+                    b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
+                        .WithMany("Courses")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("QuizSystem_backend.Models.Teacher", "Teacher")
                         .WithMany("CourseClasses")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Subject");
 
                     b.Navigation("Teacher");
                 });
@@ -798,6 +843,13 @@ namespace QuizSystem_backend.Migrations
             modelBuilder.Entity("QuizSystem_backend.Models.StudentExam", b =>
                 {
                     b.Navigation("StudentExamDetails");
+                });
+
+            modelBuilder.Entity("QuizSystem_backend.Models.Subject", b =>
+                {
+                    b.Navigation("Chapters");
+
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Student", b =>

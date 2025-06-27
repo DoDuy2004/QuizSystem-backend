@@ -14,7 +14,7 @@ namespace QuizSystem_backend.Models
             Credit = dto.Credit;
             Status = dto.Status;
             TeacherId = dto.TeacherId;
-            Subject = dto.Subject;
+            SubjectId = dto.SubjectId;
             Teacher = this.Teacher;
         }
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -24,13 +24,12 @@ namespace QuizSystem_backend.Models
         public int Credit { get; set; } // số tín chỉ
         public Status Status { get; set; }
         public Guid TeacherId { get; set; }
-        public string Subject { get; set; } = string.Empty;
+        public Guid SubjectId { get; set; }
 
         // Navigation
         public virtual Teacher Teacher { get; set; } = null!;
-        //public virtual Subject Subject { get; set; } = null!;
+        public virtual Subject Subject { get; set; } = null!;
         public virtual ICollection<Chapter> Chapters { get; set; } = null!;
-        //public virtual ICollection<QuestionBank> QuestionBanks { get; set; } = null!;
         public virtual ICollection<RoomExam> RoomExams { get; set;} = null!;
         public ICollection<StudentCourseClass> Students { get; set; } = null!;
 

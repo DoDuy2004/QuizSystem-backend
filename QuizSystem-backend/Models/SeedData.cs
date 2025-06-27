@@ -88,6 +88,31 @@ namespace QuizSystem_backend.Models
                     context.SaveChanges();
                 }
 
+                if (!context.Subjects.Any())
+                {
+                    var subjects = new[]
+                    {
+                        new Subject
+                        {
+                            Id = Guid.NewGuid(),
+                            SubjectCode = "PPLTHDT",
+                            Name = "Phương pháp lập trình hướng đối tượng",
+                            Status = Status.ACTIVE
+                        },
+                        new Subject
+                        {
+                            Id = Guid.NewGuid(),
+                            SubjectCode = "CSDL",
+                            Name = "Cơ sở dữ liệu",
+                            Status = Status.ACTIVE
+                        }
+                    };
+                    context.Subjects.AddRange(subjects);
+                    context.SaveChanges();
+                }
+
+                var subjectsList = context.Subjects.ToList();
+
                 var teacherId = context.Teachers.First().Id;
                 var studentIds = context.Students.Select(s => s.Id).ToList();
 
@@ -101,7 +126,7 @@ namespace QuizSystem_backend.Models
                         Name = "CDTH22WEBC - PPLTHDT",
                         Credit = 3,
                         Status = Status.ACTIVE,
-                        Subject = "Lập trình hướng đối tượng",
+                        SubjectId = subjectsList[0].Id,
                         TeacherId = teacherId,
                     };
                     context.CourseClasses.Add(courseClass);
@@ -121,7 +146,7 @@ namespace QuizSystem_backend.Models
                             Name = "Chương 1: Cơ bản về Lập trình hướng đối tượng",
                             Description = "Giới thiệu các khái niệm cơ bản về OOP",
                             Status = Status.ACTIVE,
-                            CourseClassId = courseClassId
+                            SubjectId = subjectsList[0].Id
                         },
                         new Chapter
                         {
@@ -129,7 +154,7 @@ namespace QuizSystem_backend.Models
                             Name = "Chương 2: Lớp và Đối tượng",
                             Description = "Tạo và sử dụng lớp, đối tượng",
                             Status = Status.ACTIVE,
-                            CourseClassId = courseClassId
+                            SubjectId = subjectsList[0].Id
                         }
                     };
                     context.Chapters.AddRange(chapters);

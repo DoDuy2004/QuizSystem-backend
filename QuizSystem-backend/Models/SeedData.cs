@@ -110,7 +110,7 @@ namespace QuizSystem_backend.Models
 
                 var courseClassId = context.CourseClasses.First().Id;
 
-                // Seed Chapters
+                //Seed Chapters
                 if (!context.Chapters.Any())
                 {
                     var chapters = new[]
@@ -177,6 +177,7 @@ namespace QuizSystem_backend.Models
                             Topic = "OOP Basics",
                             QuestionBankId = questionBankId,
                             ChapterId = chapter1Id
+                            //Chapter = ""
                         },
                         new Question
                         {

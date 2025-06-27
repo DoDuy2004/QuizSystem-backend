@@ -16,7 +16,7 @@ namespace QuizSystem_backend.DTOs
             Credit = course.Credit;
             Status = course.Status;
             TeacherId = course.TeacherId;
-            Subject = course.Subject;
+            SubjectId = course.SubjectId;
             Teacher = teacher;
         }
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -26,10 +26,10 @@ namespace QuizSystem_backend.DTOs
         public int Credit { get; set; } // số tín chỉ
         public Status Status { get; set; }
         public Guid TeacherId { get; set; }
-        public string Subject { get; set; } = null!;
+        public Guid SubjectId { get; set; }
 
         // Navigation
         public virtual TeacherDto? Teacher { get; set; } = null!;
-        //public virtual Subject Subject { get; set; } = null!;
+        public virtual Subject Subject { get; set; } = null!;
     }
 }

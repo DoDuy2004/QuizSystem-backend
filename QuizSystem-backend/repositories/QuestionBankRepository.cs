@@ -45,7 +45,7 @@ namespace QuizSystem_backend.repositories
             var questions = await _context.Questions
                 .Include(q => q.Teacher)
                 .Include(q => q.Chapter)
-                    .ThenInclude(qb => qb.Course)
+                    .ThenInclude(qb => qb.Subject)
                 .Include(q => q.Answers)
                 .Where(q => q.QuestionBank.Id == id)
                 .ToListAsync();

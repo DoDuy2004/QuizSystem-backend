@@ -742,7 +742,7 @@ namespace QuizSystem_backend.Models
         public DbSet<StudentCourseClass> StudentCourseClasses { get; set; }
         public DbSet<StudentExam> StudentExams { get; set; }
         public DbSet<StudentExamDetail> StudentExamDetails { get; set; }
-        //public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -937,13 +937,13 @@ namespace QuizSystem_backend.Models
                 entity.Property(e => e.Status)
                     .HasColumnName("trang_thai");
 
-                entity.Property(e => e.CourseClassId)
+                entity.Property(e => e.SubjectId)
                     .HasColumnName("ma_mon_hoc")
                     .IsRequired();
 
-                entity.HasOne(e => e.Course)
+                entity.HasOne(e => e.Subject)
                     .WithMany(s => s.Chapters)
-                    .HasForeignKey(e => e.CourseClassId)
+                    .HasForeignKey(e => e.SubjectId)
                     .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasMany(e => e.Question)
@@ -985,8 +985,8 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("ma_giao_vien")
                     .IsRequired();
 
-                entity.Property(e => e.Subject)
-                    .HasColumnName("mon_hoc")
+                entity.Property(e => e.SubjectId)
+                    .HasColumnName("ma_mon_hoc")
                     .IsRequired();
 
                 entity.HasOne(e => e.Teacher)
@@ -994,10 +994,10 @@ namespace QuizSystem_backend.Models
                     .HasForeignKey(e => e.TeacherId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                //entity.HasOne(e => e.Subject)
-                //    .WithMany(s => s.Courses)
-                //    .HasForeignKey(e => e.SubjectId)
-                //    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.Subject)
+                    .WithMany(s => s.Courses)
+                    .HasForeignKey(e => e.SubjectId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasMany(e => e.RoomExams)
                     .WithOne(re => re.Course)
@@ -1410,50 +1410,50 @@ namespace QuizSystem_backend.Models
             });
 
             // Subject
-            //modelBuilder.Entity<Subject>(entity =>
-            //{
-            //    entity.ToTable("MonHoc");
-            //    entity.HasKey(s => s.Id);
+            modelBuilder.Entity<Subject>(entity =>
+            {
+                entity.ToTable("MonHoc");
+                entity.HasKey(s => s.Id);
 
-            //    entity.Property(s => s.Id)
-            //        .HasColumnName("ma_mon_hoc")
-            //        .ValueGeneratedOnAdd();
+                entity.Property(s => s.Id)
+                    .HasColumnName("ma_mon_hoc")
+                    .ValueGeneratedOnAdd();
 
-            //    entity.Property(s => s.SubjectCode)
-            //        .HasColumnName("ma_mon_hoc_code")
-            //        .HasMaxLength(20);
+                entity.Property(s => s.SubjectCode)
+                    .HasColumnName("ma_mon_hoc_code")
+                    .HasMaxLength(20);
 
-            //    entity.Property(s => s.Name)
-            //        .HasColumnName("ten_mon_hoc")
-            //        .HasMaxLength(100);
+                entity.Property(s => s.Name)
+                    .HasColumnName("ten_mon_hoc")
+                    .HasMaxLength(100);
 
-            //    entity.Property(s => s.FacutlyId)
-            //        .HasColumnName("ma_khoa")
-            //        .IsRequired();
+                //entity.Property(s => s.FacutlyId)
+                //    .HasColumnName("ma_khoa")
+                //    .IsRequired();
 
-            //    entity.Property(s => s.Status)
-            //        .HasColumnName("trang_thai");
+                entity.Property(s => s.Status)
+                    .HasColumnName("trang_thai");
 
-            //    entity.HasOne(s => s.Facutly)
-            //        .WithMany(f => f.Subjects)
-            //        .HasForeignKey(s => s.FacutlyId)
-            //        .OnDelete(DeleteBehavior.Restrict);
+                //entity.HasOne(s => s.Facutly)
+                //    .WithMany(f => f.Subjects)
+                //    .HasForeignKey(s => s.FacutlyId)
+                //    .OnDelete(DeleteBehavior.Restrict);
 
-            //    entity.HasMany(s => s.Courses)
-            //        .WithOne(cc => cc.Subject)
-            //        .HasForeignKey(cc => cc.SubjectId)
-            //        .OnDelete(DeleteBehavior.Restrict);
+                entity.HasMany(s => s.Courses)
+                    .WithOne(cc => cc.Subject)
+                    .HasForeignKey(cc => cc.SubjectId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
-            //    entity.HasMany(s => s.QuestionBanks)
-            //        .WithOne(qb => qb.Subject)
-            //        .HasForeignKey(qb => qb.SubjectId)
-            //        .OnDelete(DeleteBehavior.Restrict);
+                //entity.HasMany(s => s.QuestionBanks)
+                //    .WithOne(qb => qb.Subject)
+                //    .HasForeignKey(qb => qb.SubjectId)
+                //    .OnDelete(DeleteBehavior.Restrict);
 
-            //    entity.HasMany(s => s.Chapters)
-            //        .WithOne(c => c.Subject)
-            //        .HasForeignKey(c => c.SubjectId)
-            //        .OnDelete(DeleteBehavior.Restrict);
-            //});
+                entity.HasMany(s => s.Chapters)
+                    .WithOne(c => c.Subject)
+                    .HasForeignKey(c => c.SubjectId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }

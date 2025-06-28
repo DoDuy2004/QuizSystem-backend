@@ -20,8 +20,10 @@ namespace QuizSystem_backend.repositories
                 .Include(e => e.RoomExam)
                 .Include(e => e.ExamQuestions)
                     .ThenInclude(eq => eq.Question)
+                        .ThenInclude(q => q.QuestionBank)  // Bổ sung dòng này
                 .ToListAsync();
         }
+
 
         public async Task<Exam?> GetExamByIdAsync(Guid id)
         {
@@ -34,6 +36,7 @@ namespace QuizSystem_backend.repositories
                 .Include(e => e.RoomExam)
                 .Include(e => e.ExamQuestions)
                     .ThenInclude(eq => eq.Question)
+                        .ThenInclude(q => q.QuestionBank)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 

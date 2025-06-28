@@ -24,6 +24,7 @@ namespace QuizSystem_backend.Controllers
 
         // GET: api/Students
         [HttpGet]
+    
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
             return await _context.Students.ToListAsync();
@@ -31,6 +32,7 @@ namespace QuizSystem_backend.Controllers
 
         // GET: api/Students/5
         [HttpGet("{id}")]
+     
         public async Task<ActionResult<Student>> GetStudent(Guid id)
         {
             var student = await _context.Students.FindAsync(id);
@@ -46,6 +48,7 @@ namespace QuizSystem_backend.Controllers
         // PUT: api/Students/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+       
         public async Task<IActionResult> PutStudent(Guid id, Student student)
         {
             if (id != student.Id)

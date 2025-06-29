@@ -1,4 +1,6 @@
-﻿namespace QuizSystem_backend.DTOs
+﻿using QuizSystem_backend.Enums;
+
+namespace QuizSystem_backend.DTOs
 {
     public class ExamMatrixRequest
     {
@@ -12,7 +14,7 @@
 
         // Key: Difficulty ("Easy", "Medium", "Hard")
         // Value: Số câu hỏi
-        public Dictionary<string, int> DifficultyMap { get; set; } = new();
+        public Dictionary<Difficulty, int> DifficultyMap { get; set; } = new();
     }
 
 }

@@ -41,7 +41,7 @@ namespace QuizSystem_backend.Models
         public Guid? CreatedBy { get; set; }
         public string Type { get; set; } = null!;
 
-        public string Difficulty { get; set; } = string.Empty;
+        public Difficulty Difficulty { get; set; }
         public Status Status { get; set; }
         public string Topic { get; set; } = null!;
         public Guid? QuestionBankId { get; set; }

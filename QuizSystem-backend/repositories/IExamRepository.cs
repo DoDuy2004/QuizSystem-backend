@@ -1,4 +1,5 @@
 ﻿using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using static QuizSystem_backend.DTOs.ExamDto;
 
@@ -12,7 +13,7 @@ namespace QuizSystem_backend.repositories
         Task<Exam?> GetExamByIdAsync(Guid examId);
         Task<Exam>GenerateAsync(Exam exam);
         Task<Exam> AddQuestionToExamAsync(Guid examId, Question questionDto);
-        Task<List<Question>> GetQuestionsByChapterAndDifficultyAsync(Guid chapterId, string difficulty, int take,Guid questionBankId);
+        Task<List<Question>> GetQuestionsByChapterAndDifficultyAsync(Guid chapterId, Difficulty difficulty, int take,Guid questionBankId);
 
     }
 }

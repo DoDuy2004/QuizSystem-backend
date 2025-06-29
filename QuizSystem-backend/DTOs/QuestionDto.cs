@@ -55,7 +55,7 @@ namespace QuizSystem_backend.DTOs
         public string Content { get; set; } = null!;
         public string? Image { get; set; } = null!;
         public Status Status { get; set; } = Status.ACTIVE;
-        public string Difficulty { get; set; } = null!;
+        public Difficulty Difficulty { get; set; }
         public Guid? ChapterId { get; set; }
         public Guid? QuestionBankId { get; set; }
         public Guid? CreatedBy { get; set; }

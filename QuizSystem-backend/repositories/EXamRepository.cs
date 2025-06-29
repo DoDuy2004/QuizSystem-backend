@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using static QuizSystem_backend.DTOs.ExamDto;
 
@@ -53,7 +54,7 @@ namespace QuizSystem_backend.repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Question>> GetQuestionsByChapterAndDifficultyAsync(Guid chapterId, string difficulty, int take, Guid questionBankId)
+        public async Task<List<Question>> GetQuestionsByChapterAndDifficultyAsync(Guid chapterId, Difficulty difficulty, int take, Guid questionBankId)
         {
             return await _context.Questions
                 .Where(q => q.QuestionBankId==questionBankId && q.ChapterId == chapterId && q.Difficulty == difficulty)

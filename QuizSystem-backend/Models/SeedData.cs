@@ -283,8 +283,9 @@ namespace QuizSystem_backend.Models
                         Name = "Giữa kỳ Lập trình hướng đối tượng",
                         StartDate = new DateTime(2025, 6, 25, 8, 30, 0),
                         DurationMinutes = 90,
-                        NumberOfQuestions = 3,
+                        NoOfQuestions = 3,
                         RoomExamId = roomExamId,
+                        Subject = "Phương pháp lập trình hướng đối tượng",
                         Status = Status.ACTIVE
                     };
                     context.Exams.Add(exam);

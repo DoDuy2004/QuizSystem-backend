@@ -23,7 +23,10 @@ namespace QuizSystem_backend.repositories
                 .Include(e => e.RoomExam)
                 .Include(e => e.ExamQuestions)
                     .ThenInclude(eq => eq.Question)
-                        .ThenInclude(q => q.QuestionBank)  // Bổ sung dòng này
+                        .ThenInclude(q => q.QuestionBank)
+                .Include(e => e.ExamQuestions) 
+                    .ThenInclude(eq => eq.Question)
+                        .ThenInclude(q => q.Answers) 
                 .ToListAsync();
         }
 
@@ -40,6 +43,9 @@ namespace QuizSystem_backend.repositories
                 .Include(e => e.ExamQuestions)
                     .ThenInclude(eq => eq.Question)
                         .ThenInclude(q => q.QuestionBank)
+                .Include(e => e.ExamQuestions)
+                    .ThenInclude(eq => eq.Question)
+                        .ThenInclude(q => q.Answers)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 

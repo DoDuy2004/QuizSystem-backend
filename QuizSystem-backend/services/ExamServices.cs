@@ -84,7 +84,7 @@ namespace QuizSystem_backend.services
             exam.StartDate = examDto.StartDate;
            
             exam.ExamCode = examDto.ExamCode;
-            exam.NumberOfQuestions = examDto.NumberOfQuestions;
+            exam.NoOfQuestions = examDto.NoOfQuestions;
 
             // Xóa toàn bộ câu hỏi cũ và thêm lại (hoặc dùng so sánh/phân biệt nếu cần cập nhật tinh vi hơn)
             exam.ExamQuestions = examDto.ExamQuestions.Select(eq => new ExamQuestion

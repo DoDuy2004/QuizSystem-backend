@@ -11,7 +11,7 @@ namespace QuizSystem_backend.DTOs
             SubjectCode = subject.SubjectCode;
             Name = subject.Name;
         }
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }
         public string SubjectCode { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
     }

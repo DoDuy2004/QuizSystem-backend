@@ -16,6 +16,7 @@ namespace QuizSystem_backend.Models
             TeacherId = dto.TeacherId;
             SubjectId = dto.SubjectId;
             Teacher = this.Teacher;
+            Description = dto.Description;
         }
         public Guid Id { get; set; } = Guid.NewGuid();
         public string ClassCode { get; set; } = string.Empty;
@@ -23,6 +24,7 @@ namespace QuizSystem_backend.Models
 
         public int Credit { get; set; } // số tín chỉ
         public Status Status { get; set; }
+        public string Description { get; set; } = string.Empty;
         public Guid TeacherId { get; set; }
         public Guid SubjectId { get; set; }
 

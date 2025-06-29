@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.Models;
@@ -12,61 +11,60 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeachersController : ControllerBase
+    public class SubjectsController : ControllerBase
     {
         private readonly QuizSystemDbContext _context;
 
-        public TeachersController(QuizSystemDbContext context)
+        public SubjectsController(QuizSystemDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Teachers
+        // GET: api/Subjects
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Teacher>>> GetTeachers()
+        public async Task<ActionResult<IEnumerable<Subject>>> GetSubjects()
         {
-            return await _context.Teachers.ToListAsync();
+            return await _context.Subjects.ToListAsync();
         }
 
-        // GET: api/Teachers/5
+        // GET: api/Subjects/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Teacher>> GetTeacher(Guid id)
+        public async Task<ActionResult<Subject>> GetSubject(Guid id)
         {
-            var teacher = await _context.Teachers.FindAsync(id);
+            var subject = await _context.Subjects.FindAsync(id);
 
-            if (teacher == null)
+            if (subject == null)
             {
                 return NotFound();
             }
 
-            return teacher;
+            return subject;
         }
 
-        [HttpGet("{id}/classes")]
-
-        public async Task<ActionResult> GetClassByTeacher(Guid id)
+        [HttpGet("chapters")]
+        public async Task<ActionResult> GetChapters()
         {
-            var classes = await _context.CourseClasses.Where(cc => cc.TeacherId == id).ToListAsync();
+            var chapters = await _context.Chapters.ToListAsync();
 
             return Ok(new
             {
                 code = 200,
                 message = "Success",
-                data = classes
-            });
+                data = chapters
+            }); ;
         }
 
-        // PUT: api/Teachers/5
+        // PUT: api/Subjects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeacher(Guid id, Teacher teacher)
+        public async Task<IActionResult> PutSubject(Guid id, Subject subject)
         {
-            if (id != teacher.Id)
+            if (id != subject.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(teacher).State = EntityState.Modified;
+            _context.Entry(subject).State = EntityState.Modified;
 
             try
             {
@@ -74,7 +72,7 @@ namespace QuizSystem_backend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeacherExists(id))
+                if (!SubjectExists(id))
                 {
                     return NotFound();
                 }
@@ -87,36 +85,36 @@ namespace QuizSystem_backend.Controllers
             return NoContent();
         }
 
-        // POST: api/Teachers
+        // POST: api/Subjects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Teacher>> PostTeacher(Teacher teacher)
+        public async Task<ActionResult<Subject>> PostSubject(Subject subject)
         {
-            _context.Teachers.Add(teacher);
+            _context.Subjects.Add(subject);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTeacher", new { id = teacher.Id }, teacher);
+            return CreatedAtAction("GetSubject", new { id = subject.Id }, subject);
         }
 
-        // DELETE: api/Teachers/5
+        // DELETE: api/Subjects/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeacher(Guid id)
+        public async Task<IActionResult> DeleteSubject(Guid id)
         {
-            var teacher = await _context.Teachers.FindAsync(id);
-            if (teacher == null)
+            var subject = await _context.Subjects.FindAsync(id);
+            if (subject == null)
             {
                 return NotFound();
             }
 
-            _context.Teachers.Remove(teacher);
+            _context.Subjects.Remove(subject);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TeacherExists(Guid id)
+        private bool SubjectExists(Guid id)
         {
-            return _context.Teachers.Any(e => e.Id == id);
+            return _context.Subjects.Any(e => e.Id == id);
         }
     }
 }

@@ -189,6 +189,11 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("trang_thai");
 
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("mon_hoc");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ExamCode")

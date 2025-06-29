@@ -19,7 +19,7 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpGet("GetExams")]
-     
+
         public async Task<ActionResult> GetExams()
         {
             try
@@ -39,7 +39,7 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpGet("GetById/{id}")]
-      
+
         public async Task<ActionResult> GetExamById(Guid id)
         {
             try
@@ -63,7 +63,7 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpPost("CreateExam")]
-       
+
         public async Task<ActionResult> CreateExam([FromBody] ExamDto examDto)
         {
             try
@@ -93,7 +93,7 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpPut("UpdateExam/{id}")]
-     
+
         public async Task<ActionResult> UpdateExam(Guid id, [FromBody] ExamDto examDto)
         {
             try
@@ -121,7 +121,7 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpDelete("{id}")]
- 
+
         public async Task<ActionResult> DeleteExam(Guid id)
         {
             try
@@ -140,14 +140,31 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpPost("create-matrix")]
-        public async Task<IActionResult> CreateExamByMatrix([FromBody] ExamMatrixRequest request,Guid questionBankId)
+        public async Task<IActionResult> CreateExamByMatrix([FromBody] ExamMatrixRequest request, Guid questionBankId)
         {
-            var result = await _examService.CreateExamByMatrixAsync(request,questionBankId);
+            var result = await _examService.CreateExamByMatrixAsync(request, questionBankId);
             return Ok(result);
         }
 
+        [HttpPost("add-list-question")]
+        public async Task<IActionResult> AddListQuestionToExam([FromBody] AddListQuestionDto dto)
+        {
+            try
+            {
+                var result = await _examService.AddListQuestionToExamAsync(dto);
+                return Ok(new
+                {
+                    code = 201,
+                    message = "Add list question successfully",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+            
 
-
-
+        }
     }
 }

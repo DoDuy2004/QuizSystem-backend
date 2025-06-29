@@ -1,4 +1,5 @@
-﻿using QuizSystem_backend.DTOs;
+﻿using AutoMapper;
+using QuizSystem_backend.DTOs;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
@@ -9,10 +10,12 @@ namespace QuizSystem_backend.services
     public class QuestionService : IQuestionService
     {
         private readonly IQuestionRepository _questionRepository;
+        
 
         public QuestionService(IQuestionRepository questionRepository)
         {
             _questionRepository = questionRepository;
+      
         }
 
         public async Task<IEnumerable<QuestionDto>> GetQuestionsAsync()
@@ -87,5 +90,7 @@ namespace QuizSystem_backend.services
 
             return true;
         }
+
+        
     }
 }

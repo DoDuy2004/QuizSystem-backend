@@ -30,6 +30,13 @@ namespace QuizSystem_backend.Helper
             CreateMap<Exam, ExamDto>().ReverseMap();
             CreateMap<RoomExam, RoomExamDto>().ReverseMap();
             CreateMap<ExamQuestion, ExamQuestionDto>().ReverseMap();
+            CreateMap<Question, QuestionDto>().ReverseMap();
+            CreateMap<Teacher, TeacherDto>().ReverseMap();
+            CreateMap<Answer, AnswerDto>().ReverseMap();
+            CreateMap<QuestionBank, QuestionBankDto>().ReverseMap();
+            CreateMap<Chapter, ChapterDto>().ReverseMap();
+
+
 
         }
 

@@ -18,6 +18,7 @@ namespace QuizSystem_backend.DTOs
             TeacherId = course.TeacherId;
             SubjectId = course.SubjectId;
             Teacher = teacher;
+            Description = course.Description;
         }
         public Guid Id { get; set; } = Guid.NewGuid();
         public string ClassCode { get; set; } = null!;
@@ -27,9 +28,10 @@ namespace QuizSystem_backend.DTOs
         public Status Status { get; set; }
         public Guid TeacherId { get; set; }
         public Guid SubjectId { get; set; }
+        public string? Description { get; set; }
 
         // Navigation
         public virtual TeacherDto? Teacher { get; set; } = null!;
-        public virtual Subject Subject { get; set; } = null!;
+        public virtual SubjectDto? Subject { get; set; } = null!;
     }
 }

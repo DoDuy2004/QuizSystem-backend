@@ -12,7 +12,7 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250627143709_Initial")]
+    [Migration("20250628052507_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -116,6 +116,12 @@ namespace QuizSystem_backend.Migrations
                     b.Property<int>("Credit")
                         .HasColumnType("int")
                         .HasColumnName("so_tin_chi");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("mo_ta");
 
                     b.Property<string>("Name")
                         .IsRequired()

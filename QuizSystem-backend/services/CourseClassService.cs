@@ -92,7 +92,7 @@ namespace QuizSystem_backend.services
             updatedCourseClass.Credit = dto.Credit;
             updatedCourseClass.Status = dto.Status;
             updatedCourseClass.TeacherId = dto.TeacherId;
-            updatedCourseClass.Subject = dto.Subject;
+            updatedCourseClass.SubjectId = dto.SubjectId;
 
             await _courseClassRepository.SaveChangesAsync();
 

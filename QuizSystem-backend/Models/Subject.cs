@@ -1,9 +1,17 @@
-﻿using QuizSystem_backend.Enums;
+﻿using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Enums;
 
 namespace QuizSystem_backend.Models
 {
     public class Subject
     {
+        public Subject() { }
+        public Subject(SubjectDto dto)
+        {
+            Id = dto.Id;
+            SubjectCode = dto.SubjectCode;
+            Name = dto.Name;
+        }
         public Guid Id { get; set; } = Guid.NewGuid();
         public string SubjectCode { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;

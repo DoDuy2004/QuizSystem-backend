@@ -124,6 +124,7 @@ namespace QuizSystem_backend.Models
                         Id = Guid.NewGuid(),
                         ClassCode = "CDTH22WEBC - PPLTHDT",
                         Name = "CDTH22WEBC - PPLTHDT",
+                        Description = "Học Kỳ 1 2024 - 2025",
                         Credit = 3,
                         Status = Status.ACTIVE,
                         SubjectId = subjectsList[0].Id,

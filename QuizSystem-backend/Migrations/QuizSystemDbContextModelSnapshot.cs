@@ -114,6 +114,12 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("so_tin_chi");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("mo_ta");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)

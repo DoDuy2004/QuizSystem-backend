@@ -975,6 +975,15 @@ namespace QuizSystem_backend.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.Description)
+                   .HasColumnName("mo_ta")
+                   .HasMaxLength(100);
+
+                entity.Property(e => e.Name)
+                   .HasColumnName("ten_lop")
+                   .IsRequired()
+                   .HasMaxLength(100);
+
                 entity.Property(e => e.Credit)
                     .HasColumnName("so_tin_chi");
 

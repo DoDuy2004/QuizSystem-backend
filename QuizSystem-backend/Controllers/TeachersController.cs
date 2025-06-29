@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.Models;
@@ -39,6 +40,20 @@ namespace QuizSystem_backend.Controllers
             }
 
             return teacher;
+        }
+
+        [HttpGet("{id}/classes")]
+
+        public async Task<ActionResult> GetClassByTeacher(Guid id)
+        {
+            var classes = await _context.CourseClasses.Where(cc => cc.TeacherId == id).ToListAsync();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = classes
+            });
         }
 
         // PUT: api/Teachers/5

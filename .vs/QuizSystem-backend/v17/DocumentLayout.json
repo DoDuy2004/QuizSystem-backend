@@ -3,16 +3,87 @@
   "WorkspaceRootPath": "C:\\CDTH22\\QuizSystem-backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\questionbankdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\questionbankdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\questiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\questiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/QuizSystem/True/SqlTable/dbo.CauHoi.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\questionbankdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\questionbankdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\controllers\\teacherscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\controllers\\teacherscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\models\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\models\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\models\\quizsystemdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\models\\quizsystemdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\courseclassdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\courseclassdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\models\\courseclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\models\\courseclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\studentcourseclassdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\studentcourseclassdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\teacherdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\teacherdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\services\\courseclassservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\services\\courseclassservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\services\\questionbankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\services\\questionbankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\models\\subject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\models\\subject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\models\\questionbank.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\models\\questionbank.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\studentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\studentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\subjectdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\subjectdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\services\\questionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\services\\questionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\controllers\\courseclassescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\controllers\\courseclassescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\repositories\\iteacherrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\repositories\\iteacherrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\models\\teacher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\models\\teacher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\answerdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -31,10 +102,6 @@
       "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\chapterdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\services\\questionbankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\services\\questionbankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\controllers\\subjectscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\controllers\\subjectscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -45,10 +112,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\controllers\\questionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\controllers\\questionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\studentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\studentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\models\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -63,32 +126,8 @@
       "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\repositories\\iquestionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\models\\courseclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\models\\courseclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\models\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\models\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\models\\quizsystemdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\models\\quizsystemdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\services\\icourseclassservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\services\\icourseclassservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\services\\courseclassservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\services\\courseclassservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\subjectdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\subjectdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\models\\subject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\models\\subject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\repositories\\courseclassrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -103,18 +142,10 @@
       "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\repositories\\questionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\dtos\\courseclassdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\dtos\\courseclassdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/QuizSystem/True/SqlTable/dbo.TaiKhoan.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/QuizSystem/True/SqlTable/dbo.NganHangCauHoi.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\controllers\\courseclassescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|solutionrelative:quizsystem-backend\\controllers\\courseclassescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{66FC22D5-001E-4FC4-A85A-F292064BBC34}|QuizSystem-backend\\QuizSystem-backend.csproj|c:\\cdth22\\quizsystem-backend\\quizsystem-backend\\services\\iquestionbankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -139,7 +170,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 21,
+          "SelectedChildIndex": 33,
           "Children": [
             {
               "$type": "Bookmark",
@@ -155,19 +186,121 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 1,
+              "Title": "dbo.CauHoi [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/QuizSystem/True/SqlTable/dbo.CauHoi.sql",
+              "ToolTip": "dbo.CauHoi [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-06-28T12:53:29.464Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "StudentCourseClassDto.cs",
+              "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\StudentCourseClassDto.cs",
+              "RelativeDocumentMoniker": "QuizSystem-backend\\DTOs\\StudentCourseClassDto.cs",
+              "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\StudentCourseClassDto.cs",
+              "RelativeToolTip": "QuizSystem-backend\\DTOs\\StudentCourseClassDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T04:55:07.467Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "QuestionService.cs",
+              "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\services\\QuestionService.cs",
+              "RelativeDocumentMoniker": "QuizSystem-backend\\services\\QuestionService.cs",
+              "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\services\\QuestionService.cs",
+              "RelativeToolTip": "QuizSystem-backend\\services\\QuestionService.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAIwEYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T04:50:19.494Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "LoginDto.cs",
+              "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\LoginDto.cs",
+              "RelativeDocumentMoniker": "QuizSystem-backend\\DTOs\\LoginDto.cs",
+              "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\LoginDto.cs",
+              "RelativeToolTip": "QuizSystem-backend\\DTOs\\LoginDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T04:47:48.809Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ITeacherRepository.cs",
+              "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\repositories\\ITeacherRepository.cs",
+              "RelativeDocumentMoniker": "QuizSystem-backend\\repositories\\ITeacherRepository.cs",
+              "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\repositories\\ITeacherRepository.cs",
+              "RelativeToolTip": "QuizSystem-backend\\repositories\\ITeacherRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T04:36:32.226Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "TeachersController.cs",
+              "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Controllers\\TeachersController.cs",
+              "RelativeDocumentMoniker": "QuizSystem-backend\\Controllers\\TeachersController.cs",
+              "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Controllers\\TeachersController.cs",
+              "RelativeToolTip": "QuizSystem-backend\\Controllers\\TeachersController.cs",
+              "ViewState": "AgIAAFAAAAAAAAAAAAAcwDMAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T04:35:58.616Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Teacher.cs",
+              "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\Teacher.cs",
+              "RelativeDocumentMoniker": "QuizSystem-backend\\Models\\Teacher.cs",
+              "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\Teacher.cs",
+              "RelativeToolTip": "QuizSystem-backend\\Models\\Teacher.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T04:34:57.123Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "TeacherDto.cs",
+              "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\TeacherDto.cs",
+              "RelativeDocumentMoniker": "QuizSystem-backend\\DTOs\\TeacherDto.cs",
+              "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\TeacherDto.cs",
+              "RelativeToolTip": "QuizSystem-backend\\DTOs\\TeacherDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T04:34:50.825Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "QuestionBankService.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\services\\QuestionBankService.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\services\\QuestionBankService.cs",
               "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\services\\QuestionBankService.cs",
               "RelativeToolTip": "QuizSystem-backend\\services\\QuestionBankService.cs",
-              "ViewState": "AgIAACgAAAAAAAAAAAA1wEIAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAC8AAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-27T19:53:52.164Z"
+              "WhenOpened": "2025-06-27T19:53:52.164Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 26,
               "Title": "QuestionBanksController.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Controllers\\QuestionBanksController.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Controllers\\QuestionBanksController.cs",
@@ -179,7 +312,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 25,
               "Title": "SubjectsController.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Controllers\\SubjectsController.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Controllers\\SubjectsController.cs",
@@ -191,7 +324,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 27,
               "Title": "QuestionsController.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Controllers\\QuestionsController.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Controllers\\QuestionsController.cs",
@@ -203,19 +336,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 12,
               "Title": "Subject.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\Subject.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Models\\Subject.cs",
               "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\Subject.cs",
               "RelativeToolTip": "QuizSystem-backend\\Models\\Subject.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwA8AAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-27T14:02:02.581Z"
+              "WhenOpened": "2025-06-27T14:02:02.581Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 15,
               "Title": "SubjectDto.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\SubjectDto.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\DTOs\\SubjectDto.cs",
@@ -223,11 +357,12 @@
               "RelativeToolTip": "QuizSystem-backend\\DTOs\\SubjectDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-27T14:02:00.097Z"
+              "WhenOpened": "2025-06-27T14:02:00.097Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 14,
               "Title": "StudentDto.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\StudentDto.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\DTOs\\StudentDto.cs",
@@ -235,23 +370,25 @@
               "RelativeToolTip": "QuizSystem-backend\\DTOs\\StudentDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-27T14:01:38.688Z"
+              "WhenOpened": "2025-06-27T14:01:38.688Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 6,
               "Title": "CourseClassDto.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\CourseClassDto.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\DTOs\\CourseClassDto.cs",
               "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\CourseClassDto.cs",
               "RelativeToolTip": "QuizSystem-backend\\DTOs\\CourseClassDto.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAA1wBoAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAowBQAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-27T13:57:41.27Z"
+              "WhenOpened": "2025-06-27T13:57:41.27Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 35,
               "Title": "dbo.TaiKhoan.sql",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/QuizSystem/True/SqlTable/dbo.TaiKhoan.sql",
               "ToolTip": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/QuizSystem/True/SqlTable/dbo.TaiKhoan.sql",
@@ -260,7 +397,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 36,
               "Title": "dbo.NganHangCauHoi.sql",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/QuizSystem/True/SqlTable/dbo.NganHangCauHoi.sql",
               "ToolTip": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/QuizSystem/True/SqlTable/dbo.NganHangCauHoi.sql",
@@ -269,31 +406,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 18,
               "Title": "CourseClassesController.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Controllers\\CourseClassesController.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Controllers\\CourseClassesController.cs",
               "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Controllers\\CourseClassesController.cs",
               "RelativeToolTip": "QuizSystem-backend\\Controllers\\CourseClassesController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAgwCkAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-26T10:00:08.746Z"
+              "WhenOpened": "2025-06-26T10:00:08.746Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 10,
               "Title": "CourseClassService.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\services\\CourseClassService.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\services\\CourseClassService.cs",
               "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\services\\CourseClassService.cs",
               "RelativeToolTip": "QuizSystem-backend\\services\\CourseClassService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAoAAAA5AAAAAAAAAA==",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAmwF4AAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-26T09:59:21.852Z"
+              "WhenOpened": "2025-06-26T09:59:21.852Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 31,
               "Title": "ICourseClassService.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\services\\ICourseClassService.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\services\\ICourseClassService.cs",
@@ -305,7 +444,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 37,
               "Title": "IQuestionBankService.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\services\\IQuestionBankService.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\services\\IQuestionBankService.cs",
@@ -317,7 +456,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 32,
               "Title": "CourseClassRepository.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\repositories\\CourseClassRepository.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\repositories\\CourseClassRepository.cs",
@@ -329,7 +468,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 38,
               "Title": "IQuestionBankRepository.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\repositories\\IQuestionBankRepository.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\repositories\\IQuestionBankRepository.cs",
@@ -341,7 +480,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 33,
               "Title": "ICourseClassRepository.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\repositories\\ICourseClassRepository.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\repositories\\ICourseClassRepository.cs",
@@ -353,7 +492,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 21,
               "Title": "AnswerDto.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\AnswerDto.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\DTOs\\AnswerDto.cs",
@@ -365,32 +504,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "QuestionBankDto.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\QuestionBankDto.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\DTOs\\QuestionBankDto.cs",
               "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\QuestionBankDto.cs",
               "RelativeToolTip": "QuizSystem-backend\\DTOs\\QuestionBankDto.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABkAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwBsAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-26T09:35:26.007Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 13,
               "Title": "QuestionBank.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\QuestionBank.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Models\\QuestionBank.cs",
               "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\QuestionBank.cs",
               "RelativeToolTip": "QuizSystem-backend\\Models\\QuestionBank.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAxwBwAAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABwAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-26T09:34:23.833Z"
+              "WhenOpened": "2025-06-26T09:34:23.833Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 30,
               "Title": "IQuestionRepository.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\repositories\\IQuestionRepository.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\repositories\\IQuestionRepository.cs",
@@ -402,43 +542,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 4,
               "Title": "SeedData.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\SeedData.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Models\\SeedData.cs",
               "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\SeedData.cs",
               "RelativeToolTip": "QuizSystem-backend\\Models\\SeedData.cs",
-              "ViewState": "AgIAAIcAAAAAAAAAAAAiwKEAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAiwIMAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-26T09:32:25.732Z"
+              "WhenOpened": "2025-06-26T09:32:25.732Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "QuestionDto.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\QuestionDto.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\DTOs\\QuestionDto.cs",
               "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\QuestionDto.cs",
               "RelativeToolTip": "QuizSystem-backend\\DTOs\\QuestionDto.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAowDsAAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-26T09:29:10.569Z"
+              "WhenOpened": "2025-06-26T09:29:10.569Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 5,
               "Title": "QuizSystemDbContext.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\QuizSystemDbContext.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Models\\QuizSystemDbContext.cs",
               "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\QuizSystemDbContext.cs",
               "RelativeToolTip": "QuizSystem-backend\\Models\\QuizSystemDbContext.cs",
-              "ViewState": "AgIAABUEAAAAAAAAAADwvzoEAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAAM8DAAAAAAAAAAAnwOkDAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-26T09:26:13.406Z"
+              "WhenOpened": "2025-06-26T09:26:13.406Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 24,
               "Title": "ChapterDto.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\DTOs\\ChapterDto.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\DTOs\\ChapterDto.cs",
@@ -450,7 +593,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 23,
               "Title": "Answer.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\Answer.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Models\\Answer.cs",
@@ -462,7 +605,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 28,
               "Title": "Question.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\Question.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Models\\Question.cs",
@@ -474,7 +617,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 39,
               "Title": "Facutly.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\Facutly.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Models\\Facutly.cs",
@@ -486,7 +629,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 29,
               "Title": "QuestionBankRepository.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\repositories\\QuestionBankRepository.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\repositories\\QuestionBankRepository.cs",
@@ -498,19 +641,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 7,
               "Title": "CourseClass.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\CourseClass.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Models\\CourseClass.cs",
               "ToolTip": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\CourseClass.cs",
               "RelativeToolTip": "QuizSystem-backend\\Models\\CourseClass.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAA0wBcAAAA1AAAAAAAAAA==",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAgwBoAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-26T09:14:58.93Z"
+              "WhenOpened": "2025-06-26T09:14:58.93Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 22,
               "Title": "Chapter.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\Models\\Chapter.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\Models\\Chapter.cs",
@@ -522,7 +666,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 34,
               "Title": "QuestionRepository.cs",
               "DocumentMoniker": "C:\\CDTH22\\QuizSystem-backend\\QuizSystem-backend\\repositories\\QuestionRepository.cs",
               "RelativeDocumentMoniker": "QuizSystem-backend\\repositories\\QuestionRepository.cs",
@@ -534,7 +678,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 40,
               "Title": "ChapterDto.cs",
               "DocumentMoniker": "C:\\Users\\PC\\AppData\\Local\\SourceServer\\09541804a611c6e4e796e3945c224b48ea86f670ebf1a293b177172274891f58\\QuizSystem-backend\\DTOs\\ChapterDto.cs",
               "RelativeDocumentMoniker": "..\\..\\Users\\PC\\AppData\\Local\\SourceServer\\09541804a611c6e4e796e3945c224b48ea86f670ebf1a293b177172274891f58\\QuizSystem-backend\\DTOs\\ChapterDto.cs",

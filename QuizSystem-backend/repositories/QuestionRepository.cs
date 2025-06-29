@@ -11,6 +11,20 @@ namespace QuizSystem_backend.repositories
         {
             _context = context;
         }
+
+        public async Task<IEnumerable<Question>> AddQuestionToExamAsync(IEnumerable<Question> questions, Guid examId)
+        {
+            //var examQuestions = questions.Select(q => new ExamQuestion
+            //{
+            //    Id = Guid.NewGuid(),
+            //    QuestionId = q.Id,
+            //    ExamId = examId
+            //});
+            //_context.ExamQuestions.AddRange(examQuestions);
+            //await _context.SaveChangesAsync();
+            return questions;
+        }
+
         public async Task<IEnumerable<Question>> GetQuestionsAsync()
         {
             var result = await _context.Questions

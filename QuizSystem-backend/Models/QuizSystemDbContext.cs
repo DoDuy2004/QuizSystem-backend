@@ -1056,8 +1056,8 @@ namespace QuizSystem_backend.Models
                 //    .HasColumnName("tong_diem");
 
                 entity.Property(e => e.RoomExamId)
-                    .HasColumnName("ma_phong_thi")
-                    .IsRequired();
+                    .HasColumnName("ma_phong_thi");
+                   
 
                 entity.Property(e => e.Status)
                     .HasColumnName("trang_thai");

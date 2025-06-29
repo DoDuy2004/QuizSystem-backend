@@ -31,32 +31,32 @@ namespace QuizSystem_backend.services
         {
             var questionBank = new QuestionBank(dto);
 
-            if (!string.IsNullOrEmpty(dto.Subject))
-            {
-                var existingSubject = await _context.Subjects
-                    .FirstOrDefaultAsync(s => s.Name == dto.Subject);
+            //if (!string.IsNullOrEmpty(dto.Subject))
+            //{
+            //    var existingSubject = await _context.Subjects
+            //        .FirstOrDefaultAsync(s => s.Name == dto.Subject);
 
-                if (existingSubject != null)
-                {
-                    qb.SubjectId = existingSubject.Id;
-                }
-                else
-                {
-                    var newSubject = new Subject
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = dto.Subject
-                    };
-                    _context.Subjects.Add(newSubject);
-                    await _context.SaveChangesAsync();
+            //    if (existingSubject != null)
+            //    {
+            //        qb.SubjectId = existingSubject.Id;
+            //    }
+            //    else
+            //    {
+            //        var newSubject = new Subject
+            //        {
+            //            Id = Guid.NewGuid(),
+            //            Name = dto.Subject
+            //        };
+            //        _context.Subjects.Add(newSubject);
+            //        await _context.SaveChangesAsync();
 
-                    qb.SubjectId = newSubject.Id;
-                }
-            }
-            else if (dto.SubjectId.HasValue)
-            {
-                qb.SubjectId = dto.SubjectId;
-            }
+            //        qb.SubjectId = newSubject.Id;
+            //    }
+            //}
+            //else if (dto.SubjectId.HasValue)
+            //{
+            //    qb.SubjectId = dto.SubjectId;
+            //}
 
             await _questionBankRepository.AddAsync(questionBank);
 

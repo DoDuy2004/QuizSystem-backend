@@ -78,3 +78,6 @@ secrets.json
 
 # Dotnet tool manifest
 .dotnet_tool_manifest.json
+.suo
+DocumentLayout.json
+.vs/

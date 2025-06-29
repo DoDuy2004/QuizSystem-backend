@@ -14,6 +14,8 @@ namespace QuizSystem_backend.repositories
             _context = context;
         }
 
+
+       
         public async Task<IEnumerable<Exam>> GetExamsAsync()
         {
             return await _context.Exams
@@ -71,7 +73,7 @@ namespace QuizSystem_backend.repositories
             return exam;
         }
 
-        public async Task<Exam> AddQuestionToExamAsync(Guid examId, Question question)
+        public async Task<Question> AddQuestionToExamAsync(Guid examId, Question question,float score)
         {
             // Find the exam
             var exam = await _context.Exams
@@ -89,20 +91,14 @@ namespace QuizSystem_backend.repositories
             var examQuestion = new ExamQuestion
             {
                 ExamId = examId,
-                QuestionId = question.Id
+                QuestionId = question.Id,
+                Score = score
             };
 
             _context.ExamQuestions.Add(examQuestion);
             await _context.SaveChangesAsync();
 
-
-            // Reload exam with questions
-            exam = await _context.Exams
-                .Include(e => e.ExamQuestions)
-                .ThenInclude(eq => eq.Question)
-                .FirstOrDefaultAsync(e => e.Id == examId);
-
-            return exam!;
+            return question;
         }
     }
 }

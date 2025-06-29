@@ -11,11 +11,11 @@ namespace QuizSystem_backend.services
         Task<IEnumerable<ExamDto>> GetExamsAsync();
         Task<ExamDto> GetExamByIdAsync(Guid id);
         Task<ExamDto> AddExamAsync(ExamDto examDto);
-        Task<QuestionDto> AddQuestionToExamAsync(Guid examId, QuestionDto questionDto);
         Task<bool> DeleteExamAsync(Guid id);
         Task<ExamDto> UpdateExamAsync(Guid id, ExamDto examDto);
         
         Task<ExamDto> CreateExamByMatrixAsync(ExamMatrixRequest request,Guid questionBankId);
+        Task<List<QuestionDto>> AddListQuestionToExamAsync(AddListQuestionDto dto);
 
     }
 }

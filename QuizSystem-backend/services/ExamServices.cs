@@ -19,6 +19,27 @@ namespace QuizSystem_backend.services
             _examRepository = examRepository;
             _mapper = mapper;
         }
+
+        public async Task<List<QuestionDto>> AddListQuestionToExamAsync(AddListQuestionDto dto)
+        {
+            var examId = dto.examId;
+
+            
+            if (dto.QuestionScores == null || !dto.QuestionScores.Any())
+            {
+                throw new ArgumentException("Question scores cannot be null or empty.", nameof(dto.QuestionScores));
+            }
+            
+            List<QuestionDto> questions = new List<QuestionDto>();
+            foreach (var questionScore in dto.QuestionScores)
+            {
+                var question = _mapper.Map<Question>(questionScore.Question);
+
+                var addedQuestion=await _examRepository.AddQuestionToExamAsync(examId, question,questionScore.Score);
+                questions.Add(_mapper.Map<QuestionDto>(addedQuestion));
+            }
+            return questions;
+        }
         public async Task<IEnumerable<ExamDto>> GetExamsAsync()
         {
             var exams = await _examRepository.GetExamsAsync();
@@ -41,15 +62,7 @@ namespace QuizSystem_backend.services
             return _mapper.Map<ExamDto>(addedExam);
         }
 
-        public async Task<QuestionDto> AddQuestionToExamAsync(Guid examId, QuestionDto questionDto)
-        {
-            var question=_mapper.Map<Question>(questionDto);
-
-            await _examRepository.AddQuestionToExamAsync(examId, question);
-
-            return _mapper.Map<QuestionDto>(await _examRepository.GetExamByIdAsync(examId));
-
-        }
+        
         public async Task<bool> DeleteExamAsync(Guid id)
         {
             var exam = await _examRepository.GetExamByIdAsync(id);

@@ -16,7 +16,6 @@ namespace QuizSystem_backend.Models
             Status = dto.Status;
             Questions = this.Questions;
             //Course = this.Course;
-            Subject = dto.Subject!;
             //CourseClassId = dto.CourseClassId;
             TeacherId = dto.TeacherId;
         }
@@ -26,10 +25,10 @@ namespace QuizSystem_backend.Models
         public string Description {  get; set; } = string.Empty;
         public Status Status { get; set; }
         public Guid TeacherId { get; set; }
-        public string Subject { get; set; } = null!;
+        //public string Subject { get; set; } = null!;
         public virtual ICollection<Question>? Questions { get; set; } = null!;
         public virtual Teacher Teacher { get; set; } = null!;
-        //public virtual Subject Subject { get; set; } = null!;
+        //public virtual ICollection<Subject> Subjects { get; set; } = null!;
         //public virtual CourseClass Course { get; set; } = null!;
     }
 }

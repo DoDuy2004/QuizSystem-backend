@@ -12,5 +12,6 @@
         public virtual ICollection<CourseClass> CourseClasses { get; set; } = null!;
 
         public virtual ICollection<QuestionBank> QuestionBanks { get; set; } = null!;
+        public virtual ICollection<Exam> Exams { get; set; } = null!;
     }
 }

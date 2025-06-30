@@ -20,7 +20,6 @@ namespace QuizSystem_backend.DTOs
             //Questions = questions!;
             //Course = course;
             //CourseClassId = qb.CourseClassId;
-            Subject = qb?.Subject;
             NoOfQuestions = questions!.Count();
             Teacher = teacher;
         }
@@ -31,7 +30,6 @@ namespace QuizSystem_backend.DTOs
         public int NoOfQuestions { get; set; }
         public Guid TeacherId { get; set; }
 
-        public string? Subject { get; set; } = null!;
         //public List<QuestionDto>? Questions { get; set; } = null!;
         public TeacherDto? Teacher { get; set; } = null!;
     }

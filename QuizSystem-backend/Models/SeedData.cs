@@ -173,7 +173,6 @@ namespace QuizSystem_backend.Models
                             Name = "Ngân hàng câu hỏi OOP",
                             Description = "Câu hỏi liên quan đến Lập trình hướng đối tượng",
                             Status = Status.ACTIVE,
-                            Subject = "Phương pháp lập trình hướng đối tượng",
                             //CourseClassId = courseClassId
                             TeacherId = teacherId
                         }
@@ -281,11 +280,11 @@ namespace QuizSystem_backend.Models
                         Id = Guid.NewGuid(),
                         ExamCode = "PPLTHDT-MID",
                         Name = "Giữa kỳ Lập trình hướng đối tượng",
-                        StartDate = new DateTime(2025, 6, 25, 8, 30, 0),
                         DurationMinutes = 90,
                         NoOfQuestions = 3,
                         RoomExamId = roomExamId,
-                        Subject = "Phương pháp lập trình hướng đối tượng",
+                        SubjectId = subjectsList[0].Id,
+                        TeacherId = teacherId,
                         Status = Status.ACTIVE
                     };
                     context.Exams.Add(exam);

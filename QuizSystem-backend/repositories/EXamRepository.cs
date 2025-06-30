@@ -6,47 +6,41 @@ using static QuizSystem_backend.DTOs.ExamDto;
 
 namespace QuizSystem_backend.repositories
 {
-    public class EXamRepository : IExamRepository
+    public class ExamRepository : IExamRepository
     {
         private readonly QuizSystemDbContext _context;
-        public EXamRepository(QuizSystemDbContext context)
+        public ExamRepository(QuizSystemDbContext context)
         {
             _context = context;
         }
-
-
        
         public async Task<IEnumerable<Exam>> GetExamsAsync()
         {
             return await _context.Exams
                 .AsNoTracking()
-                .Include(e => e.RoomExam)
-                .Include(e => e.ExamQuestions)
-                    .ThenInclude(eq => eq.Question)
-                        .ThenInclude(q => q.QuestionBank)
-                .Include(e => e.ExamQuestions) 
-                    .ThenInclude(eq => eq.Question)
-                        .ThenInclude(q => q.Answers) 
+                //.Include(e => e.RoomExam)
+                //.Include(e => e.ExamQuestions)
+                //    .ThenInclude(eq => eq.Question)
+                //        .ThenInclude(q => q.QuestionBank)
+                //.Include(e => e.ExamQuestions) 
+                //    .ThenInclude(eq => eq.Question)
+                //        .ThenInclude(q => q.Answers) 
                 .ToListAsync();
         }
 
 
-        public async Task<Exam?> GetExamByIdAsync(Guid id)
+        public async Task<Exam> GetExamByIdAsync(Guid id)
         {
-            if (id == Guid.Empty)
-            {
-                return null;
-            }
-            return await _context.Exams
-                .AsNoTracking()
-                .Include(e => e.RoomExam)
-                .Include(e => e.ExamQuestions)
-                    .ThenInclude(eq => eq.Question)
-                        .ThenInclude(q => q.QuestionBank)
-                .Include(e => e.ExamQuestions)
-                    .ThenInclude(eq => eq.Question)
-                        .ThenInclude(q => q.Answers)
+            var exam = await _context.Exams
+                //.Include(e => e.RoomExam)
+                //.Include(e => e.ExamQuestions)
+                //    .ThenInclude(eq => eq.Question)
+                //        .ThenInclude(q => q.QuestionBank)
+                //.Include(e => e.ExamQuestions!)
+                //    .ThenInclude(eq => eq.Question)
+                //        .ThenInclude(q => q.Answers)
                 .FirstOrDefaultAsync(e => e.Id == id);
+            return exam!;
         }
 
         public async Task<IEnumerable<ExamQuestion>> GetQuestionsByExamAsync(Guid id)

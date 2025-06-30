@@ -73,27 +73,16 @@ namespace QuizSystem_backend.services
             return true;
         }
 
-        public async Task<ExamDto?> UpdateExamAsync(Guid id, ExamDto examDto)
+        public async Task<ExamDto> UpdateExamAsync(Guid id, ExamDto examDto)
         {
             var exam = await _examRepository.GetExamByIdAsync(id);
-            if (exam == null) return null;
+            if (exam == null) return null!;
 
             exam.Name = examDto.Name;
             exam.DurationMinutes = examDto.DurationMinutes;
             exam.Status = examDto.Status;
             exam.StartDate = examDto.StartDate;
-           
             exam.ExamCode = examDto.ExamCode;
-            exam.NoOfQuestions = examDto.NoOfQuestions;
-
-            // Xóa toàn bộ câu hỏi cũ và thêm lại (hoặc dùng so sánh/phân biệt nếu cần cập nhật tinh vi hơn)
-            exam.ExamQuestions = examDto.ExamQuestions.Select(eq => new ExamQuestion
-            {
-                ExamId = exam.Id,
-                QuestionId = eq.QuestionId,
-                Score = eq.Score,
-                Order = eq.Order
-            }).ToList();
 
             await _examRepository.SaveChangesAsync();
 

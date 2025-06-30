@@ -96,7 +96,7 @@ namespace QuizSystem_backend.repositories
             }
 
             _context.Questions.Add(question);
-            await _context.SaveChangesAsync();
+            
 
             var examQuestion = new ExamQuestion
             {
@@ -106,6 +106,10 @@ namespace QuizSystem_backend.repositories
             };
 
             _context.ExamQuestions.Add(examQuestion);
+            
+            var num=await _context.ExamQuestions.CountAsync(e=>e.ExamId==examId);
+            exam.NumberOfQuestions = num+1;
+
             await _context.SaveChangesAsync();
 
             return question;

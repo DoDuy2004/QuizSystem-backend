@@ -32,7 +32,7 @@ builder.Services.AddScoped<ICourseClassRepository, CourseClassRepository>();
 builder.Services.AddScoped<ICourseClassService, CourseClassService>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentService, StudentService>();
-builder.Services.AddScoped<IExamRepository, EXamRepository>();
+builder.Services.AddScoped<IExamRepository, ExamRepository>();
 builder.Services.AddScoped<IExamServices, ExamServices>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 

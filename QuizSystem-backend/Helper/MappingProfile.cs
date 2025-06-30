@@ -27,19 +27,34 @@ namespace QuizSystem_backend.Helper
             //CreateMap<Exam, ExamDto>()
             //    .ForMember(dest => dest.RoomExamId, opt =>
             //                                          opt.Condition(src => src.RoomExamId != null));
-            CreateMap<ExamDto, Exam>().ReverseMap();
-            CreateMap<RoomExamDto, RoomExam>().ReverseMap();
+            CreateMap<ExamDto, Exam>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ReverseMap();
+            CreateMap<RoomExamDto, RoomExam>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ReverseMap();
             CreateMap<ExamQuestionDto, ExamQuestion>().ReverseMap();
             CreateMap<QuestionDto, Question>()
+                .ForMember(dest=>dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ForMember(dest=>dest.Teacher,opt=>opt.Ignore())
                 .ForMember(dest => dest.Chapter, opt => opt.Ignore())
                 .ForMember(dest => dest.QuestionBank, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<TeacherDto, Teacher>().ReverseMap();
-            CreateMap<AnswerDto, Answer>().ReverseMap();
-            CreateMap<QuestionBankDto, QuestionBank>().ReverseMap();
-            CreateMap<ChapterDto, Chapter>().ReverseMap();
-            CreateMap<CourseClassDto, CourseClass>().ReverseMap();
+            CreateMap<TeacherDto, Teacher>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ReverseMap();
+            CreateMap<AnswerDto, Answer>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ReverseMap();
+            CreateMap<QuestionBankDto, QuestionBank>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ReverseMap();
+            CreateMap<ChapterDto, Chapter>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ReverseMap();
+            CreateMap<CourseClassDto, CourseClass>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ReverseMap();
             //CreateMap<QuestionsAddedToExamDto,Question>().ReverseMap();
 
 

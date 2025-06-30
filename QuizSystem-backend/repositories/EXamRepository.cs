@@ -81,6 +81,7 @@ namespace QuizSystem_backend.repositories
 
         public async Task<Question> AddQuestionToExamAsync(Guid examId, Question question, float score)
         {
+            // Kiểm tra exam có tồn tại không
             var exam = await _context.Exams
                 .Include(e => e.ExamQuestions)
                 .FirstOrDefaultAsync(e => e.Id == examId);
@@ -113,13 +114,22 @@ namespace QuizSystem_backend.repositories
             };
 
             _context.ExamQuestions.Add(examQuestion);
-            
-            var num=await _context.ExamQuestions.CountAsync(e=>e.ExamId==examId);
-            exam.NoOfQuestions = num+1;
-
             await _context.SaveChangesAsync();
 
             return existingQuestion;
+        }
+
+        public async Task<bool> DeleteQuestionFromExamAsync(Guid examId, Guid questionId)
+        {
+            var examQuestion = await _context.ExamQuestions
+                .FirstOrDefaultAsync(eq => eq.ExamId == examId && eq.QuestionId == questionId);
+
+            if (examQuestion == null)
+                return false;
+
+            _context.ExamQuestions.Remove(examQuestion);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

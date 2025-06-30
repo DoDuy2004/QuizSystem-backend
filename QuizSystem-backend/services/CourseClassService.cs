@@ -87,11 +87,12 @@ namespace QuizSystem_backend.services
                 return null!;
             }
 
-            updatedCourseClass.ClassCode = dto.ClassCode;
+            updatedCourseClass.ClassCode = dto.ClassCode!;
             updatedCourseClass.Name = dto.Name;
             updatedCourseClass.Credit = dto.Credit;
             updatedCourseClass.TeacherId = dto.TeacherId;
             updatedCourseClass.SubjectId = dto.SubjectId;
+            updatedCourseClass.Description = dto.Description!;
 
             await _courseClassRepository.SaveChangesAsync();
 

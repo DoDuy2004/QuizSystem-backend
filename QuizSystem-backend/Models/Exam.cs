@@ -1,5 +1,4 @@
-﻿using NuGet.DependencyResolver;
-using QuizSystem_backend.Enums;
+﻿using QuizSystem_backend.Enums;
 
 namespace QuizSystem_backend.Models
 {
@@ -15,15 +14,15 @@ namespace QuizSystem_backend.Models
         //public float TotalScore { get; set; }
         public Guid? RoomExamId { get; set; }
         public Status Status { get; set; }
-
-        public Guid SubjectId { get; set; }
-        public Guid TeacherId { get; set; }
+        public string Subject { get; set; } = null!;
+        //public Guid SubjectId { get; set; }
+        //public Guid TeacherId { get; set; }
 
         // Navigation
-        public virtual RoomExam RoomExam { get; set; } = null!;    
-        public virtual Teacher? Teacher { get; set; } = null!;
-        public virtual Subject Subject { get; set; } = null!;
+        public virtual RoomExam RoomExam { get; set; } = null!;
+
         public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = null!;
-       
+        //public virtual Teacher? Teacher { get; set; } = null!;
+        //public virtual Subject Subject { get; set; } = null!;
     }
 }

@@ -19,8 +19,8 @@ namespace QuizSystem_backend.repositories
             return await _context.Exams
                 .AsNoTracking()
                 //.Include(e => e.RoomExam)
-                //.Include(e => e.ExamQuestions)
-                //    .ThenInclude(eq => eq.Question)
+                .Include(e => e.ExamQuestions)
+                    .ThenInclude(eq => eq.Question)
                 //        .ThenInclude(q => q.QuestionBank)
                 //.Include(e => e.ExamQuestions) 
                 //    .ThenInclude(eq => eq.Question)
@@ -33,8 +33,8 @@ namespace QuizSystem_backend.repositories
         {
             var exam = await _context.Exams
                 //.Include(e => e.RoomExam)
-                //.Include(e => e.ExamQuestions)
-                //    .ThenInclude(eq => eq.Question)
+                .Include(e => e.ExamQuestions)
+                    .ThenInclude(eq => eq.Question)
                 //        .ThenInclude(q => q.QuestionBank)
                 //.Include(e => e.ExamQuestions!)
                 //    .ThenInclude(eq => eq.Question)
@@ -48,6 +48,7 @@ namespace QuizSystem_backend.repositories
             var q= await _context.ExamQuestions
                 .Where(eq => eq.ExamId == id)
                 .Include(eq => eq.Question)
+                    .ThenInclude(q => q.Answers)
                 .ToListAsync();
 
             List<Question> list = new();
@@ -78,9 +79,8 @@ namespace QuizSystem_backend.repositories
             return exam;
         }
 
-        public async Task<Question> AddQuestionToExamAsync(Guid examId, Question question,float score)
+        public async Task<Question> AddQuestionToExamAsync(Guid examId, Question question, float score)
         {
-            // Find the exam
             var exam = await _context.Exams
                 .Include(e => e.ExamQuestions)
                 .FirstOrDefaultAsync(e => e.Id == examId);
@@ -90,24 +90,36 @@ namespace QuizSystem_backend.repositories
                 throw new InvalidOperationException("Exam not found.");
             }
 
-            _context.Questions.Add(question);
-            
+            var existingQuestion = await _context.Questions
+                .FirstOrDefaultAsync(q => q.Id == question.Id || q.Content == question.Content);
+
+            if (existingQuestion == null)
+            {
+                _context.Questions.Add(question);
+                await _context.SaveChangesAsync();
+                existingQuestion = question;
+            }
+
+            if (exam.ExamQuestions.Any(eq => eq.QuestionId == existingQuestion.Id))
+            {
+                throw new InvalidOperationException("This question is already in the exam.");
+            }
 
             var examQuestion = new ExamQuestion
             {
                 ExamId = examId,
-                QuestionId = question.Id,
+                QuestionId = existingQuestion.Id,
                 Score = score,
             };
 
             _context.ExamQuestions.Add(examQuestion);
             
             var num=await _context.ExamQuestions.CountAsync(e=>e.ExamId==examId);
-            exam.NumberOfQuestions = num+1;
+            exam.NoOfQuestions = num+1;
 
             await _context.SaveChangesAsync();
 
-            return question;
+            return existingQuestion;
         }
     }
 }

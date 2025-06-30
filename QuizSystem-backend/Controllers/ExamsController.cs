@@ -9,22 +9,22 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExamController : ControllerBase
+    public class ExamsController : ControllerBase
     {
         private readonly IExamServices _examService;
 
-        public ExamController(IExamServices examServices)
+        public ExamsController(IExamServices examServices)
         {
             _examService = examServices;
         }
 
-        [HttpGet("Exam/{id}/Questions")]
+        [HttpGet("{id}/questions")]
         public async Task<ActionResult> GetQuestionsByExam(Guid id)
         {
             try
             {
                 var result = await _examService.GetAllQuestionOfExam(id);
-                if (result == null || !result.Any())
+                if (result == null)
                 {
                     return NotFound(new { message = "No questions found for this exam" });
                 }
@@ -40,7 +40,7 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
-        [HttpGet("GetExams")]
+        [HttpGet]
 
         public async Task<ActionResult> GetExams()
         {
@@ -60,7 +60,7 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
-        [HttpGet("GetById/{id}")]
+        [HttpGet("{id}")]
 
         public async Task<ActionResult> GetExamById(Guid id)
         {
@@ -84,7 +84,7 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
-        [HttpPost("CreateExam")]
+        [HttpPost]
 
         public async Task<ActionResult> CreateExam([FromBody] ExamDto examDto)
         {
@@ -114,7 +114,7 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
-        [HttpPut("UpdateExam/{id}")]
+        [HttpPut("{id}")]
 
         public async Task<ActionResult> UpdateExam(Guid id, [FromBody] ExamDto examDto)
         {
@@ -168,8 +168,8 @@ namespace QuizSystem_backend.Controllers
             return Ok(result);
         }
 
-        [HttpPost("add-list-question")]
-        public async Task<IActionResult> AddListQuestionToExam([FromBody] AddListQuestionDto dto)
+        [HttpPost("{id}/add-list-question")]
+        public async Task<IActionResult> AddListQuestionToExam(Guid id, [FromBody] AddListQuestionDto dto)
         {
             try
             {

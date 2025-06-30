@@ -84,9 +84,10 @@ namespace QuizSystem_backend.services
             exam.StartDate = examDto.StartDate;
             exam.ExamCode = examDto.ExamCode;
 
-            var examUpdated = await _examRepository.UpdateExamAsync(examUpdate);
+            //var examUpdated = await _examRepository.UpdateExamAsync(examUpdate);
+            await _examRepository.SaveChangesAsync();
 
-            return _mapper.Map<ExamDto>(examUpdated);
+            return _mapper.Map<ExamDto>(exam);
         }
 
 

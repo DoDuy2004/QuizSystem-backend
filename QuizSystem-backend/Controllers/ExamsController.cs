@@ -188,5 +188,28 @@ namespace QuizSystem_backend.Controllers
             
 
         }
+
+        [HttpDelete("{examId}/questions/{questionId}")]
+        public async Task<IActionResult> DeleteQuestionFromExam(Guid examId, Guid questionId)
+        {
+            if(Guid.Empty == examId || Guid.Empty == questionId)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                var isDeleted = await _examService.DeleteQuestionFromExamAsync(examId, questionId);
+                if (!isDeleted)
+                {
+                    return NotFound(new { message = $"Question or Exam not found." });
+                }
+
+                return Ok(new { message = "Deleted Successful" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
     }
 }

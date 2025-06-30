@@ -56,9 +56,6 @@ namespace QuizSystem_backend.Helper
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ReverseMap();
             //CreateMap<QuestionsAddedToExamDto,Question>().ReverseMap();
-
-
-
         }
 
     }

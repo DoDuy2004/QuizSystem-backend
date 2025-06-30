@@ -136,6 +136,11 @@ namespace QuizSystem_backend.services
             return result;
         }
 
+        public async Task<bool> DeleteQuestionFromExamAsync(Guid examId, Guid questionId)
+        {
+            var result = await _examRepository.DeleteQuestionFromExamAsync(examId, questionId);
 
+            return result;
+        }
     }
 }

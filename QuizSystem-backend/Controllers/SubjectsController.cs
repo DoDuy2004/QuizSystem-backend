@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuizSystem_backend.DTOs;
 using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.Controllers
@@ -88,12 +89,11 @@ namespace QuizSystem_backend.Controllers
         // POST: api/Subjects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Subject>> PostSubject(Subject subject)
+        public async Task<ActionResult> PostSubject(SubjectDto dto)
         {
-            _context.Subjects.Add(subject);
+            _context.Subjects.Add(new Subject(dto));
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetSubject", new { id = subject.Id }, subject);
+            return NoContent();
         }
 
         // DELETE: api/Subjects/5

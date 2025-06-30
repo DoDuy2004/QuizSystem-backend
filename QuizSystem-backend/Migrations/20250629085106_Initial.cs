@@ -264,7 +264,8 @@ namespace QuizSystem_backend.Migrations
                     thoi_gian_lam_bai = table.Column<int>(type: "int", nullable: false),
                     so_cau_hoi = table.Column<int>(type: "int", nullable: false),
                     ma_phong_thi = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    trang_thai = table.Column<int>(type: "int", nullable: false)
+                    trang_thai = table.Column<int>(type: "int", nullable: false),
+                    mon_hoc = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

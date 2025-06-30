@@ -19,6 +19,7 @@ namespace QuizSystem_backend.repositories
             return await _context.Exams
                 .AsNoTracking()
                 //.Include(e => e.RoomExam)
+                .Include(e => e.Subject)
                 .Include(e => e.ExamQuestions)
                     .ThenInclude(eq => eq.Question)
                 //        .ThenInclude(q => q.QuestionBank)
@@ -33,6 +34,7 @@ namespace QuizSystem_backend.repositories
         {
             var exam = await _context.Exams
                 //.Include(e => e.RoomExam)
+                .Include(e => e.Subject)
                 .Include(e => e.ExamQuestions)
                     .ThenInclude(eq => eq.Question)
                 //        .ThenInclude(q => q.QuestionBank)

@@ -875,10 +875,10 @@ namespace QuizSystem_backend.Models
                     .HasForeignKey(cc => cc.TeacherId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasMany(t => t.QuestionBanks)
-                    .WithOne(q => q.Teacher)
-                    .HasForeignKey(qb => qb.TeacherId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                //entity.HasMany(t => t.QuestionBanks)
+                //    .WithOne(q => q.Teacher)
+                //    .HasForeignKey(qb => qb.TeacherId)
+                //    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Answer
@@ -1257,19 +1257,19 @@ namespace QuizSystem_backend.Models
                 //    .HasColumnName("mon_hoc")
                 //    .IsRequired();
 
-                entity.Property(qb => qb.TeacherId)
-                    .HasColumnName("ma_giang_vien")
-                    .IsRequired();
+                //entity.Property(qb => qb.TeacherId)
+                //    .HasColumnName("ma_giang_vien")
+                //    .IsRequired();
 
                 entity.HasMany(qb => qb.Questions)
                     .WithOne(q => q.QuestionBank)
                     .HasForeignKey(q => q.QuestionBankId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(qb => qb.Teacher)
-                    .WithMany(s => s.QuestionBanks)
-                    .HasForeignKey(qb => qb.TeacherId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                //entity.HasOne(qb => qb.Teacher)
+                //    .WithMany(s => s.QuestionBanks)
+                //    .HasForeignKey(qb => qb.TeacherId)
+                //    .OnDelete(DeleteBehavior.Restrict);
 
                 //entity.HasOne(qb => qb.Course)
                 //    .WithMany(s => s.QuestionBanks)

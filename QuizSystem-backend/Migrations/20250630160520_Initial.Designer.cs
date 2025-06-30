@@ -12,7 +12,7 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250630153837_Initial")]
+    [Migration("20250630160520_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -317,9 +317,8 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("trang_thai");
 
-                    b.Property<Guid>("TeacherId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ma_giang_vien");
+                    b.Property<Guid?>("TeacherId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -719,13 +718,9 @@ namespace QuizSystem_backend.Migrations
 
             modelBuilder.Entity("QuizSystem_backend.Models.QuestionBank", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.Teacher", "Teacher")
+                    b.HasOne("QuizSystem_backend.Models.Teacher", null)
                         .WithMany("QuestionBanks")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Teacher");
+                        .HasForeignKey("TeacherId");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.RoomExam", b =>

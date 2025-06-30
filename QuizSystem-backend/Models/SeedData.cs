@@ -174,7 +174,7 @@ namespace QuizSystem_backend.Models
                             Description = "Câu hỏi liên quan đến Lập trình hướng đối tượng",
                             Status = Status.ACTIVE,
                             //CourseClassId = courseClassId
-                            TeacherId = teacherId
+                            //TeacherId = teacherId
                         }
                     };
                     context.QuestionBanks.AddRange(questionBanks);

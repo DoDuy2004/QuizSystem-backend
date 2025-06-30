@@ -76,10 +76,13 @@ namespace QuizSystem_backend.services
         public async Task<ExamDto> UpdateExamAsync(Guid id, ExamDto examDto)
         {
             var exam = await _examRepository.GetExamByIdAsync(id);
-            if (exam == null) throw new Exception("Not found");
+            if (exam == null) return null!;
 
-            var examUpdate=_mapper.Map<Exam>(examDto);
-
+            exam.Name = examDto.Name;
+            exam.DurationMinutes = examDto.DurationMinutes;
+            exam.Status = examDto.Status;
+            exam.StartDate = examDto.StartDate;
+            exam.ExamCode = examDto.ExamCode;
 
             var examUpdated = await _examRepository.UpdateExamAsync(examUpdate);
 

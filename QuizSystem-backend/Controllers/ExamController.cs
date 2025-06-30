@@ -18,6 +18,28 @@ namespace QuizSystem_backend.Controllers
             _examService = examServices;
         }
 
+        [HttpGet("Exam/{id}/Questions")]
+        public async Task<ActionResult> GetQuestionsByExam(Guid id)
+        {
+            try
+            {
+                var result = await _examService.GetAllQuestionOfExam(id);
+                if (result == null || !result.Any())
+                {
+                    return NotFound(new { message = "No questions found for this exam" });
+                }
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
         [HttpGet("GetExams")]
 
         public async Task<ActionResult> GetExams()

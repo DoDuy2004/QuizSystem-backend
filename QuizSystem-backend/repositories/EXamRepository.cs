@@ -15,15 +15,20 @@ namespace QuizSystem_backend.repositories
         }
 
 
-       
-        public async Task<IEnumerable<Exam>> GetExamsAsync()
+        public async Task<Exam> UpdateExamAsync(Exam exam)
+        {
+            _context.Exams.Update(exam);
+            await _context.SaveChangesAsync();
+            return exam;
+        }
+        public async Task<IEnumerable<Exam>?> GetExamsAsync()
         {
             return await _context.Exams
                 .AsNoTracking()
                 .Include(e => e.RoomExam)
                 .Include(e => e.ExamQuestions)
                     .ThenInclude(eq => eq.Question)
-                        .ThenInclude(q => q.QuestionBank)  // Bổ sung dòng này
+                        .ThenInclude(q => q.QuestionBank) 
                 .ToListAsync();
         }
 
@@ -43,12 +48,17 @@ namespace QuizSystem_backend.repositories
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<IEnumerable<ExamQuestion>> GetQuestionsByExamAsync(Guid id)
+        public async Task<List<Question>?> GetQuestionsByExamAsync(Guid id)
         {
-            return await _context.ExamQuestions
+            var q= await _context.ExamQuestions
                 .Where(eq => eq.ExamId == id)
                 .Include(eq => eq.Question)
                 .ToListAsync();
+
+            List<Question> list = new();
+            foreach (var questionExam in q) list.Add(questionExam.Question);
+            return list;
+                
         }
 
         public async Task SaveChangesAsync()

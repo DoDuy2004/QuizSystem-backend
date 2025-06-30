@@ -20,7 +20,7 @@ namespace QuizSystem_backend.services
             _mapper = mapper;
         }
 
-        public async Task<List<QuestionDto>> AddListQuestionToExamAsync(AddListQuestionDto dto)
+        public async Task<AddListQuestionDto> AddListQuestionToExamAsync(AddListQuestionDto dto)
         {
             var examId = dto.examId;
 
@@ -30,15 +30,15 @@ namespace QuizSystem_backend.services
                 throw new ArgumentException("Question scores cannot be null or empty.", nameof(dto.QuestionScores));
             }
             
-            List<QuestionDto> questions = new List<QuestionDto>();
             foreach (var questionScore in dto.QuestionScores)
             {
                 var question = _mapper.Map<Question>(questionScore.Question);
 
+
                 var addedQuestion=await _examRepository.AddQuestionToExamAsync(examId, question,questionScore.Score);
-                questions.Add(_mapper.Map<QuestionDto>(addedQuestion));
+                
             }
-            return questions;
+            return dto;
         }
         public async Task<IEnumerable<ExamDto>> GetExamsAsync()
         {
@@ -73,36 +73,24 @@ namespace QuizSystem_backend.services
             return true;
         }
 
-        public async Task<ExamDto?> UpdateExamAsync(Guid id, ExamDto examDto)
+        public async Task<ExamDto> UpdateExamAsync(Guid id, ExamDto examDto)
         {
             var exam = await _examRepository.GetExamByIdAsync(id);
-            if (exam == null) return null;
+            if (exam == null) throw new Exception("Not found");
 
-            exam.Name = examDto.Name;
-            exam.DurationMinutes = examDto.DurationMinutes;
-            exam.Status = examDto.Status;
-            exam.StartDate = examDto.StartDate;
-           
-            exam.ExamCode = examDto.ExamCode;
-            exam.NoOfQuestions = examDto.NoOfQuestions;
+            var examUpdate=_mapper.Map<Exam>(examDto);
 
-            // Xóa toàn bộ câu hỏi cũ và thêm lại (hoặc dùng so sánh/phân biệt nếu cần cập nhật tinh vi hơn)
-            exam.ExamQuestions = examDto.ExamQuestions.Select(eq => new ExamQuestion
-            {
-                ExamId = exam.Id,
-                QuestionId = eq.QuestionId,
-                Score = eq.Score,
-                Order = eq.Order
-            }).ToList();
 
-            await _examRepository.SaveChangesAsync();
+            var examUpdated = await _examRepository.UpdateExamAsync(examUpdate);
 
-            return _mapper.Map<ExamDto>(exam);
+            return _mapper.Map<ExamDto>(examUpdated);
         }
+
 
 
         public async Task<ExamDto> CreateExamByMatrixAsync(ExamMatrixRequest request,Guid questionBankId)
         {
+
             var exam = _mapper.Map<Exam>(request.Exam);
 
             foreach (var row in request.Matrix)
@@ -136,6 +124,13 @@ namespace QuizSystem_backend.services
             return _mapper.Map<ExamDto>(exam);
         }
 
+
+        public async Task<List<QuestionDto>?>GetAllQuestionOfExam(Guid examId)
+        {
+            var listQuestion = await _examRepository.GetQuestionsByExamAsync(examId);
+            var result= _mapper.Map<List<QuestionDto>>(listQuestion);
+            return result;
+        }
 
 
     }

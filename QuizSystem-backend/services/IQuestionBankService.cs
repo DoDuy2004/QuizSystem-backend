@@ -11,5 +11,7 @@ namespace QuizSystem_backend.services
         Task<QuestionBankDto> UpdateQuestionBankAsync(Guid id ,QuestionBankDto questionBank);
         Task<IEnumerable<QuestionDto>> GetQuestionsByQuestionBankAsync(Guid id);
         Task<bool> DeleteQuestionBankAsync(Guid id);
+        Task<List<QuestionDto>> AddListQuestionsToQuestionBankAsync(Guid questionBankId, List<QuestionDto> question);
+
     }
 }

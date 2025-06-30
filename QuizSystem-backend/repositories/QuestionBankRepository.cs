@@ -57,5 +57,10 @@ namespace QuizSystem_backend.repositories
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddQuestionAsync(Question newQuestion)
+        {
+            await _context.Questions.AddAsync(newQuestion);
+        }
     }
 }

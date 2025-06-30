@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
@@ -10,9 +11,12 @@ namespace QuizSystem_backend.services
     public class QuestionBankService : IQuestionBankService
     {
         private readonly IQuestionBankRepository _questionBankRepository;
-        public QuestionBankService(IQuestionBankRepository questionBankRepository)
+        private readonly IMapper _mapper;
+
+        public QuestionBankService(IQuestionBankRepository questionBankRepository,IMapper mapper)
         {
             _questionBankRepository = questionBankRepository;
+            _mapper = mapper;
         }
         public async Task<IEnumerable<QuestionBankDto>> GetQuestionBanksAsync()
         {
@@ -65,6 +69,7 @@ namespace QuizSystem_backend.services
             return new QuestionBankDto(newQuestionBank);
         }
 
+
         public async Task<QuestionBankDto> UpdateQuestionBankAsync(Guid id, QuestionBankDto dto)
         {
             var questionBank = await _questionBankRepository.GetQuestionBankByIdAsync(id);
@@ -99,6 +104,21 @@ namespace QuizSystem_backend.services
             await _questionBankRepository.SaveChangesAsync();
 
             return true;
+        }
+        public async Task<List<QuestionDto>> AddListQuestionsToQuestionBankAsync(Guid questionBankId, List<QuestionDto> listQuestionDto)
+        {
+            var questionBank = await _questionBankRepository.GetQuestionBankByIdAsync(questionBankId);
+            if (questionBank == null)
+            {
+                throw new Exception("Question bank not found");
+            }
+            foreach(var questionDto in listQuestionDto)
+            {
+                var newQuestion = _mapper.Map<Question>(questionDto);
+                newQuestion.QuestionBank = questionBank;
+                await _questionBankRepository.AddQuestionAsync(newQuestion);
+            }
+            return listQuestionDto;
         }
     }
 }

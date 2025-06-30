@@ -13,9 +13,9 @@ namespace QuizSystem_backend.services
         Task<ExamDto> AddExamAsync(ExamDto examDto);
         Task<bool> DeleteExamAsync(Guid id);
         Task<ExamDto> UpdateExamAsync(Guid id, ExamDto examDto);
-        
+        Task<List<QuestionDto>?> GetAllQuestionOfExam(Guid examId);
         Task<ExamDto> CreateExamByMatrixAsync(ExamMatrixRequest request,Guid questionBankId);
-        Task<List<QuestionDto>> AddListQuestionToExamAsync(AddListQuestionDto dto);
+        Task<AddListQuestionDto> AddListQuestionToExamAsync(AddListQuestionDto dto);
 
     }
 }

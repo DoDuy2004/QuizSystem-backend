@@ -203,5 +203,28 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error.", error = ex.Message });
             }
         }
+
+        [HttpPost("Add-List-Questions")]
+        public async Task<ActionResult> AddListQuestionsToQuestionBank([FromBody]AddListQuestionToBankDto request )
+        {
+            if (request.Questions == null || !request.Questions.Any() || Guid.Empty == request.QuestionBankId)
+            {
+                return BadRequest(new { message = "Invalid input data." });
+            }
+            try
+            {
+                var addedQuestions = await _questionBankService.AddListQuestionsToQuestionBankAsync(request.QuestionBankId,request.Questions);
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = addedQuestions
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
     }
 }

@@ -8,11 +8,15 @@ namespace QuizSystem_backend.repositories
     public interface IExamRepository
     {
         
-        Task<IEnumerable<Exam>> GetExamsAsync();
+        Task<IEnumerable<Exam>?> GetExamsAsync();
         Task SaveChangesAsync();
         Task<Exam> GetExamByIdAsync(Guid examId);
         Task<Exam>GenerateAsync(Exam exam);
+
+        Task<List<Question>?> GetQuestionsByExamAsync(Guid id);
         Task<List<Question>> GetQuestionsByChapterAndDifficultyAsync(Guid chapterId, Difficulty difficulty, int take,Guid questionBankId);
         Task<Question> AddQuestionToExamAsync(Guid examId, Question question,float score);
+        Task<Exam> UpdateExamAsync(Exam exam);
+
     }
 }

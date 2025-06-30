@@ -13,13 +13,14 @@ namespace QuizSystem_backend.DTOs
         public int NoOfQuestions { get; set; }
         public Status Status { get; set; }
         public Guid? RoomExamId { get; set; }
-        //public Guid TeacherId { get; set; }
+
+        public Guid TeacherId { get; set; }
         public string Subject { get; set; } = string.Empty;
-        //public Guid SubjectId { get; set; }
+        public Guid SubjectId { get; set; }
 
         public virtual RoomExamDto? RoomExam { get; set; }
         public virtual List<ExamQuestionDto>? ExamQuestions { get; set; } = null!;
-        //public virtual TeacherDto? Teacher { get; set; } = null!;
-        //public virtual Subject? Subject { get; set; } = null!;
+        public virtual TeacherDto? Teacher { get; set; } = null!;
+        public virtual Subject? Subject { get; set; } = null!;
     }
 }

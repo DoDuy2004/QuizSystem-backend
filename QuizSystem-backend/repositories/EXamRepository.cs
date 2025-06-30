@@ -43,12 +43,17 @@ namespace QuizSystem_backend.repositories
             return exam!;
         }
 
-        public async Task<IEnumerable<ExamQuestion>> GetQuestionsByExamAsync(Guid id)
+        public async Task<List<Question>?> GetQuestionsByExamAsync(Guid id)
         {
-            return await _context.ExamQuestions
+            var q= await _context.ExamQuestions
                 .Where(eq => eq.ExamId == id)
                 .Include(eq => eq.Question)
                 .ToListAsync();
+
+            List<Question> list = new();
+            foreach (var questionExam in q) list.Add(questionExam.Question);
+            return list;
+                
         }
 
         public async Task SaveChangesAsync()
@@ -92,7 +97,7 @@ namespace QuizSystem_backend.repositories
             {
                 ExamId = examId,
                 QuestionId = question.Id,
-                Score = score
+                Score = score,
             };
 
             _context.ExamQuestions.Add(examQuestion);

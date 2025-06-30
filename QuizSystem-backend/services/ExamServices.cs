@@ -20,7 +20,7 @@ namespace QuizSystem_backend.services
             _mapper = mapper;
         }
 
-        public async Task<List<QuestionDto>> AddListQuestionToExamAsync(AddListQuestionDto dto)
+        public async Task<AddListQuestionDto> AddListQuestionToExamAsync(AddListQuestionDto dto)
         {
             var examId = dto.examId;
 
@@ -30,15 +30,15 @@ namespace QuizSystem_backend.services
                 throw new ArgumentException("Question scores cannot be null or empty.", nameof(dto.QuestionScores));
             }
             
-            List<QuestionDto> questions = new List<QuestionDto>();
             foreach (var questionScore in dto.QuestionScores)
             {
                 var question = _mapper.Map<Question>(questionScore.Question);
 
+
                 var addedQuestion=await _examRepository.AddQuestionToExamAsync(examId, question,questionScore.Score);
-                questions.Add(_mapper.Map<QuestionDto>(addedQuestion));
+                
             }
-            return questions;
+            return dto;
         }
         public async Task<IEnumerable<ExamDto>> GetExamsAsync()
         {
@@ -84,14 +84,16 @@ namespace QuizSystem_backend.services
             exam.StartDate = examDto.StartDate;
             exam.ExamCode = examDto.ExamCode;
 
-            await _examRepository.SaveChangesAsync();
+            var examUpdated = await _examRepository.UpdateExamAsync(examUpdate);
 
-            return _mapper.Map<ExamDto>(exam);
+            return _mapper.Map<ExamDto>(examUpdated);
         }
+
 
 
         public async Task<ExamDto> CreateExamByMatrixAsync(ExamMatrixRequest request,Guid questionBankId)
         {
+
             var exam = _mapper.Map<Exam>(request.Exam);
 
             foreach (var row in request.Matrix)
@@ -125,6 +127,13 @@ namespace QuizSystem_backend.services
             return _mapper.Map<ExamDto>(exam);
         }
 
+
+        public async Task<List<QuestionDto>?>GetAllQuestionOfExam(Guid examId)
+        {
+            var listQuestion = await _examRepository.GetQuestionsByExamAsync(examId);
+            var result= _mapper.Map<List<QuestionDto>>(listQuestion);
+            return result;
+        }
 
 
     }

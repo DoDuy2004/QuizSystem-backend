@@ -1049,8 +1049,11 @@ namespace QuizSystem_backend.Models
                 entity.Property(e => e.DurationMinutes)
                     .HasColumnName("thoi_gian_lam_bai");
 
-                entity.Property(e => e.NumberOfQuestions)
+                entity.Property(e => e.NoOfQuestions)
                     .HasColumnName("so_cau_hoi");
+
+                entity.Property(e => e.Subject)
+                    .HasColumnName("mon_hoc");
 
                 //entity.Property(e => e.TotalScore)
                 //    .HasColumnName("tong_diem");

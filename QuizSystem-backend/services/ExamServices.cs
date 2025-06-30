@@ -20,7 +20,7 @@ namespace QuizSystem_backend.services
             _mapper = mapper;
         }
 
-        public async Task<List<QuestionDto>> AddListQuestionToExamAsync(AddListQuestionDto dto)
+        public async Task<AddListQuestionDto> AddListQuestionToExamAsync(AddListQuestionDto dto)
         {
             var examId = dto.examId;
 
@@ -30,15 +30,15 @@ namespace QuizSystem_backend.services
                 throw new ArgumentException("Question scores cannot be null or empty.", nameof(dto.QuestionScores));
             }
             
-            List<QuestionDto> questions = new List<QuestionDto>();
             foreach (var questionScore in dto.QuestionScores)
             {
                 var question = _mapper.Map<Question>(questionScore.Question);
 
+
                 var addedQuestion=await _examRepository.AddQuestionToExamAsync(examId, question,questionScore.Score);
-                questions.Add(_mapper.Map<QuestionDto>(addedQuestion));
+                
             }
-            return questions;
+            return dto;
         }
         public async Task<IEnumerable<ExamDto>> GetExamsAsync()
         {

@@ -13,7 +13,7 @@ namespace QuizSystem_backend.DTOs
         public int NumberOfQuestions { get; set; }
         public Status Status { get; set; }
         public Guid? RoomExamId { get; set; }
-
+        
         public virtual RoomExamDto? RoomExam { get; set; }
         public List<ExamQuestionDto>? ExamQuestions { get; set; } = new();
     }

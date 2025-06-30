@@ -92,7 +92,7 @@ namespace QuizSystem_backend.repositories
             {
                 ExamId = examId,
                 QuestionId = question.Id,
-                Score = score
+                Score = score,
             };
 
             _context.ExamQuestions.Add(examQuestion);

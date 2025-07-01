@@ -10,7 +10,7 @@ namespace QuizSystem_backend.repositories
         
         Task<IEnumerable<Exam>?> GetExamsAsync();
         Task SaveChangesAsync();
-        Task<Exam?> GetExamByIdAsync(Guid examId);
+        Task<Exam> GetExamByIdAsync(Guid examId);
         Task<Exam>GenerateAsync(Exam exam);
 
         Task<List<Question>?> GetQuestionsByExamAsync(Guid id);

@@ -5,7 +5,7 @@ namespace QuizSystem_backend.services
 {
     public interface ICourseClassService
     {
-        Task<IEnumerable<CourseClassDto>> GetCourseClassesAsync();
+        Task<IEnumerable<CourseClassDto>> GetCourseClassesAsync(Guid userId, string role);
         Task<CourseClassDto> GetCourseClassByIdAsync(Guid id);
         Task<(bool success, string? message, object? data)> AddStudentToCourseAsync(StudentCourseClassDto scc);
         Task<IEnumerable<StudentDto>> GetStudentByCourseClassAsync(Guid id);

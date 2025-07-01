@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Humanizer;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,7 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "TEACHER")]
+    [Authorize(Roles = "TEACHER, ADMIN")]
 
     public class CourseClassesController : ControllerBase
     {
@@ -31,9 +32,11 @@ namespace QuizSystem_backend.Controllers
         [HttpGet]
         public async Task<ActionResult> GetCourseClasses()
         {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
             try
             {
-                var result = await _courseClassService.GetCourseClassesAsync();
+                var result = await _courseClassService.GetCourseClassesAsync(Guid.Parse(userId!), role!);
 
                 return Ok(new
                 {

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "ADMIN")]
     public class SubjectsController : ControllerBase
     {
         private readonly QuizSystemDbContext _context;
@@ -23,9 +26,16 @@ namespace QuizSystem_backend.Controllers
 
         // GET: api/Subjects
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Subject>>> GetSubjects()
+        public async Task<ActionResult> GetSubjects()
         {
-            return await _context.Subjects.ToListAsync();
+           var subjects = await _context.Subjects.ToListAsync();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = subjects
+            }); ;
         }
 
         // GET: api/Subjects/5

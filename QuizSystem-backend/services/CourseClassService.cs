@@ -19,9 +19,18 @@ namespace QuizSystem_backend.services
             _studentRepository = studentRepository;
         }
 
-        public async Task<IEnumerable<CourseClassDto>> GetCourseClassesAsync()
+        public async Task<IEnumerable<CourseClassDto>> GetCourseClassesAsync(Guid userId, string role)
         {
-            var courses = await _courseClassRepository.GetCourseClassesAsync();
+            IEnumerable<CourseClass> courses = Enumerable.Empty<CourseClass>(); ;
+
+            if (role == "ADMIN")
+            {
+                courses = await _courseClassRepository.GetCourseClassesAsync();
+            }
+            else if (role == "TEACHER")
+            {
+                courses = await _courseClassRepository.GetCourseClassesByTeacherAsync(userId);
+            }
 
             return courses.Select(c => new CourseClassDto(c));
         }

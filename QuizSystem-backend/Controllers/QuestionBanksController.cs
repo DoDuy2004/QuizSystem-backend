@@ -16,7 +16,7 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "TEACHER")]
+    [Authorize(Roles = "TEACHER, ADMIN")]
     public class QuestionBanksController : ControllerBase
     {
         private readonly IQuestionBankService _questionBankService;

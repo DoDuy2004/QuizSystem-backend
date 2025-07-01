@@ -23,5 +23,6 @@ namespace QuizSystem_backend.Models
         public virtual ICollection<CourseClass> Courses { get; set; } = null!;
         //public virtual ICollection<QuestionBank> QuestionBanks { get; set; } = null!;
         public virtual ICollection<Chapter> Chapters { get; set; } = null!;
+        public virtual ICollection<Exam> Exams { get; set; } = null!;
     }
 }

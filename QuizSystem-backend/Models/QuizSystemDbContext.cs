@@ -875,10 +875,10 @@ namespace QuizSystem_backend.Models
                     .HasForeignKey(cc => cc.TeacherId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasMany(t => t.QuestionBanks)
-                    .WithOne(q => q.Teacher)
-                    .HasForeignKey(qb => qb.TeacherId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                //entity.HasMany(t => t.QuestionBanks)
+                //    .WithOne(q => q.Teacher)
+                //    .HasForeignKey(qb => qb.TeacherId)
+                //    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Answer
@@ -1034,17 +1034,13 @@ namespace QuizSystem_backend.Models
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.HasIndex(e => e.ExamCode)
-                    .IsUnique();
+                //entity.HasIndex(e => e.ExamCode)
+                //    .IsUnique();
 
                 entity.Property(e => e.Name)
                     .HasColumnName("ten_bai_thi")
                     .IsRequired()
                     .HasMaxLength(100);
-
-                entity.Property(e => e.StartDate)
-                    .HasColumnName("ngay_bat_dau")
-                    .IsRequired();
 
                 entity.Property(e => e.DurationMinutes)
                     .HasColumnName("thoi_gian_lam_bai");
@@ -1052,8 +1048,11 @@ namespace QuizSystem_backend.Models
                 entity.Property(e => e.NoOfQuestions)
                     .HasColumnName("so_cau_hoi");
 
-                //entity.Property(e => e.Subject)
-                //    .HasColumnName("mon_hoc");
+                entity.Property(e => e.SubjectId)
+                    .HasColumnName("ma_mon_hoc");
+
+                entity.Property(e => e.TeacherId)
+                   .HasColumnName("ma_giang_vien");
 
                 //entity.Property(e => e.TotalScore)
                 //    .HasColumnName("tong_diem");
@@ -1074,6 +1073,16 @@ namespace QuizSystem_backend.Models
                     .WithOne(eq => eq.Exam)
                     .HasForeignKey(eq => eq.ExamId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Subject)
+                    .WithMany(s => s.Exams)
+                    .HasForeignKey(e => e.SubjectId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Teacher)
+                    .WithMany(t => t.Exams)
+                    .HasForeignKey(e => e.TeacherId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // ExamQuestion
@@ -1248,23 +1257,19 @@ namespace QuizSystem_backend.Models
                 //    .HasColumnName("mon_hoc")
                 //    .IsRequired();
 
-                entity.Property(qb => qb.Subject)
-                    .HasColumnName("mon_hoc")
-                    .IsRequired();
-
-                entity.Property(qb => qb.TeacherId)
-                    .HasColumnName("ma_giang_vien")
-                    .IsRequired();
+                //entity.Property(qb => qb.TeacherId)
+                //    .HasColumnName("ma_giang_vien")
+                //    .IsRequired();
 
                 entity.HasMany(qb => qb.Questions)
                     .WithOne(q => q.QuestionBank)
                     .HasForeignKey(q => q.QuestionBankId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(qb => qb.Teacher)
-                    .WithMany(s => s.QuestionBanks)
-                    .HasForeignKey(qb => qb.TeacherId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                //entity.HasOne(qb => qb.Teacher)
+                //    .WithMany(s => s.QuestionBanks)
+                //    .HasForeignKey(qb => qb.TeacherId)
+                //    .OnDelete(DeleteBehavior.Restrict);
 
                 //entity.HasOne(qb => qb.Course)
                 //    .WithMany(s => s.QuestionBanks)

@@ -19,7 +19,7 @@ namespace QuizSystem_backend.DTOs
 
         public virtual RoomExamDto? RoomExam { get; set; }
         public virtual List<ExamQuestionDto>? ExamQuestions { get; set; } = null!;
-        public virtual TeacherDto? Teacher { get; set; } = null!;
+        //public virtual TeacherDto? Teacher { get; set; } = null!;
         public virtual Subject? Subject { get; set; } = null!;
     }
 }

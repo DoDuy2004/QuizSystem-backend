@@ -81,10 +81,16 @@ namespace QuizSystem_backend.services
             exam.Name = examDto.Name;
             exam.DurationMinutes = examDto.DurationMinutes;
             exam.Status = examDto.Status;
-            exam.StartDate = examDto.StartDate;
             exam.ExamCode = examDto.ExamCode;
 
+<<<<<<< HEAD
             return _mapper.Map < ExamDto > (exam);
+=======
+            //var examUpdated = await _examRepository.UpdateExamAsync(examUpdate);
+            await _examRepository.SaveChangesAsync();
+
+            return _mapper.Map<ExamDto>(exam);
+>>>>>>> a96a77dd9afcb848b3152e6771feff0e0c843d38
         }
 
 
@@ -132,6 +138,11 @@ namespace QuizSystem_backend.services
             return result;
         }
 
+        public async Task<bool> DeleteQuestionFromExamAsync(Guid examId, Guid questionId)
+        {
+            var result = await _examRepository.DeleteQuestionFromExamAsync(examId, questionId);
 
+            return result;
+        }
     }
 }

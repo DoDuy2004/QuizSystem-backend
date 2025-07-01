@@ -21,21 +21,20 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
-builder.Services.AddScoped<IQuestionService, QuestionService>();
-builder.Services.AddScoped<IQuestionBankService, QuestionBankService>();
-builder.Services.AddScoped<IQuestionBankRepository, QuestionBankRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<ICourseClassRepository, CourseClassRepository>();
-builder.Services.AddScoped<ICourseClassService, CourseClassService>();
-builder.Services.AddScoped<IStudentRepository, StudentRepository>();
-builder.Services.AddScoped<IStudentService, StudentService>();
-builder.Services.AddScoped<IExamRepository, ExamRepository>();
-builder.Services.AddScoped<IExamServices, ExamServices>();
+builder.Services.AddTransient<IQuestionRepository, QuestionRepository>();
+builder.Services.AddTransient<IQuestionService, QuestionService>();
+builder.Services.AddTransient<IQuestionBankService, QuestionBankService>();
+builder.Services.AddTransient<IQuestionBankRepository, QuestionBankRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<TokenService>();
+builder.Services.AddTransient<ICourseClassRepository, CourseClassRepository>();
+builder.Services.AddTransient<ICourseClassService, CourseClassService>();
+builder.Services.AddTransient<IStudentRepository, StudentRepository>();
+builder.Services.AddTransient<IStudentService, StudentService>();
+builder.Services.AddTransient<IExamRepository, ExamRepository>();
+builder.Services.AddTransient<IExamServices, ExamServices>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-
 
 
 builder.Services.AddControllers()

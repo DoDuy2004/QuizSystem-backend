@@ -125,18 +125,16 @@ namespace QuizSystem_backend.Migrations
                     ten_ngan_hang = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     mo_ta = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     trang_thai = table.Column<int>(type: "int", nullable: false),
-                    ma_giang_vien = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    mon_hoc = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_NganHangCauHoi", x => x.id);
                     table.ForeignKey(
-                        name: "FK_NganHangCauHoi_GiangVien_ma_giang_vien",
-                        column: x => x.ma_giang_vien,
+                        name: "FK_NganHangCauHoi_GiangVien_TeacherId",
+                        column: x => x.TeacherId,
                         principalTable: "GiangVien",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -260,16 +258,28 @@ namespace QuizSystem_backend.Migrations
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ma_de = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ten_bai_thi = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ngay_bat_dau = table.Column<DateTime>(type: "datetime2", nullable: false),
                     thoi_gian_lam_bai = table.Column<int>(type: "int", nullable: false),
                     so_cau_hoi = table.Column<int>(type: "int", nullable: false),
                     ma_phong_thi = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     trang_thai = table.Column<int>(type: "int", nullable: false),
-                    mon_hoc = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ma_mon_hoc = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ma_giang_vien = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DeThi", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_DeThi_GiangVien_ma_giang_vien",
+                        column: x => x.ma_giang_vien,
+                        principalTable: "GiangVien",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DeThi_MonHoc_ma_mon_hoc",
+                        column: x => x.ma_mon_hoc,
+                        principalTable: "MonHoc",
+                        principalColumn: "ma_mon_hoc",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_DeThi_PhongThi_ma_phong_thi",
                         column: x => x.ma_phong_thi,
@@ -431,10 +441,14 @@ namespace QuizSystem_backend.Migrations
                 column: "ma_mon_hoc");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeThi_ma_de",
+                name: "IX_DeThi_ma_giang_vien",
                 table: "DeThi",
-                column: "ma_de",
-                unique: true);
+                column: "ma_giang_vien");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeThi_ma_mon_hoc",
+                table: "DeThi",
+                column: "ma_mon_hoc");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeThi_ma_phong_thi",
@@ -468,9 +482,9 @@ namespace QuizSystem_backend.Migrations
                 column: "ma_mon_hoc");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NganHangCauHoi_ma_giang_vien",
+                name: "IX_NganHangCauHoi_TeacherId",
                 table: "NganHangCauHoi",
-                column: "ma_giang_vien");
+                column: "TeacherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PhongThi_ma_lop_hoc_phan",

@@ -274,10 +274,9 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("chu_de");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
+                    b.Property<int>("Type")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("int")
                         .HasColumnName("loai_cau_hoi");
 
                     b.HasKey("Id");

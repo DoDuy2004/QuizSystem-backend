@@ -12,7 +12,7 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250630160520_Initial")]
+    [Migration("20250701123924_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -277,10 +277,9 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("chu_de");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
+                    b.Property<int>("Type")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("int")
                         .HasColumnName("loai_cau_hoi");
 
                     b.HasKey("Id");

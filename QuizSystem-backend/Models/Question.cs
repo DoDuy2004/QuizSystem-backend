@@ -39,7 +39,7 @@ namespace QuizSystem_backend.Models
         public string Content { get; set; } = string.Empty;
         public string? Image { get; set; } = string.Empty;
         public Guid? CreatedBy { get; set; }
-        public string Type { get; set; } = null!;
+        public TypeOfQuestion Type { get; set; } 
 
         public Difficulty Difficulty { get; set; }
         public Status Status { get; set; }

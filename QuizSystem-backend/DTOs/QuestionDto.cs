@@ -50,7 +50,7 @@ namespace QuizSystem_backend.DTOs
         }
         public Guid Id { get; set; }
         public string Topic { get; set; } = null!;
-        public string Type { get; set; } = null!;
+        public TypeOfQuestion Type { get; set; } 
         public string Content { get; set; } = null!;
         public string? Image { get; set; } = null!;
         public Status Status { get; set; } = Status.ACTIVE;

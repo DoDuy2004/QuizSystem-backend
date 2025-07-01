@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
@@ -226,5 +227,57 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
+
+        [HttpPost("ImportQuestionsFile-preview")]
+        public async Task<IActionResult> ImportQuestionsPreview(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("File không hợp lệ!");
+            }
+            try
+            {
+                var result = await _questionBankService.ImportQuestionsPreview(file);
+                if (result == null || !result.Any())
+                {
+                    return NotFound(new { message = "No questions found in the file" });
+                }
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+
+        }
+
+        [HttpPost("import-confirm")]
+        public async Task<IActionResult> ImportQuestionsConfirm([FromBody] List<QuestionImportPreviewDto> questionsImportPreviewDto)
+        {
+            if (questionsImportPreviewDto == null || !questionsImportPreviewDto.Any())
+            {
+                return BadRequest(new { message = "Invalid input data." });
+            }
+            try
+            {
+                var addedQuestions = await _questionBankService.ImPortQuestionConfirm(questionsImportPreviewDto);
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = addedQuestions
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
     }
 }

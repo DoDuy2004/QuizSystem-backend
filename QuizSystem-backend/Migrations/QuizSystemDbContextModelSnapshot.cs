@@ -185,8 +185,6 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("trang_thai");
 
-<<<<<<< HEAD
-=======
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("ma_mon_hoc");
@@ -195,7 +193,6 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("ma_giang_vien");
 
->>>>>>> a96a77dd9afcb848b3152e6771feff0e0c843d38
                     b.HasKey("Id");
 
                     b.HasIndex("RoomExamId");
@@ -277,10 +274,9 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("chu_de");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
+                    b.Property<int>("Type")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("int")
                         .HasColumnName("loai_cau_hoi");
 
                     b.HasKey("Id");

@@ -2,6 +2,7 @@
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
+using System.Linq.Expressions;
 
 namespace QuizSystem_backend.repositories
 {
@@ -12,6 +13,23 @@ namespace QuizSystem_backend.repositories
         {
             _context = context;
         }
+
+        public async Task<string?> CheckErrorSubChap(string nameSubject,string nameChapter)
+        {
+            if (string.IsNullOrEmpty(nameSubject) || string.IsNullOrEmpty(nameChapter))
+            {
+                return "Tên môn học hoặc chương không được để trống";
+            }
+            var result= await _context.Subjects.Include(s=>s.Chapters).FirstOrDefaultAsync(s=>s.Name == nameSubject);
+            if (result == null) return "Môn học không tồn tại";
+            if(!result.Chapters.Any(c => c.Name == nameChapter))
+            {
+                return "Chương không có trong môn học";
+            }
+            return null;    
+        }
+
+        
         public async Task<IEnumerable<QuestionBank>> GetQuestionBanksAsync()
         {
             var questionBanks = await _context.QuestionBanks
@@ -61,6 +79,14 @@ namespace QuizSystem_backend.repositories
         public async Task AddQuestionAsync(Question newQuestion)
         {
             await _context.Questions.AddAsync(newQuestion);
+            await _context.SaveChangesAsync();
         }
+        public async Task<List<Question>> AddListQuestionAsync(List<Question> listQuestion)
+        {
+            await _context.Questions.AddRangeAsync(listQuestion);
+            await _context.SaveChangesAsync();
+            return listQuestion;
+        }
+
     }
 }

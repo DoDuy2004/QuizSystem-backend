@@ -15,7 +15,6 @@ namespace QuizSystem_backend.DTOs
         public Guid? RoomExamId { get; set; }
 
         public Guid TeacherId { get; set; }
-        public string Subject { get; set; } = string.Empty;
         public Guid SubjectId { get; set; }
 
         public virtual RoomExamDto? RoomExam { get; set; }

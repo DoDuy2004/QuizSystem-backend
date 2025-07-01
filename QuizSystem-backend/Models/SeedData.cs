@@ -197,7 +197,7 @@ namespace QuizSystem_backend.Models
                             Content = "Khái niệm nào dưới đây là đặc trưng của Lập trình hướng đối tượng?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "Multiple Choice",
+                            Type=TypeOfQuestion.MultipleChoice,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "OOP Basics",
@@ -211,7 +211,7 @@ namespace QuizSystem_backend.Models
                             Content = "Lớp trong Lập trình hướng đối tượng được định nghĩa như thế nào?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "Multiple Choice",
+                            Type=TypeOfQuestion.MultipleChoice,
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "Classes",
@@ -224,7 +224,7 @@ namespace QuizSystem_backend.Models
                             Content = "Đối tượng là gì trong Lập trình hướng đối tượng?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "Multiple Choice",
+                            Type=TypeOfQuestion.MultipleChoice,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Objects",
@@ -285,7 +285,7 @@ namespace QuizSystem_backend.Models
                         DurationMinutes = 90,
                         NoOfQuestions = 3,
                         RoomExamId = roomExamId,
-                        Subject = "Phương pháp lập trình hướng đối tượng",
+                        //Subject = "Phương pháp lập trình hướng đối tượng",
                         Status = Status.ACTIVE
                     };
                     context.Exams.Add(exam);

@@ -18,13 +18,13 @@ namespace QuizSystem_backend.repositories
         {
             return await _context.Exams
                 .AsNoTracking()
-                //.Include(e => e.RoomExam)
-                //.Include(e => e.ExamQuestions)
-                //    .ThenInclude(eq => eq.Question)
-                //        .ThenInclude(q => q.QuestionBank)
-                //.Include(e => e.ExamQuestions) 
-                //    .ThenInclude(eq => eq.Question)
-                //        .ThenInclude(q => q.Answers) 
+                .Include(e => e.RoomExam)
+                .Include(e => e.ExamQuestions)
+                    .ThenInclude(eq => eq.Question)
+                        .ThenInclude(q => q.QuestionBank)
+                .Include(e => e.ExamQuestions)
+                    .ThenInclude(eq => eq.Question)
+                        .ThenInclude(q => q.Answers)
                 .ToListAsync();
         }
 
@@ -32,13 +32,13 @@ namespace QuizSystem_backend.repositories
         public async Task<Exam> GetExamByIdAsync(Guid id)
         {
             var exam = await _context.Exams
-                //.Include(e => e.RoomExam)
-                //.Include(e => e.ExamQuestions)
-                //    .ThenInclude(eq => eq.Question)
-                //        .ThenInclude(q => q.QuestionBank)
-                //.Include(e => e.ExamQuestions!)
-                //    .ThenInclude(eq => eq.Question)
-                //        .ThenInclude(q => q.Answers)
+                .Include(e => e.RoomExam)
+                .Include(e => e.ExamQuestions)
+                    .ThenInclude(eq => eq.Question)
+                        .ThenInclude(q => q.QuestionBank)
+                .Include(e => e.ExamQuestions!)
+                    .ThenInclude(eq => eq.Question)
+                        .ThenInclude(q => q.Answers)
                 .FirstOrDefaultAsync(e => e.Id == id);
             return exam!;
         }

@@ -16,13 +16,13 @@ namespace QuizSystem_backend.Models
         public Guid? RoomExamId { get; set; }
         public Status Status { get; set; }
 
-        public Guid SubjectId { get; set; }
-        public Guid TeacherId { get; set; }
+        //public Guid SubjectId { get; set; }
+        //public Guid TeacherId { get; set; }
 
         // Navigation
         public virtual RoomExam RoomExam { get; set; } = null!;    
-        public virtual Teacher? Teacher { get; set; } = null!;
-        public virtual Subject Subject { get; set; } = null!;
+        //public virtual Teacher? Teacher { get; set; } = null!;
+        //public virtual Subject Subject { get; set; } = null!;
         public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = null!;
        
     }

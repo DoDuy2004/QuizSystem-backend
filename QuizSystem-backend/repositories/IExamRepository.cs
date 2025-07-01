@@ -16,7 +16,7 @@ namespace QuizSystem_backend.repositories
         Task<List<Question>?> GetQuestionsByExamAsync(Guid id);
         Task<List<Question>> GetQuestionsByChapterAndDifficultyAsync(Guid chapterId, Difficulty difficulty, int take,Guid questionBankId);
         Task<Question> AddQuestionToExamAsync(Guid examId, Question question,float score);
-        Task<Exam> UpdateExamAsync(Exam exam);
+        
 
     }
 }

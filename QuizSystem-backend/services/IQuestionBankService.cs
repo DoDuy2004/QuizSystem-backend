@@ -12,6 +12,7 @@ namespace QuizSystem_backend.services
         Task<IEnumerable<QuestionDto>> GetQuestionsByQuestionBankAsync(Guid id);
         Task<bool> DeleteQuestionBankAsync(Guid id);
         Task<List<QuestionDto>> AddListQuestionsToQuestionBankAsync(Guid questionBankId, List<QuestionDto> question);
-
+        Task <List<QuestionImportPreviewDto>>ImportQuestionsPreview(IFormFile file);
+        Task <List<QuestionImportPreviewDto>>ImPortQuestionConfirm(List<QuestionImportPreviewDto> questionsImportPreviewDto);
     }
 }

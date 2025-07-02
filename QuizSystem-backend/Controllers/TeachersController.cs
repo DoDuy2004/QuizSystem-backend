@@ -25,14 +25,14 @@ namespace QuizSystem_backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Teacher>>> GetTeachers()
         {
-            return await _context.Teachers.ToListAsync();
+            return await _context.Users.OfType<Teacher>().ToListAsync();
         }
 
         // GET: api/Teachers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Teacher>> GetTeacher(Guid id)
         {
-            var teacher = await _context.Teachers.FindAsync(id);
+            var teacher = await _context.Users.OfType<Teacher>().FirstOrDefaultAsync(t => t.Id == id);
 
             if (teacher == null)
             {
@@ -92,7 +92,7 @@ namespace QuizSystem_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Teacher>> PostTeacher(Teacher teacher)
         {
-            _context.Teachers.Add(teacher);
+            _context.Users.Add(teacher);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTeacher", new { id = teacher.Id }, teacher);
@@ -102,13 +102,13 @@ namespace QuizSystem_backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTeacher(Guid id)
         {
-            var teacher = await _context.Teachers.FindAsync(id);
+            var teacher = await _context.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Id == id);
             if (teacher == null)
             {
                 return NotFound();
             }
 
-            _context.Teachers.Remove(teacher);
+            _context.Users.Remove(teacher);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -116,7 +116,7 @@ namespace QuizSystem_backend.Controllers
 
         private bool TeacherExists(Guid id)
         {
-            return _context.Teachers.Any(e => e.Id == id);
+            return _context.Users.OfType<Teacher>().Any(e => e.Id == id);
         }
     }
 }

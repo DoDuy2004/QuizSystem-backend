@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.OpenApi;
 using Microsoft.AspNetCore.Http.HttpResults;
 namespace QuizSystem_backend.Models
 {
-    public class Student: User
+    public class Student: AppUser
     {
         public string StudentCode { get; set; } = string.Empty;
         public bool IsFirstTimeLogin { get; set; }

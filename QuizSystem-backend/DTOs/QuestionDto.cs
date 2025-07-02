@@ -21,7 +21,7 @@ namespace QuizSystem_backend.DTOs
             {
                 Id = question!.Teacher.Id,
                 FullName = question.Teacher.FullName,
-                Username = question.Teacher.Username,
+                Username = question.Teacher.UserName,
                 Email = question.Teacher.Email,
                 PhoneNumber = question.Teacher.PhoneNumber,
                 Gender = question.Teacher.Gender,

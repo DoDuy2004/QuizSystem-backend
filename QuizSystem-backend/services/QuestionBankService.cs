@@ -133,11 +133,21 @@ namespace QuizSystem_backend.services
                 using (var package = new ExcelPackage(stream))
                 {
                     var worksheet = package.Workbook.Worksheets[0];
-                    var rowCount = worksheet.Dimension.Rows;
+                    
 
                     var arrayCode = new string[] { "A", "B", "C", "D", "E", "F" };
 
-                    for (int row = 2; row < rowCount; row++)
+                    
+                    int rowMax = 1; int colMax = 1;
+                    while (true)
+                    {
+                        while (colMax <= 12 && worksheet.Cells[rowMax, colMax++].Text.Trim() == string.Empty  ) ;
+                        if (colMax == 13) break;
+                        rowMax++;colMax = 1;
+                    }
+
+                    
+                    for (int row = 2; row < rowMax; row++)
                     {
                         var preview = new QuestionImportPreviewDto();
 
@@ -158,9 +168,9 @@ namespace QuizSystem_backend.services
                             preview.Difficulty = value;
                         else preview.Difficulty = null;
 
-                        preview.CorrectAnswer= worksheet.Cells[row, 6].Text.Trim().Split(',');
-                        
-                        
+                        var correctString = worksheet.Cells[row, 6].Text.Trim();
+                        preview.CorrectAnswer = string.IsNullOrEmpty(correctString) ? Array.Empty<string>() 
+                            : correctString.Split(',').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
 
                         if (int.TryParse(worksheet.Cells[row, 7].Text.Trim(), out var selectionCount))
                             preview.SelectionCount = selectionCount;
@@ -172,6 +182,7 @@ namespace QuizSystem_backend.services
 
                         preview.Answer = new List<AnswerImportPreview>();
                         char code = 'A';
+
                         for (int i = 9; i <= 14; i++)
                         {
                             var answerImport = new AnswerImportPreview();
@@ -224,10 +235,12 @@ namespace QuizSystem_backend.services
                         if(preview.Difficulty == null)
                             preview.ErrorMessages.Add("Độ khó không hợp lệ");
 
-                        if(preview.CorrectAnswer.Length>arrayCode.Length)
+                        if (preview.CorrectAnswer.Any())
+                            preview.ErrorMessages.Add("Đáp án đúng không được để trống");
+                        else if(preview.CorrectAnswer.Length>arrayCode.Length)
                             preview.ErrorMessages.Add("Số lượng đáp án đúng không hợp lệ");
 
-                        if(preview.CorrectAnswer.Any(code=>!arrayCode.Contains(code)))
+                        else if(preview.CorrectAnswer.Any(code=>!arrayCode.Contains(code)))
                             preview.ErrorMessages.Add("Mã đáp án đúng không hợp lệ");
 
                         if(preview.CorrectAnswer.Length==0)
@@ -272,7 +285,9 @@ namespace QuizSystem_backend.services
                 listQuestion.Add(question);
             }
             await _questionBankRepository.AddListQuestionAsync(listQuestion);
-            return questionsImportPreviewDto;
+            return _mapper.Map<List<QuestionImportPreviewDto>>(listQuestion);
         }
+
+        
     }
 }

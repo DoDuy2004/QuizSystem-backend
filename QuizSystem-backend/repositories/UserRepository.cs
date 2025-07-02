@@ -11,13 +11,13 @@ namespace QuizSystem_backend.repositories
         {
             _context = context;
         }
-        public async Task<User> GetByUsernameAsync(string username)
+        public async Task<AppUser> GetByUsernameAsync(string username)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username || u.Email == username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username || u.Email == username);
 
             return user!;
         }
-        public async Task<User> GetByIdAsync(Guid userId)
+        public async Task<AppUser> GetByIdAsync(Guid userId)
         {
             var user = await _context.Users.FindAsync(userId);
 

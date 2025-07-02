@@ -115,16 +115,52 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AddQuestion", policy => policy.RequireClaim("AddQuestion", "true"));
+    options.AddPolicy("EditQuestion", policy => policy.RequireClaim("EditQuestion", "true"));
+    options.AddPolicy("DeleteQuestion", policy => policy.RequireClaim("DeleteQuestion", "true"));
+});
+
 
 
 builder.Services.AddDbContext<QuizSystemDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("QuizSystemConnection")));
 
+builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<QuizSystemDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(options => {
+    // Thiết lập về Password
+    options.Password.RequireDigit = false; // Không bắt phải có số
+    options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
+    options.Password.RequireNonAlphanumeric = false; // Không bắt ký tự đặc biệt
+    options.Password.RequireUppercase = false; // Không bắt buộc chữ in
+    options.Password.RequiredLength = 4; // Số ký tự tối thiểu của password
+    options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
+
+    // Cấu hình Lockout - khóa user
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Khóa 5 phút
+    options.Lockout.MaxFailedAccessAttempts = 10; // Thất bại 5 lần thì khóa
+    options.Lockout.AllowedForNewUsers = true;
+
+    // Cấu hình về User.
+    options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;  // Email là duy nhất
+
+    // Cấu hình đăng nhập.
+    options.SignIn.RequireConfirmedEmail = false;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
+    options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
+
+});
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -145,24 +181,61 @@ app.UseSession();
 
 app.MapControllers();
 
-SeedData.Initialize(app.Services);
+//SeedData.Initialize(app.Services);
 
-using var scope = app.Services.CreateScope();
-var db = scope.ServiceProvider.GetRequiredService<QuizSystemDbContext>();
+//using var scope = app.Services.CreateScope();
+//var db = scope.ServiceProvider.GetRequiredService<QuizSystemDbContext>();
 
-var hasher = new PasswordHasher<User>();
+//var hasher = new PasswordHasher<AppUser>();
 
-var users = await db.Users.ToListAsync();
+//var users = await db.Users.ToListAsync();
 
-foreach (var user in users)
+//foreach (var user in users)
+//{
+//    if (!user.PasswordHash.StartsWith("$"))
+//    {
+//        user.PasswordHash = hasher.HashPassword(user, "123456789");
+//    }
+//}
+
+//await db.SaveChangesAsync();
+using (var scope = app.Services.CreateScope())
 {
-    if (!user.PasswordHash.StartsWith("$"))
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+
+    string[] roles = new[] { "Admin", "Teacher", "Student" };
+
+    foreach (var roleName in roles)
     {
-        user.PasswordHash = hasher.HashPassword(user, "123456789");
+        var exists = await roleManager.RoleExistsAsync(roleName);
+        if (!exists)
+        {
+            var role = new IdentityRole<Guid>(roleName)
+            {
+                NormalizedName = roleName.ToUpper()
+            };
+            await roleManager.CreateAsync(role);
+        }
+    }
+
+    var adminEmail = "admin@caothang.edu.vn";
+
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser == null)
+    {
+        adminUser = new AppUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true
+        };
+        var result = await userManager.CreateAsync(adminUser, "admin");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
     }
 }
-
-await db.SaveChangesAsync();
-
 
 app.Run();

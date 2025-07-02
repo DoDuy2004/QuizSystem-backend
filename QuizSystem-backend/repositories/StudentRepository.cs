@@ -12,13 +12,13 @@ namespace QuizSystem_backend.repositories
         }
         public async Task<IEnumerable<Student>> GetStudentsAsync()
         {
-            var students = await _context.Students.ToListAsync();
+            var students = await _context.Users.OfType<Student>().ToListAsync();
 
             return students;
         }
         public async Task<Student> GetByIdAsync(Guid id)
         {
-            var student = await _context.Students.FindAsync(id);
+            var student = await _context.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Id == id);
 
             return student!;
         }

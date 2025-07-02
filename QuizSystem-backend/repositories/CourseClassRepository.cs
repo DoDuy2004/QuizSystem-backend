@@ -29,8 +29,7 @@ namespace QuizSystem_backend.repositories
 
             await _context.SaveChangesAsync();
 
-            var student = await _context.Students.FindAsync(scc.StudentId);
-            
+            var student = await _context.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Id == scc.StudentId);
             return student!;
         }
         public async Task<IEnumerable<Student>> GetStudentByCourseClassAsync(Guid id)

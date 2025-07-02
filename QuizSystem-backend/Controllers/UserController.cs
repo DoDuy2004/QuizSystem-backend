@@ -12,8 +12,8 @@ namespace QuizSystem_backend.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService) 
-        { 
+        public UserController(IUserService userService)
+        {
             _userService = userService;
         }
 
@@ -41,6 +41,29 @@ namespace QuizSystem_backend.Controllers
                 message = "Success",
                 data = userDto
             });
+        }
+
+        [HttpPost("import-file-student")]
+        public async Task<IActionResult> ImportFileStudent(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest(new { message = "File is required" });
+            }
+            try
+            {
+                var students = await _userService.ImportFileStudent(file);
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = students
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
         }
     }
 }

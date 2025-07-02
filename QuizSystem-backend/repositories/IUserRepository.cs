@@ -4,7 +4,7 @@ namespace QuizSystem_backend.repositories
 {
     public interface IUserRepository
     {
-        Task<User> GetByUsernameAsync(string username);
-        Task<User> GetByIdAsync(Guid userId);
+        Task<AppUser> GetByUsernameAsync(string username);
+        Task<AppUser> GetByIdAsync(Guid userId);
     }
 }

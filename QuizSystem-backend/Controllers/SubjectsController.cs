@@ -14,7 +14,7 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "ADMIN")]
+    [Authorize(Roles = "ADMIN, TEACHER")]
     public class SubjectsController : ControllerBase
     {
         private readonly QuizSystemDbContext _context;
@@ -35,7 +35,7 @@ namespace QuizSystem_backend.Controllers
                 code = 200,
                 message = "Success",
                 data = subjects
-            }); ;
+            });
         }
 
         // GET: api/Subjects/5
@@ -52,10 +52,10 @@ namespace QuizSystem_backend.Controllers
             return subject;
         }
 
-        [HttpGet("chapters")]
-        public async Task<ActionResult> GetChapters()
+        [HttpGet("{id}/chapters")]
+        public async Task<ActionResult> GetChapters(Guid id)
         {
-            var chapters = await _context.Chapters.ToListAsync();
+            var chapters = await _context.Chapters.Where(c => c.SubjectId == id).ToListAsync();
 
             return Ok(new
             {

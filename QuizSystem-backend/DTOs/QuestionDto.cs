@@ -30,6 +30,14 @@ namespace QuizSystem_backend.DTOs
 
             var chapter = question.Chapter != null ? new ChapterDto(question.Chapter) : null;
 
+            var questionBank = question?.QuestionBank != null ? new QuestionBankDto
+            {
+                Id = question.QuestionBank.Id,
+                Name = question.QuestionBank.Name,
+                //TeacherId = question.QuestionBank.TeacherId
+                //CourseClassId = question.QuestionBank.CourseClassId,
+            } : null ;
+
             Id = question.Id;
             Content = question.Content;
             Image = question.Image;
@@ -39,13 +47,7 @@ namespace QuizSystem_backend.DTOs
             Status = question.Status;
             Teacher = teacher;
             Chapter = chapter;
-            QuestionBank = new QuestionBankDto
-            {
-                Id = question.QuestionBank.Id,
-                Name = question.QuestionBank.Name,
-                //TeacherId = question.QuestionBank.TeacherId
-                //CourseClassId = question.QuestionBank.CourseClassId,
-            };
+            QuestionBank = questionBank;
             Answers = answers;
         }
         public Guid Id { get; set; }

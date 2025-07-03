@@ -9,13 +9,11 @@ namespace QuizSystem_backend.DTOs
         { 
             Id = chapter.Id;
             Name = chapter.Name;
-            Subject = chapter.Subject.Name;
+            Subject = new SubjectDto(chapter.Subject);
         }
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public Guid SubjectId { get; set; }
-
-        public string Subject { get; set; } = null!;    
-        //public SubjectDto Subject { get; set; }
+        public SubjectDto Subject { get; set; }
     }
 }

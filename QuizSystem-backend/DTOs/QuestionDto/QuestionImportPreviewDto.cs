@@ -5,7 +5,7 @@ namespace QuizSystem_backend.DTOs
     public class QuestionImportPreviewDto
     {
         public int RowIndex { get; set; }
-        public string Chapter { get; set; } = "";
+        public string? Chapter { get; set; } = "";
         public string Content { get; set; } = "";
         public string Subject { get; set; } = "";
         public TypeOfQuestion? Type { get; set; } 

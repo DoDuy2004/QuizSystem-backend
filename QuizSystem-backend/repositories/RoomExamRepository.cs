@@ -3,7 +3,7 @@ using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.repositories
 {
-    public class RoomExamRepository
+    public class RoomExamRepository:IRoomExamRepository
     {
         private readonly QuizSystemDbContext _context;
         public RoomExamRepository(QuizSystemDbContext context)

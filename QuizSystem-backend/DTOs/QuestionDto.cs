@@ -21,7 +21,7 @@ namespace QuizSystem_backend.DTOs
             {
                 Id = question!.Teacher.Id,
                 FullName = question.Teacher.FullName,
-                Username = question.Teacher.Username,
+                Username = question.Teacher.UserName,
                 Email = question.Teacher.Email,
                 PhoneNumber = question.Teacher.PhoneNumber,
                 Gender = question.Teacher.Gender,
@@ -50,7 +50,7 @@ namespace QuizSystem_backend.DTOs
         }
         public Guid Id { get; set; }
         public string Topic { get; set; } = null!;
-        public string Type { get; set; } = null!;
+        public TypeOfQuestion Type { get; set; } 
         public string Content { get; set; } = null!;
         public string? Image { get; set; } = null!;
         public Status Status { get; set; } = Status.ACTIVE;

@@ -1,4 +1,4 @@
-﻿//using Microsoft.EntityFrameworkCore;
+﻿//                    .IsRequired();//using Microsoft.EntityFrameworkCore;
 
 //namespace QuizSystem_backend.Models
 //{
@@ -249,7 +249,7 @@
 
 //                entity.Property(e => e.TeacherId)
 //                    .HasColumnName("teacher_id")
-//                    .IsRequired();
+
 
 //                entity.Property(e => e.SubjectId)
 //                    .HasColumnName("subject_id")
@@ -714,12 +714,23 @@
 //    }
 //}
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Plugins;
 
 namespace QuizSystem_backend.Models
 {
-    public class QuizSystemDbContext : DbContext
+    public class QuizSystemDbContext : IdentityDbContext<
+        AppUser, 
+        IdentityRole<Guid>, 
+        Guid,
+        IdentityUserClaim<Guid>,
+        IdentityUserRole<Guid>,
+        IdentityUserLogin<Guid>,
+        IdentityRoleClaim<Guid>,
+        IdentityUserToken<Guid>
+        >
     {
         public QuizSystemDbContext(DbContextOptions<QuizSystemDbContext> options)
             : base(options)
@@ -727,9 +738,9 @@ namespace QuizSystem_backend.Models
         }
 
         // DbSets cho các entity
-        public DbSet<User> Users { get; set; }
-        public DbSet<Student> Students { get; set; }
-        public DbSet<Teacher> Teachers { get; set; }
+        //public DbSet<AppUser> Users { get; set; }
+        //public DbSet<Student> Students { get; set; }
+        //public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Chapter> Chapters { get; set; }
         public DbSet<CourseClass> CourseClasses { get; set; }
@@ -747,140 +758,140 @@ namespace QuizSystem_backend.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // User
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.ToTable("TaiKhoan");
-                entity.HasKey(e => e.Id);
+            //modelBuilder.Entity<AppUser>(entity =>
+            //{
+            //    entity.ToTable("TaiKhoan");
+            //    entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedOnAdd();
+            //    entity.Property(e => e.Id)
+            //        .HasColumnName("id")
+            //        .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.Username)
-                    .HasColumnName("ten_dang_nhap")
-                    .IsRequired()
-                    .HasMaxLength(50);
+            //    entity.Property(e => e.Username)
+            //        .HasColumnName("ten_dang_nhap")
 
-                entity.HasIndex(e => e.Username)
-                    .IsUnique();
+            //        .HasMaxLength(50);
 
-                entity.Property(e => e.FullName)
-                    .HasColumnName("ho_ten")
-                    .IsRequired()
-                    .HasMaxLength(100);
+            //    entity.HasIndex(e => e.Username)
+            //        .IsUnique();
 
-                entity.Property(e => e.Email)
-                    .HasColumnName("email")
-                    .IsRequired()
-                    .HasMaxLength(100);
+            //    entity.Property(e => e.FullName)
+            //        .HasColumnName("ho_ten")
 
-                entity.HasIndex(e => e.Email)
-                    .IsUnique();
+            //        .HasMaxLength(100);
 
-                entity.Property(e => e.PhoneNumber)
-                    .HasColumnName("so_dien_thoai")
-                    .HasMaxLength(15);
+            //    entity.Property(e => e.Email)
+            //        .HasColumnName("email")
+            //        .IsRequired()
+            //        .HasMaxLength(100);
 
-                entity.Property(e => e.Gender)
-                    .HasColumnName("gioi_tinh");
+            //    entity.HasIndex(e => e.Email)
+            //        .IsUnique();
 
-                entity.Property(e => e.DateOfBirth)
-                    .HasColumnName("ngay_sinh");
+            //    entity.Property(e => e.PhoneNumber)
+            //        .HasColumnName("so_dien_thoai")
+            //        .HasMaxLength(15);
 
-                entity.Property(e => e.AvatarUrl)
-                    .HasColumnName("url_anh")
-                    .HasMaxLength(255);
+            //    entity.Property(e => e.Gender)
+            //        .HasColumnName("gioi_tinh");
 
-                entity.Property(e => e.Status)
-                    .HasColumnName("trang_thai");
+            //    entity.Property(e => e.DateOfBirth)
+            //        .HasColumnName("ngay_sinh");
 
-                entity.Property(e => e.PasswordHash)
-                    .HasColumnName("mat_khau")
-                    .IsRequired()
-                    .HasMaxLength(255);
+            //    entity.Property(e => e.AvatarUrl)
+            //        .HasColumnName("url_anh")
+            //        .HasMaxLength(255);
 
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnName("ngay_tao")
-                    .IsRequired();
+            //    entity.Property(e => e.Status)
+            //        .HasColumnName("trang_thai");
 
-                entity.Property(e => e.Role)
-                    .HasColumnName("vai_tro")
-                    .IsRequired();
-            });
+            //    entity.Property(e => e.PasswordHash)
+            //        .HasColumnName("mat_khau")
+            //        .IsRequired()
+            //        .HasMaxLength(255);
+
+            //    entity.Property(e => e.CreatedAt)
+            //        .HasColumnName("ngay_tao");
+
+
+            //    entity.Property(e => e.Role)
+            //        .HasColumnName("vai_tro")
+            //        .IsRequired();
+            //});
 
             // Student (TPT inheritance from User)
-            modelBuilder.Entity<Student>(entity =>
-            {
-                entity.ToTable("SinhVien");
-                entity.HasBaseType<User>();
+            //modelBuilder.Entity<Student>(entity =>
+            //{
+            //    entity.ToTable("SinhVien");
+            //    entity.HasBaseType<AppUser>();
 
-                entity.Property(s => s.StudentCode)
-                    .HasColumnName("ma_sinh_vien")
-                    .HasMaxLength(50);
+            //    entity.Property(s => s.StudentCode)
+            //        .HasColumnName("ma_sinh_vien")
+            //        .HasMaxLength(50);
 
-                entity.Property(s => s.IsFirstTimeLogin)
-                    .HasColumnName("dang_nhap_lan_dau");
+            //    entity.Property(s => s.IsFirstTimeLogin)
+            //        .HasColumnName("dang_nhap_lan_dau");
 
-                entity.Property(s => s.Facutly)
-                    .HasColumnName("khoa")
-                    .HasMaxLength(50);
+            //    entity.Property(s => s.Facutly)
+            //        .HasColumnName("khoa")
+            //        .HasMaxLength(50);
 
-                //entity.Property(s => s.FacutlyId)
-                //    .HasColumnName("ma_khoa")
-                //    .IsRequired();
+            //entity.Property(s => s.FacutlyId)
+            //    .HasColumnName("ma_khoa")
+            //    .IsRequired();
 
-                //entity.HasOne(s => s.Facutly)
-                //    .WithMany(f => f.Students)
-                //    .HasForeignKey(s => s.FacutlyId)
-                //    .OnDelete(DeleteBehavior.Restrict);
-                entity.HasMany(e => e.Courses)
-                    .WithOne(scc => scc.Student)
-                    .HasForeignKey(scc => scc.StudentId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
+            //entity.HasOne(s => s.Facutly)
+            //    .WithMany(f => f.Students)
+            //    .HasForeignKey(s => s.FacutlyId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+            //entity.HasMany(e => e.Courses)
+            //    .WithOne(scc => scc.Student)
+            //    .HasForeignKey(scc => scc.StudentId)
+            //    .OnDelete(DeleteBehavior.Cascade);
+            //});
 
             // Teacher (TPT inheritance from User)
-            modelBuilder.Entity<Teacher>(entity =>
-            {
-                entity.ToTable("GiangVien");
-                entity.HasBaseType<User>();
+            //modelBuilder.Entity<Teacher>(entity =>
+            //{
+            //    entity.ToTable("GiangVien");
+            //    entity.HasBaseType<AppUser>();
 
-                entity.Property(t => t.TeacherCode)
-                    .HasColumnName("ma_giao_vien")
-                    .HasMaxLength(50);
+            //    entity.Property(t => t.TeacherCode)
+            //        .HasColumnName("ma_giao_vien")
+            //        .HasMaxLength(50);
 
-                entity.Property(t => t.IsFirstTimeLogin)
-                    .HasColumnName("dang_nhap_lan_dau");
+            //    entity.Property(t => t.IsFirstTimeLogin)
+            //        .HasColumnName("dang_nhap_lan_dau");
 
-                entity.Property(s => s.Facutly)
-                    .HasColumnName("khoa")
-                    .HasMaxLength(50);
+            //    entity.Property(s => s.Facutly)
+            //        .HasColumnName("khoa")
+            //        .HasMaxLength(50);
 
-                //entity.Property(t => t.FacutlyId)
-                //    .HasColumnName("ma_khoa")
-                //    .IsRequired();  
+            //entity.Property(t => t.FacutlyId)
+            //    .HasColumnName("ma_khoa")
+            //    .IsRequired();  
 
-                //entity.HasOne(t => t.Department)
-                //    .WithMany(f => f.Teachers)
-                //    .HasForeignKey(t => t.FacutlyId)
-                //    .OnDelete(DeleteBehavior.Restrict);
+            //entity.HasOne(t => t.Department)
+            //    .WithMany(f => f.Teachers)
+            //    .HasForeignKey(t => t.FacutlyId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasMany(t => t.Questions)
-                    .WithOne(q => q.Teacher)
-                    .HasForeignKey(q => q.CreatedBy)
-                    .OnDelete(DeleteBehavior.Cascade);
+            //entity.HasMany(t => t.Questions)
+            //    .WithOne(q => q.Teacher)
+            //    .HasForeignKey(q => q.CreatedBy)
+            //    .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasMany(t => t.CourseClasses)
-                    .WithOne(cc => cc.Teacher)
-                    .HasForeignKey(cc => cc.TeacherId)
-                    .OnDelete(DeleteBehavior.Restrict);
+            //entity.HasMany(t => t.CourseClasses)
+            //    .WithOne(cc => cc.Teacher)
+            //    .HasForeignKey(cc => cc.TeacherId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
-                //entity.HasMany(t => t.QuestionBanks)
-                //    .WithOne(q => q.Teacher)
-                //    .HasForeignKey(qb => qb.TeacherId)
-                //    .OnDelete(DeleteBehavior.Cascade);
-            });
-
+            //entity.HasMany(t => t.QuestionBanks)
+            //    .WithOne(q => q.Teacher)
+            //    .HasForeignKey(qb => qb.TeacherId)
+            //    .OnDelete(DeleteBehavior.Cascade);
+            //});
+            base.OnModelCreating(modelBuilder);
             // Answer
             modelBuilder.Entity<Answer>(entity =>
             {
@@ -1031,7 +1042,7 @@ namespace QuizSystem_backend.Models
 
                 entity.Property(e => e.ExamCode)
                     .HasColumnName("ma_de")
-                    .IsRequired()
+                    
                     .HasMaxLength(20);
 
                 //entity.HasIndex(e => e.ExamCode)

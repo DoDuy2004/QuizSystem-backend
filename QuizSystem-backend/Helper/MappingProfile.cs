@@ -1,6 +1,8 @@
 ﻿using QuizSystem_backend.DTOs;
 using QuizSystem_backend.Models;
 using AutoMapper;
+using QuizSystem_backend.DTOs.StudentDtos;
+using QuizSystem_backend.DTOs.AuthDto;
 namespace QuizSystem_backend.Helper
 {
     public class MappingProfile:Profile
@@ -30,32 +32,64 @@ namespace QuizSystem_backend.Helper
             CreateMap<ExamDto, Exam>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ReverseMap();
+
             CreateMap<RoomExamDto, RoomExam>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ReverseMap();
+
             CreateMap<ExamQuestionDto, ExamQuestion>().ReverseMap();
+
             CreateMap<QuestionDto, Question>()
                 .ForMember(dest=>dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ForMember(dest=>dest.Teacher,opt=>opt.Ignore())
                 .ForMember(dest => dest.Chapter, opt => opt.Ignore())
                 .ForMember(dest => dest.QuestionBank, opt => opt.Ignore())
                 .ReverseMap();
+
             CreateMap<TeacherDto, Teacher>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ReverseMap();
+
             CreateMap<AnswerDto, Answer>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ReverseMap();
+
             CreateMap<QuestionBankDto, QuestionBank>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ReverseMap();
+
             CreateMap<ChapterDto, Chapter>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ReverseMap();
+
             CreateMap<CourseClassDto, CourseClass>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ReverseMap();
+
             //CreateMap<QuestionsAddedToExamDto,Question>().ReverseMap();
+            CreateMap<QuestionImportPreviewDto, Question>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src =>Guid.NewGuid()))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+                
+                .ForMember(dest => dest.Answers, opt => opt.MapFrom(src => src.Answer != null
+                    ? src.Answer.Select(a => new Answer
+                    {
+                        Id =Guid.NewGuid() ,
+                        Content = a.Content,
+                        IsCorrect = a.IsCorrect,
+                       
+                    }).ToList()
+                    : new List<Answer>()))
+                .ForMember(dest => dest.Teacher, opt => opt.Ignore())
+                .ForMember(dest => dest.Chapter, opt => opt.Ignore())
+                .ForMember(dest => dest.QuestionBank, opt => opt.Ignore());
+
+            CreateMap<RegisterDto, AppUser>().ReverseMap();
+            CreateMap<RoomExamDto, RoomExam>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ReverseMap();
+
+
         }
 
     }

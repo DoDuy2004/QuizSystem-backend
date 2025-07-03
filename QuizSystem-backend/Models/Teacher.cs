@@ -1,6 +1,6 @@
 ﻿namespace QuizSystem_backend.Models
 {
-    public class Teacher : User
+    public class Teacher : AppUser
     {
         public string TeacherCode { get; set; } = string.Empty;
         public bool IsFirstTimeLogin { get; set; }

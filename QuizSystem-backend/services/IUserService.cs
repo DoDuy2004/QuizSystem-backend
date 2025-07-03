@@ -1,10 +1,12 @@
-﻿using QuizSystem_backend.Models;
+﻿using QuizSystem_backend.DTOs.StudentDtos;
+using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.services
 {
     public interface IUserService
     {
-        Task<User> GetUserByUsernameAsync(string username);
-        Task<User> GetUserByIdAsync(Guid userId);
+        Task<AppUser> GetUserByUsernameAsync(string username);
+        Task<AppUser> GetUserByIdAsync(Guid userId);
+        Task<List<StudentImportDto>> ImportFileStudent(IFormFile file);
     }
 }

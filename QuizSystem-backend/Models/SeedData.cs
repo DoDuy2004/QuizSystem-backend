@@ -22,34 +22,34 @@ namespace QuizSystem_backend.Models
                 var currentDate = DateTime.UtcNow;
 
                 // Seed Admin User
-                if (!context.Users.Any())
-                {
-                    var admin = new User
-                    {
-                        Id = Guid.NewGuid(),
-                        Username = "admin1",
-                        FullName = "Đỗ Đình Duy",
-                        Email = "admin@example.com",
-                        PhoneNumber = "0987654321",
-                        Gender = true,
-                        DateOfBirth = new DateTime(2004, 6, 20),
-                        AvatarUrl = "",
-                        Status = Status.ACTIVE,
-                        PasswordHash = "123456789",
-                        CreatedAt = currentDate,
-                        Role = Role.ADMIN
-                    };
-                    context.Users.Add(admin);
-                    context.SaveChanges();
-                }
+                //if (!context.Users.Any())
+                //{
+                //    var admin = new AppUser
+                //    {
+                //        Id = Guid.NewGuid(),
+                //        Username = "admin1",
+                //        FullName = "Đỗ Đình Duy",
+                //        Email = "admin@example.com",
+                //        PhoneNumber = "0987654321",
+                //        Gender = true,
+                //        DateOfBirth = new DateTime(2004, 6, 20),
+                //        AvatarUrl = "",
+                //        Status = Status.ACTIVE,
+                //        PasswordHash = "123456789",
+                //        CreatedAt = currentDate,
+                //        Role = Role.ADMIN
+                //    };
+                //    context.Users.Add(admin);
+                //    context.SaveChanges();
+                //}
 
                 // Seed Teacher
-                if (!context.Teachers.Any())
+                if (!context.Users.OfType<Teacher>().Any())
                 {
                     var teacher = new Teacher
                     {
                         Id = Guid.NewGuid(),
-                        Username = "ndduy",
+                        UserName = "ndduy",
                         FullName = "Nguyễn Đức Duy",
                         Email = "ndduy@gmail.com",
                         PhoneNumber = "0912345678",
@@ -60,19 +60,19 @@ namespace QuizSystem_backend.Models
                         PasswordHash = "123456789",
                         CreatedAt = currentDate,
                         Facutly = "Công Nghệ Thông Tin",
-                        Role = Role.TEACHER
+                        
                     };
-                    context.Teachers.Add(teacher);
+                    context.Users.Add(teacher);
                     context.SaveChanges();
                 }
 
                 // Seed 20 Students
-                if (!context.Students.Any())
+                if (!context.Users.OfType<Student>().Any())
                 {
                     var students = new Student
                     {
                         Id = Guid.NewGuid(),
-                        Username = "duy0604",
+                        UserName = "duy0604",
                         FullName = "Đỗ Đình Duy",
                         Email = "duy2004.gi@gmail.com",
                         PhoneNumber = "0918557317",
@@ -84,7 +84,7 @@ namespace QuizSystem_backend.Models
                         PasswordHash = "123456789",
                         CreatedAt = currentDate
                     };
-                    context.Students.AddRange(students);
+                    context.Users.AddRange(students);
                     context.SaveChanges();
                 }
 
@@ -113,8 +113,8 @@ namespace QuizSystem_backend.Models
 
                 var subjectsList = context.Subjects.ToList();
 
-                var teacherId = context.Teachers.First().Id;
-                var studentIds = context.Students.Select(s => s.Id).ToList();
+                var teacherId = context.Users.OfType<Teacher>().First().Id;
+                var studentIds = context.Users.OfType<Student>().Select(s => s.Id).ToList();
 
                 // Seed CourseClass
                 if (!context.CourseClasses.Any())
@@ -196,7 +196,7 @@ namespace QuizSystem_backend.Models
                             Content = "Khái niệm nào dưới đây là đặc trưng của Lập trình hướng đối tượng?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "Multiple Choice",
+                            Type=TypeOfQuestion.MultipleChoice,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "OOP Basics",
@@ -210,7 +210,7 @@ namespace QuizSystem_backend.Models
                             Content = "Lớp trong Lập trình hướng đối tượng được định nghĩa như thế nào?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "Multiple Choice",
+                            Type=TypeOfQuestion.MultipleChoice,
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "Classes",
@@ -223,7 +223,7 @@ namespace QuizSystem_backend.Models
                             Content = "Đối tượng là gì trong Lập trình hướng đối tượng?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "Multiple Choice",
+                            Type=TypeOfQuestion.MultipleChoice,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Objects",

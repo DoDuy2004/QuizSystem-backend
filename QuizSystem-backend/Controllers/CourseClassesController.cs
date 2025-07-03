@@ -17,7 +17,7 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "TEACHER, ADMIN")]
+    [Authorize(Roles = "TEACHER,ADMIN")]
 
     public class CourseClassesController : ControllerBase
     {

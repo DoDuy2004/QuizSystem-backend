@@ -5,13 +5,13 @@ namespace QuizSystem_backend.DTOs
 {   public class UserDto
     {
         public UserDto() { }
-        public UserDto(User user)
+        public UserDto(AppUser user)
         {
-            string userRole = ((Role)user.Role).ToString();
+            
             string status = ((Status)user.Status).ToString();
 
             Id = user.Id;
-            Username = user.Username;
+            Username = user.UserName;
             FullName = user.FullName;
             Email = user.Email;
             PhoneNumber = user.PhoneNumber;
@@ -20,7 +20,7 @@ namespace QuizSystem_backend.DTOs
             AvatarUrl = user.AvatarUrl;
             Status = status;
             CreatedAt = user.CreatedAt;
-            Role = userRole;
+           
         }
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Username { get; set; } = null!;
@@ -32,7 +32,8 @@ namespace QuizSystem_backend.DTOs
         public string? AvatarUrl { get; set; } = null!;
         public string? Status { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
-        public string? Role { get; set; } = null!;
+        public string role { get; set; }
+       
     }
 
 }

@@ -83,6 +83,7 @@ namespace QuizSystem_backend.services
             exam.DurationMinutes = examDto.DurationMinutes;
             exam.Status = examDto.Status;
             exam.ExamCode = examDto.ExamCode;
+            exam.SubjectId = examDto.SubjectId;
 
             //var examUpdated = await _examRepository.UpdateExamAsync(examUpdate);
             await _examRepository.SaveChangesAsync();

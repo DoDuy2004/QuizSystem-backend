@@ -12,7 +12,7 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250703134336_Initial")]
+    [Migration("20250703135527_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

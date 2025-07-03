@@ -72,7 +72,7 @@ namespace QuizSystem_backend.Helper
 
                     }).ToList()
                     : new List<Answer>()))
-                .ForMember(dest => dest.Teacher, opt => opt.Ignore())
+                .ForMember(dest => dest.User, opt => opt.Ignore())
                 .ForMember(dest => dest.Chapter, opt => opt.Ignore())
                 .ForMember(dest => dest.QuestionBank, opt => opt.Ignore());
         }

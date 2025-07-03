@@ -48,10 +48,10 @@ namespace QuizSystem_backend.Models
         public Guid? ChapterId { get; set; }
 
         // Navigation
-        public virtual Teacher Teacher { get; set; } = null!;
-        public virtual ICollection<ExamQuestion>? ExamQuestions { get; set; } = null!;
-        public virtual ICollection<StudentExamDetail>? StudentExamDetails { get; set; } = null!;
-        public virtual QuestionBank? QuestionBank { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
+        public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = null!;
+        public virtual ICollection<StudentExamDetail> StudentExamDetails { get; set; } = null!;
+        public virtual QuestionBank QuestionBank { get; set; } = null!;
         public virtual ICollection<Answer> Answers { get; set; } = null!;
         public virtual Chapter? Chapter { get; set; }
     }

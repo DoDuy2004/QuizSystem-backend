@@ -128,7 +128,7 @@ namespace QuizSystem_backend.Models
                         Credit = 3,
                         Status = Status.ACTIVE,
                         SubjectId = subjectsList[0].Id,
-                        TeacherId = teacherId,
+                        UserId = teacherId,
                     };
                     context.CourseClasses.Add(courseClass);
                     context.SaveChanges();
@@ -264,7 +264,6 @@ namespace QuizSystem_backend.Models
                         StartDate = new DateTime(2025, 6, 25, 8, 0, 0),
                         EndDate = new DateTime(2025, 6, 25, 10, 0, 0),
                         Status = Status.ACTIVE,
-                        CourseClassId = courseClassId
                     };
                     context.RoomExams.Add(roomExam);
                     context.SaveChanges();
@@ -284,7 +283,7 @@ namespace QuizSystem_backend.Models
                         NoOfQuestions = 3,
                         RoomExamId = roomExamId,
                         SubjectId = subjectsList[0].Id,
-                        TeacherId = teacherId,
+                        UserId = teacherId,
                         Status = Status.ACTIVE
                     };
                     context.Exams.Add(exam);
@@ -328,7 +327,6 @@ namespace QuizSystem_backend.Models
                     {
                         Id = Guid.NewGuid(),
                         StudentId = s,
-                        CourseClassId = courseClassId,
                         ExamId = examId,
                         DurationMinutes = 90,
                         Status = Status.ACTIVE

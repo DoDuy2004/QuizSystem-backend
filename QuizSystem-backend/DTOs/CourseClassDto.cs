@@ -8,14 +8,14 @@ namespace QuizSystem_backend.DTOs
         public CourseClassDto() { }
         public CourseClassDto(CourseClass course) 
         {
-            var teacher = course.Teacher != null ? new TeacherDto(course.Teacher) : null;
+            var teacher = course.User != null ? new UserDto(course.User) : null;
 
             Id = course.Id;
             ClassCode = course.ClassCode;
             Name = course.Name;
             Credit = course.Credit;
             Status = course.Status;
-            TeacherId = course.TeacherId;
+            TeacherId = course.UserId;
             SubjectId = course.SubjectId;
             Teacher = teacher;
             Description = course.Description;
@@ -31,7 +31,7 @@ namespace QuizSystem_backend.DTOs
         public string? Description { get; set; }
 
         // Navigation
-        public virtual TeacherDto? Teacher { get; set; } = null!;
+        public virtual UserDto? Teacher { get; set; } = null!;
         public virtual SubjectDto? Subject { get; set; } = null!;
     }
 }

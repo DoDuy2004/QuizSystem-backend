@@ -43,7 +43,7 @@ namespace QuizSystem_backend.repositories
         public async Task<IEnumerable<Question>> GetQuestionsByQuestionBankAsync(Guid id)
         {
             var questions = await _context.Questions
-                .Include(q => q.Teacher)
+                .Include(q => q.User)
                 .Include(q => q.Chapter)
                     .ThenInclude(qb => qb.Subject)
                 .Include(q => q.Answers)

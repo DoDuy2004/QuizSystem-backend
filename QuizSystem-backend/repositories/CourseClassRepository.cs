@@ -12,19 +12,19 @@ namespace QuizSystem_backend.repositories
         }
         public async Task<IEnumerable<CourseClass>> GetCourseClassesAsync()
         {
-            var coures = await _context.CourseClasses.Include(cc => cc.Teacher).ToListAsync();
+            var coures = await _context.CourseClasses.Include(cc => cc.User).ToListAsync();
 
             return coures;
         }
         public async Task<IEnumerable<CourseClass>> GetCourseClassesByTeacherAsync(Guid userId)
         {
-            var coures = await _context.CourseClasses.Where(cc => cc.TeacherId == userId).ToListAsync();
+            var coures = await _context.CourseClasses.Where(cc => cc.UserId == userId).ToListAsync();
 
             return coures!;
         }
         public async Task<CourseClass> GetByIdAsync(Guid id)
         {
-            var course = await _context.CourseClasses.Include(cc => cc.Teacher).FirstOrDefaultAsync(cc => cc.Id == id);
+            var course = await _context.CourseClasses.Include(cc => cc.User).FirstOrDefaultAsync(cc => cc.Id == id);
 
             return course!;
         }

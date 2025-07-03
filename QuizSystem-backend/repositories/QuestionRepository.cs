@@ -16,7 +16,7 @@ namespace QuizSystem_backend.repositories
         public async Task<IEnumerable<Question>> GetQuestionsAsync()
         {
             var result = await _context.Questions
-                .Include(q => q.Teacher)
+                .Include(q => q.User)
                 .Include(q => q.Chapter)
                     .ThenInclude(c => c.Subject)
                 .Include(q => q.QuestionBank)
@@ -44,7 +44,7 @@ namespace QuizSystem_backend.repositories
         public async Task<Question> GetByIdAsync(Guid id)
         {
             var question = await _context.Questions
-                .Include(q => q.Teacher)
+                .Include(q => q.User)
                 .Include(q => q.Chapter)
                     .ThenInclude(c => c.Subject)
                 .Include(q => q.QuestionBank)

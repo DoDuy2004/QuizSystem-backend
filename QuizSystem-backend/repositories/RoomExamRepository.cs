@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.repositories
 {
-    public class RoomExamRepository:IRoomExamRepository
+    public class RoomExamRepository : IRoomExamRepository
     {
         private readonly QuizSystemDbContext _context;
         public RoomExamRepository(QuizSystemDbContext context)
@@ -42,7 +43,7 @@ namespace QuizSystem_backend.repositories
             await SaveChangesAsync();
             return true;
         }
-       
+
         public async Task<IEnumerable<RoomExam>> GetByRoomIdAsync(Guid roomId)
         {
             return await _context.RoomExams
@@ -60,7 +61,19 @@ namespace QuizSystem_backend.repositories
         {
             return await _context.RoomExams.AnyAsync(re => re.Id == id);
         }
-       
-        
+
+        public async Task<bool> IsStudentInRoomAsync(Guid roomExamId,string Email)
+        {
+            
+            var room = await _context.RoomExams
+                .Include(r => r.Students)
+                .ThenInclude(sre => sre.Student) 
+                .FirstOrDefaultAsync(r => r.Id == roomExamId);
+            if (room == null) return false;
+            // Kiểm tra xem có sinh viên nào trong phòng thi có email trùng với email đã cho không
+            return room.Students.Any(sre => sre.Student.Email == Email);
+
+            
+        }
     }
 }

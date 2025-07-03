@@ -1,4 +1,5 @@
-﻿using QuizSystem_backend.Models;
+﻿using QuizSystem_backend.DTOs.StudentDtos;
+using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.repositories
 {
@@ -12,5 +13,8 @@ namespace QuizSystem_backend.repositories
         Task<IEnumerable<RoomExam>> GetByRoomIdAsync(Guid roomId);
         Task<bool> UpdateAsync(RoomExam roomExam);
         Task<bool> ExistsAsync(Guid id);
+        
+        
+        Task<bool> IsStudentInRoomAsync(Guid roomExamId, string Email);
     }
 }

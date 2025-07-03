@@ -4,7 +4,7 @@ namespace QuizSystem_backend.DTOs
 {
     public class ExamMatrixRequest
     {
-        public ExamDto Exam { get; set; } = new();
+        public Guid ExamId { get; set; } = new();
         public List<MatrixRow> Matrix { get; set; } = new();
     }
 

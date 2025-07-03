@@ -162,9 +162,9 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpPost("create-matrix")]
-        public async Task<IActionResult> CreateExamByMatrix([FromBody] ExamMatrixRequest request, Guid questionBankId)
+        public async Task<IActionResult> CreateExamByMatrix([FromBody] ExamMatrixRequest request)
         {
-            var result = await _examService.CreateExamByMatrixAsync(request, questionBankId);
+            var result = await _examService.CreateExamByMatrixAsync(request);
             return Ok(result);
         }
 

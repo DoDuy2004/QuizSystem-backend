@@ -91,10 +91,15 @@ namespace QuizSystem_backend.services
 
 
 
-        public async Task<ExamDto> CreateExamByMatrixAsync(ExamMatrixRequest request,Guid questionBankId)
+        public async Task<ExamDto> CreateExamByMatrixAsync(ExamMatrixRequest request)
         {
 
-            var exam = _mapper.Map<Exam>(request.Exam);
+            var exam=await _examRepository.GetExamByIdAsync(request.ExamId);
+            if(exam == null)
+            {
+                throw new Exception($"Không tìm thấy đề thi");
+            }
+            
 
             foreach (var row in request.Matrix)
             {
@@ -104,7 +109,7 @@ namespace QuizSystem_backend.services
                     var count = pair.Value;
 
                     var questions = await _examRepository
-                        .GetQuestionsByChapterAndDifficultyAsync(row.ChapterId, difficulty, count,questionBankId);
+                        .GetQuestionsByChapterAndDifficultyAsync(row.ChapterId, difficulty, count);
 
                     if (questions.Count < count)
                         throw new Exception($"Không đủ câu hỏi ở Chương {row.ChapterId} mức độ {difficulty}");
@@ -121,7 +126,6 @@ namespace QuizSystem_backend.services
                 }
             }
 
-            await _examRepository.GenerateAsync(exam);
             await _examRepository.SaveChangesAsync();
 
             return _mapper.Map<ExamDto>(exam);

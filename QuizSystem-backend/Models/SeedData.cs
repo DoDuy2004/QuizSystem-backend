@@ -24,6 +24,8 @@ namespace QuizSystem_backend.Models
 
                 var currentDate = DateTime.UtcNow;
 
+                var hasher = new PasswordHasher<User>();
+
                 // Seed Admin User
                 if (!context.Users.Any())
                 {
@@ -38,7 +40,7 @@ namespace QuizSystem_backend.Models
                         DateOfBirth = new DateTime(2004, 6, 20),
                         AvatarUrl = "",
                         Status = Status.ACTIVE,
-                        PasswordHash = "123456789",
+                        PasswordHash = hasher.HashPassword(null, "123456789"),
                         CreatedAt = currentDate,
                         Role = Role.ADMIN
                     };
@@ -61,7 +63,7 @@ namespace QuizSystem_backend.Models
                             DateOfBirth = new DateTime(1985, 3, 10),
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Facutly = "Công Nghệ Thông Tin",
                             Role = Role.TEACHER
@@ -77,7 +79,7 @@ namespace QuizSystem_backend.Models
                             DateOfBirth = new DateTime(1985, 3, 10),
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Facutly = "Công Nghệ Thông Tin",
                             Role = Role.TEACHER
@@ -93,7 +95,7 @@ namespace QuizSystem_backend.Models
                             DateOfBirth = new DateTime(1985, 3, 10),
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Facutly = "Công Nghệ Thông Tin",
                             Role = Role.TEACHER
@@ -109,7 +111,7 @@ namespace QuizSystem_backend.Models
                             DateOfBirth = new DateTime(1985, 3, 10),
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Facutly = "Công Nghệ Thông Tin",
                             Role = Role.TEACHER
@@ -134,7 +136,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -149,7 +151,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -164,7 +166,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -179,7 +181,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -194,7 +196,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -209,7 +211,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -224,7 +226,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -239,7 +241,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -254,7 +256,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -269,7 +271,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -284,7 +286,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -299,7 +301,7 @@ namespace QuizSystem_backend.Models
                             AvatarUrl = "",
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
-                            PasswordHash = "123456789",
+                            PasswordHash = hasher.HashPassword(null, "123456789"),
                             CreatedAt = currentDate,
                             Role = Role.STUDENT
                         },
@@ -717,7 +719,7 @@ namespace QuizSystem_backend.Models
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "OOP Basics",
-                            QuestionBankId = questionBankId,
+                            //QuestionBankId = questionBankId,
                             ChapterId = oopChapter1
                         },
                         new List<Answer>
@@ -740,7 +742,7 @@ namespace QuizSystem_backend.Models
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "OOP Basics",
-                            QuestionBankId = questionBankId,
+                            //QuestionBankId = questionBankId,
                             ChapterId = oopChapter1
                         },
                         new List<Answer>
@@ -766,7 +768,7 @@ namespace QuizSystem_backend.Models
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "Classes",
-                            QuestionBankId = questionBankId,
+                            //QuestionBankId = questionBankId,
                             ChapterId = oopChapter2
                         },
                         new List<Answer>
@@ -791,7 +793,7 @@ namespace QuizSystem_backend.Models
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Objects",
-                            QuestionBankId = questionBankId,
+                            //QuestionBankId = questionBankId,
                             ChapterId = oopChapter2
                         },
                         new List<Answer>
@@ -814,7 +816,7 @@ namespace QuizSystem_backend.Models
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Constructors",
-                            QuestionBankId = questionBankId,
+                            //QuestionBankId = questionBankId,
                             ChapterId = oopChapter2
                         },
                         new List<Answer>
@@ -838,7 +840,7 @@ namespace QuizSystem_backend.Models
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Java Basics",
-                            QuestionBankId = questionBankId,
+                            //QuestionBankId = questionBankId,
                             ChapterId = javaChapter1
                         },
                         new List<Answer>
@@ -861,7 +863,7 @@ namespace QuizSystem_backend.Models
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Java Basics",
-                            QuestionBankId = questionBankId,
+                            //QuestionBankId = questionBankId,
                             ChapterId = javaChapter1
                         },
                         new List<Answer>

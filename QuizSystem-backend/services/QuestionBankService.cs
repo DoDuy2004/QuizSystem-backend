@@ -278,16 +278,17 @@ namespace QuizSystem_backend.services
                     Type = questionPreview.Type,
                     Content = questionPreview.Content,
                     Difficulty = questionPreview.Difficulty,
-                    Chapter = await _chapterRepository.GetChapterByNameAsync(questionPreview.Chapter),
                     Status = Status.ACTIVE,
-                    Answers = questionPreview.Answer.Select(a => new Answer
-                    {
-                        Id = Guid.NewGuid(),
-                        Content = a.Content,
-                        IsCorrect = a.IsCorrect,
-                        
-                    }).ToList()
                 };
+                question.Chapter = await _chapterRepository.GetChapterByNameAsync(questionPreview.Chapter!);
+               
+                question.Answers = questionPreview.Answer.Select(a => new Answer
+                {
+                    Id = Guid.NewGuid(),
+                    Content = a.Content,
+                    IsCorrect = a.IsCorrect,
+                    QuestionId = question.Id // Sửa ở đây!
+                }).ToList();
 
                 listQuestion.Add(question);
             }

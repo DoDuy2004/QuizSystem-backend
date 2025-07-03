@@ -269,7 +269,6 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnName("trang_thai");
 
                     b.Property<string>("Topic")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("chu_de");

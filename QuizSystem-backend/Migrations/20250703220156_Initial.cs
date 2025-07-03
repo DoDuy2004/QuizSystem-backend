@@ -275,7 +275,7 @@ namespace QuizSystem_backend.Migrations
                     loai_cau_hoi = table.Column<int>(type: "int", maxLength: 50, nullable: true),
                     do_kho = table.Column<int>(type: "int", maxLength: 50, nullable: true),
                     trang_thai = table.Column<int>(type: "int", nullable: false),
-                    chu_de = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    chu_de = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     ma_ngan_hang_cau_hoi = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ma_chuong = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },

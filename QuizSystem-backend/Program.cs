@@ -36,6 +36,10 @@ builder.Services.AddTransient<IExamRepository, ExamRepository>();
 builder.Services.AddTransient<IExamServices, ExamServices>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddTransient<IChapterRepository, ChapterRepository>();
+builder.Services.AddTransient<IRoomExamRepository, RoomExamRepository>();
+
+builder.Services.AddTransient<IRoomExamService, RoomExamService>();
+
 
 
 
@@ -151,22 +155,22 @@ app.MapControllers();
 
 SeedData.Initialize(app.Services);
 
-using var scope = app.Services.CreateScope();
-var db = scope.ServiceProvider.GetRequiredService<QuizSystemDbContext>();
+//using var scope = app.Services.CreateScope();
+//var db = scope.ServiceProvider.GetRequiredService<QuizSystemDbContext>();
 
 var hasher = new PasswordHasher<User>();
 
-var users = await db.Users.ToListAsync();
+//var users = await db.Users.ToListAsync();
 
-foreach (var user in users)
-{
-    if (!user.PasswordHash.StartsWith("$"))
-    {
-        user.PasswordHash = hasher.HashPassword(user, user.PasswordHash);
-    }
-}
+//foreach (var user in users)
+//{
+//    if (!user.PasswordHash.StartsWith("$"))
+//    {
+//        user.PasswordHash = hasher.HashPassword(user, user.PasswordHash);
+//    }
+//}
 
-await db.SaveChangesAsync();
+//await db.SaveChangesAsync();
 
 
 app.Run();

@@ -42,6 +42,21 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
+        [HttpGet("{id}/classes")]
+        public async Task<ActionResult> GetClassByStudent(Guid id)
+        {
+            var classes = await _context.CourseClasses
+                    .Where(cc => cc.Students.Any(s => s.StudentId == id))
+                    .ToListAsync();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = classes
+            });
+        }
+
         // GET: api/Students/5
         [HttpGet("{id}")]
      

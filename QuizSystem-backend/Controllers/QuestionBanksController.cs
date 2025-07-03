@@ -24,6 +24,7 @@ namespace QuizSystem_backend.Controllers
         public QuestionBanksController(IQuestionBankService questionBankService)
         {
             _questionBankService = questionBankService;
+
         }
 
         // GET: api/QuestionBanks

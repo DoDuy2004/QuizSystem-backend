@@ -6,20 +6,24 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.Models;
+using QuizSystem_backend.services;
 
 namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "TEACHER")]
+    //[Authorize(Roles = "TEACHER")]
     public class StudentsController : ControllerBase
     {
         private readonly QuizSystemDbContext _context;
+        private readonly IStudentService _studentService;
 
-        public StudentsController(QuizSystemDbContext context)
+        public StudentsController(QuizSystemDbContext context,IStudentService studentService)
         {
             _context = context;
+            _studentService = studentService;
         }
 
         // GET: api/Students
@@ -107,6 +111,42 @@ namespace QuizSystem_backend.Controllers
         private bool StudentExists(Guid id)
         {
             return _context.Students.Any(e => e.Id == id);
+        }
+
+        [HttpPost("Import-Preview")]
+        public async Task<IActionResult> ImportStudents(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+            var listStudent=await _studentService.ImportFileStudentPreview(file);
+
+            if (listStudent == null || !listStudent.Any())
+            {
+                return BadRequest("No valid students found in the file.");
+            }                 
+            return Ok(listStudent);
+            
+        }
+        [HttpPost("Import-Confirm")]
+        public async Task<IActionResult> ImportStudentsConfirm(List<StudentImportDto> studentsPreview)
+        {
+            if (studentsPreview == null || !studentsPreview.Any())
+            {
+                return BadRequest("No students to import.");
+            }
+            var result = await _studentService.ImportStudentConfirm(studentsPreview);
+            if (result.Count==0)
+            {
+                return BadRequest("Failed to import students.");
+            }
+            return Ok(new
+            {
+                code = 200, 
+                message = "Success",
+                data = result
+            });
         }
     }
 }

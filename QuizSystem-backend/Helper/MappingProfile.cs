@@ -74,7 +74,10 @@ namespace QuizSystem_backend.Helper
                     : new List<Answer>()))
                 .ForMember(dest => dest.Teacher, opt => opt.Ignore())
                 .ForMember(dest => dest.Chapter, opt => opt.Ignore())
+                .ForMember(dest => dest.ExamQuestions, opt => opt.Ignore())
+                .ForMember(dest => dest.StudentExamDetails, opt => opt.Ignore())
                 .ForMember(dest => dest.QuestionBank, opt => opt.Ignore());
+            CreateMap<StudentDto, Student>().ReverseMap();  
         }
 
     }

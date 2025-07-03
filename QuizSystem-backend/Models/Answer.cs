@@ -8,7 +8,7 @@ namespace QuizSystem_backend.Models
         public string Content { get; set; } = string.Empty;
         public bool IsCorrect { get; set; }
         public int AnswerOrder { get; set; }
-        public Status Status { get; set; }
+        public Status Status { get; set; }=Status.ACTIVE;
 
         public Guid QuestionId { get; set; }
 

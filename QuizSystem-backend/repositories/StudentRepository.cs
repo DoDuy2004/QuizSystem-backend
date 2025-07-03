@@ -22,5 +22,23 @@ namespace QuizSystem_backend.repositories
 
             return student!;
         }
+
+        public Task<bool> SaveStudentsAsync(List<Student> students)
+        {
+            if (students == null || students.Count == 0)
+            {
+                return Task.FromResult(false);
+            }
+            try
+            {
+                _context.Students.AddRange(students);
+                return Task.FromResult(_context.SaveChanges() > 0);
+            }
+            catch (Exception)
+            {
+                // Log the exception if needed
+                return Task.FromResult(false);
+            }
+        }
     }
 }

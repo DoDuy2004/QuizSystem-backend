@@ -165,7 +165,10 @@ namespace QuizSystem_backend.Controllers
         public async Task<IActionResult> CreateExamByMatrix([FromBody] ExamMatrixRequest request)
         {
             var result = await _examService.CreateExamByMatrixAsync(request);
-            return Ok(result);
+            if (!result.Success)
+                return BadRequest(new { errors = result.ErrorMessages });
+            return Ok(result.Exam);
+            
         }
 
         [HttpPost("{id}/add-list-question")]

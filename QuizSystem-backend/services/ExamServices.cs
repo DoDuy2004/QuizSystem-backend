@@ -2,6 +2,7 @@
 using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.ResultInfoDto;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
@@ -91,13 +92,16 @@ namespace QuizSystem_backend.services
 
 
 
-        public async Task<ExamDto> CreateExamByMatrixAsync(ExamMatrixRequest request)
+        public async Task<CreateMatrixResult> CreateExamByMatrixAsync(ExamMatrixRequest request)
         {
+            var result = new CreateMatrixResult();
 
             var exam=await _examRepository.GetExamByIdAsync(request.ExamId);
             if(exam == null)
             {
-                throw new Exception($"Không tìm thấy đề thi");
+                result.Success = false;
+                result.ErrorMessages = "Exam not found";
+                return result;
             }
             
 
@@ -112,7 +116,10 @@ namespace QuizSystem_backend.services
                         .GetQuestionsByChapterAndDifficultyAsync(row.ChapterId, difficulty, count);
 
                     if (questions.Count < count)
-                        throw new Exception($"Không đủ câu hỏi ở Chương {row.ChapterId} mức độ {difficulty}");
+                    {
+                        result.ErrorMessages += $"Không đủ câu hỏi ở chương {row.ChapterId} độ khó {difficulty}. ";
+                        return result;
+                    }
 
                     foreach (var question in questions)
                     {
@@ -128,7 +135,10 @@ namespace QuizSystem_backend.services
 
             await _examRepository.SaveChangesAsync();
 
-            return _mapper.Map<ExamDto>(exam);
+            result.Success = true;
+            result.Exam = _mapper.Map<ExamDto>(exam);
+            result.ErrorMessages = "Tạo đề thi thành công";
+            return result;
         }
 
 

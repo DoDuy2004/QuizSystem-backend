@@ -699,11 +699,9 @@ namespace QuizSystem_backend.Models
                             Content = "Khái niệm nào dưới đây là đặc trưng của Lập trình hướng đối tượng?",
                             Image = "",
                             CreatedBy = teacherId,
-<<<<<<< HEAD
+
                             Type = TypeOfQuestion.MultipleChoice,
-=======
-                            Type = "SingleChoice",
->>>>>>> b2ea1bb5ac67d079f9e8346374298d1aed4ed577
+
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "OOP Basics",
@@ -716,7 +714,7 @@ namespace QuizSystem_backend.Models
                             Content = "Lập trình hướng đối tượng khác với lập trình thủ tục ở điểm nào?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "OOP Basics",
@@ -731,11 +729,9 @@ namespace QuizSystem_backend.Models
                             Content = "Lớp trong Lập trình hướng đối tượng được định nghĩa như thế nào?",
                             Image = "",
                             CreatedBy = teacherId,
-<<<<<<< HEAD
+
                             Type = TypeOfQuestion.MultipleChoice,
-=======
-                            Type = "SingleChoice",
->>>>>>> b2ea1bb5ac67d079f9e8346374298d1aed4ed577
+
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "Classes",
@@ -748,11 +744,9 @@ namespace QuizSystem_backend.Models
                             Content = "Đối tượng là gì trong Lập trình hướng đối tượng?",
                             Image = "",
                             CreatedBy = teacherId,
-<<<<<<< HEAD
+
                             Type = TypeOfQuestion.MultipleChoice,
-=======
-                            Type = "SingleChoice",
->>>>>>> b2ea1bb5ac67d079f9e8346374298d1aed4ed577
+
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Objects",
@@ -765,7 +759,7 @@ namespace QuizSystem_backend.Models
                             Content = "Phương thức khởi tạo (constructor) có thể trả về giá trị không?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "TrueFalse",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Constructors",
@@ -780,7 +774,7 @@ namespace QuizSystem_backend.Models
                             Content = "Tính đóng gói trong OOP thể hiện qua:",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "Encapsulation",
@@ -793,7 +787,7 @@ namespace QuizSystem_backend.Models
                             Content = "Access modifier nào cho phép truy cập từ bất kỳ đâu?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Access Modifiers",
@@ -808,7 +802,7 @@ namespace QuizSystem_backend.Models
                             Content = "Lớp con có thể kế thừa từ bao nhiêu lớp cha trong C#?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Inheritance",
@@ -821,7 +815,7 @@ namespace QuizSystem_backend.Models
                             Content = "Từ khóa 'base' trong C# dùng để làm gì?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "Inheritance",
@@ -836,7 +830,7 @@ namespace QuizSystem_backend.Models
                             Content = "Đa hình (polymorphism) trong OOP là gì?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "Polymorphism",
@@ -849,7 +843,7 @@ namespace QuizSystem_backend.Models
                             Content = "Phương thức ảo (virtual method) khác phương thức trừu tượng (abstract method) như thế nào?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.HARD,
                             Status = Status.ACTIVE,
                             Topic = "Polymorphism",
@@ -864,7 +858,7 @@ namespace QuizSystem_backend.Models
                             Content = "Java là ngôn ngữ lập trình thuộc loại nào?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Java Basics",
@@ -877,7 +871,7 @@ namespace QuizSystem_backend.Models
                             Content = "JVM là viết tắt của gì?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Java Basics",
@@ -892,7 +886,7 @@ namespace QuizSystem_backend.Models
                             Content = "Phương thức main trong Java phải được khai báo như thế nào?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "Java Syntax",
@@ -907,7 +901,7 @@ namespace QuizSystem_backend.Models
                             Content = "Từ khóa nào trong Java dùng để kế thừa lớp?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Java OOP",

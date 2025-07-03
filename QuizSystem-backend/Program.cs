@@ -162,7 +162,7 @@ foreach (var user in users)
 {
     if (!user.PasswordHash.StartsWith("$"))
     {
-        user.PasswordHash = hasher.HashPassword(user, "123456789");
+        user.PasswordHash = hasher.HashPassword(user, user.PasswordHash);
     }
 }
 

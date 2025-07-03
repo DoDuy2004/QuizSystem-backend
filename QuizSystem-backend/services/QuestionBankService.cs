@@ -225,7 +225,7 @@ namespace QuizSystem_backend.services
                         if (preview.Difficulty == null)
                             preview.ErrorMessages.Add("Độ khó không hợp lệ");
 
-                        if (preview.CorrectAnswer.Any())
+                        if (!preview.CorrectAnswer.Any())
                             preview.ErrorMessages.Add("Đáp án đúng không được để trống");
                         else if (preview.CorrectAnswer.Length > arrayCode.Length)
                             preview.ErrorMessages.Add("Số lượng đáp án đúng không hợp lệ");

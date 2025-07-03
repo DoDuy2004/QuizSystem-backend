@@ -12,6 +12,58 @@ namespace QuizSystem_backend.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<bool>(type: "bit", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    StudentCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsFirstTimeLogin = table.Column<bool>(type: "bit", nullable: true),
+                    Facutly = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TeacherCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Teacher_IsFirstTimeLogin = table.Column<bool>(type: "bit", nullable: true),
+                    Teacher_Facutly = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MonHoc",
                 columns: table => new
                 {
@@ -26,65 +78,129 @@ namespace QuizSystem_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TaiKhoan",
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NganHangCauHoi",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ten_dang_nhap = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ho_ten = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    so_dien_thoai = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    gioi_tinh = table.Column<bool>(type: "bit", nullable: false),
-                    ngay_sinh = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    url_anh = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    ten_ngan_hang = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    mo_ta = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     trang_thai = table.Column<int>(type: "int", nullable: false),
-                    mat_khau = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    ngay_tao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    vai_tro = table.Column<int>(type: "int", nullable: false)
+                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TaiKhoan", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GiangVien",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ma_giao_vien = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    dang_nhap_lan_dau = table.Column<bool>(type: "bit", nullable: false),
-                    khoa = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GiangVien", x => x.id);
+                    table.PrimaryKey("PK_NganHangCauHoi", x => x.id);
                     table.ForeignKey(
-                        name: "FK_GiangVien_TaiKhoan_id",
-                        column: x => x.id,
-                        principalTable: "TaiKhoan",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SinhVien",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ma_sinh_vien = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    dang_nhap_lan_dau = table.Column<bool>(type: "bit", nullable: false),
-                    khoa = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SinhVien", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_SinhVien_TaiKhoan_id",
-                        column: x => x.id,
-                        principalTable: "TaiKhoan",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_NganHangCauHoi_AspNetUsers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -104,10 +220,10 @@ namespace QuizSystem_backend.Migrations
                 {
                     table.PrimaryKey("PK_LopHocPhan", x => x.id);
                     table.ForeignKey(
-                        name: "FK_LopHocPhan_GiangVien_ma_giao_vien",
+                        name: "FK_LopHocPhan_AspNetUsers_ma_giao_vien",
                         column: x => x.ma_giao_vien,
-                        principalTable: "GiangVien",
-                        principalColumn: "id",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_LopHocPhan_MonHoc_ma_mon_hoc",
@@ -115,26 +231,6 @@ namespace QuizSystem_backend.Migrations
                         principalTable: "MonHoc",
                         principalColumn: "ma_mon_hoc",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "NganHangCauHoi",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ten_ngan_hang = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    mo_ta = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    trang_thai = table.Column<int>(type: "int", nullable: false),
-                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NganHangCauHoi", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_NganHangCauHoi_GiangVien_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "GiangVien",
-                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -200,15 +296,15 @@ namespace QuizSystem_backend.Migrations
                 {
                     table.PrimaryKey("PK_SinhVienLopHocPhan", x => new { x.ma_sinh_vien, x.ma_lop_hoc_phan });
                     table.ForeignKey(
+                        name: "FK_SinhVienLopHocPhan_AspNetUsers_ma_sinh_vien",
+                        column: x => x.ma_sinh_vien,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_SinhVienLopHocPhan_LopHocPhan_ma_lop_hoc_phan",
                         column: x => x.ma_lop_hoc_phan,
                         principalTable: "LopHocPhan",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SinhVienLopHocPhan_SinhVien_ma_sinh_vien",
-                        column: x => x.ma_sinh_vien,
-                        principalTable: "SinhVien",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -221,7 +317,7 @@ namespace QuizSystem_backend.Migrations
                     noi_dung = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     hinh_anh = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     ma_nguoi_tao = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    loai_cau_hoi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    loai_cau_hoi = table.Column<int>(type: "int", maxLength: 50, nullable: false),
                     do_kho = table.Column<int>(type: "int", maxLength: 50, nullable: false),
                     trang_thai = table.Column<int>(type: "int", nullable: false),
                     chu_de = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
@@ -232,15 +328,15 @@ namespace QuizSystem_backend.Migrations
                 {
                     table.PrimaryKey("PK_CauHoi", x => x.id);
                     table.ForeignKey(
+                        name: "FK_CauHoi_AspNetUsers_ma_nguoi_tao",
+                        column: x => x.ma_nguoi_tao,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_CauHoi_Chuong_ma_chuong",
                         column: x => x.ma_chuong,
                         principalTable: "Chuong",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CauHoi_GiangVien_ma_nguoi_tao",
-                        column: x => x.ma_nguoi_tao,
-                        principalTable: "GiangVien",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -269,10 +365,10 @@ namespace QuizSystem_backend.Migrations
                 {
                     table.PrimaryKey("PK_DeThi", x => x.id);
                     table.ForeignKey(
-                        name: "FK_DeThi_GiangVien_ma_giang_vien",
+                        name: "FK_DeThi_AspNetUsers_ma_giang_vien",
                         column: x => x.ma_giang_vien,
-                        principalTable: "GiangVien",
-                        principalColumn: "id",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_DeThi_MonHoc_ma_mon_hoc",
@@ -396,6 +492,45 @@ namespace QuizSystem_backend.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CauHoi_ma_chuong",
                 table: "CauHoi",
                 column: "ma_chuong");
@@ -495,28 +630,34 @@ namespace QuizSystem_backend.Migrations
                 name: "IX_SinhVienLopHocPhan_ma_lop_hoc_phan",
                 table: "SinhVienLopHocPhan",
                 column: "ma_lop_hoc_phan");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TaiKhoan_email",
-                table: "TaiKhoan",
-                column: "email",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TaiKhoan_ten_dang_nhap",
-                table: "TaiKhoan",
-                column: "ten_dang_nhap",
-                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
                 name: "ChiTietDeThi");
 
             migrationBuilder.DropTable(
                 name: "ChiTietKetQuaBaiThi");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "CauTraLoi");
@@ -543,19 +684,13 @@ namespace QuizSystem_backend.Migrations
                 name: "PhongThi");
 
             migrationBuilder.DropTable(
-                name: "SinhVien");
-
-            migrationBuilder.DropTable(
                 name: "LopHocPhan");
 
             migrationBuilder.DropTable(
-                name: "GiangVien");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "MonHoc");
-
-            migrationBuilder.DropTable(
-                name: "TaiKhoan");
         }
     }
 }

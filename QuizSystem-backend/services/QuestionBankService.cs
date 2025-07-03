@@ -14,11 +14,14 @@ namespace QuizSystem_backend.services
     {
         private readonly IQuestionBankRepository _questionBankRepository;
         private readonly IMapper _mapper;
+        private readonly IChapterRepository _chapterRepository;
 
-        public QuestionBankService(IQuestionBankRepository questionBankRepository,IMapper mapper)
+        public QuestionBankService(IQuestionBankRepository questionBankRepository,IMapper mapper,IChapterRepository chapterRepository)
         {
             _questionBankRepository = questionBankRepository;
             _mapper = mapper;
+
+            _chapterRepository = chapterRepository;
         }
         public async Task<IEnumerable<QuestionBankDto>> GetQuestionBanksAsync()
         {
@@ -105,21 +108,7 @@ namespace QuizSystem_backend.services
 
             return true;
         }
-        public async Task<List<QuestionDto>> AddListQuestionsToQuestionBankAsync(Guid questionBankId, List<QuestionDto> listQuestionDto)
-        {
-            var questionBank = await _questionBankRepository.GetQuestionBankByIdAsync(questionBankId);
-            if (questionBank == null)
-            {
-                throw new Exception("Question bank not found");
-            }
-            foreach(var questionDto in listQuestionDto)
-            {
-                var newQuestion = _mapper.Map<Question>(questionDto);
-                newQuestion.QuestionBank = questionBank;
-                await _questionBankRepository.AddQuestionAsync(newQuestion);
-            }
-            return listQuestionDto;
-        }
+        
 
         public async Task<List<QuestionImportPreviewDto>> ImportQuestionsPreview(IFormFile file)
         {
@@ -236,7 +225,7 @@ namespace QuizSystem_backend.services
                         if (preview.Difficulty == null)
                             preview.ErrorMessages.Add("Độ khó không hợp lệ");
 
-                        if (preview.CorrectAnswer.Any())
+                        if (!preview.CorrectAnswer.Any())
                             preview.ErrorMessages.Add("Đáp án đúng không được để trống");
                         else if (preview.CorrectAnswer.Length > arrayCode.Length)
                             preview.ErrorMessages.Add("Số lượng đáp án đúng không hợp lệ");
@@ -275,34 +264,38 @@ namespace QuizSystem_backend.services
         }
 
 
-        public async Task<List<QuestionImportPreviewDto>> ImPortQuestionConfirm(List<QuestionImportPreviewDto> questionsImportPreviewDto)
+        public async Task<List<Question>> ImPortQuestionConfirm(List<QuestionImportPreviewDto> listPreview)
         {
             var listQuestion = new List<Question>();
-            foreach (var questionImportPreview in questionsImportPreviewDto)
+
+            foreach (var questionPreview in listPreview)
             {
-                if (!questionImportPreview.IsValid)
+                if (!questionPreview.IsValid)
                     continue;
-                var question = _mapper.Map<Question>(questionImportPreview);
+                var question = new Question
+                {
+                    Id = Guid.NewGuid(),
+                    Type = questionPreview.Type,
+                    Content = questionPreview.Content,
+                    Difficulty = questionPreview.Difficulty,
+                    Chapter = await _chapterRepository.GetChapterByNameAsync(questionPreview.Chapter),
+                    Status = Status.ACTIVE,
+                    Answers = questionPreview.Answer.Select(a => new Answer
+                    {
+                        Id = Guid.NewGuid(),
+                        Content = a.Content,
+                        IsCorrect = a.IsCorrect,
+                        
+                    }).ToList()
+                };
 
                 listQuestion.Add(question);
             }
             await _questionBankRepository.AddListQuestionAsync(listQuestion);
-            return _mapper.Map<List<QuestionImportPreviewDto>>(listQuestion);
+
+            return listQuestion;
         }
 
-        //public async Task<string?> CheckErrorSubChap(string nameSubject, string nameChapter)
-        //{
-        //    if (string.IsNullOrEmpty(nameSubject) || string.IsNullOrEmpty(nameChapter))
-        //    {
-        //        return "Tên môn học hoặc chương không được để trống";
-        //    }
-        //    var result = await _context.Subjects.Include(s => s.Chapters).FirstOrDefaultAsync(s => s.Name == nameSubject);
-        //    if (result == null) return "Môn học không tồn tại";
-        //    if (!result.Chapters.Any(c => c.Name == nameChapter))
-        //    {
-        //        return "Chương không có trong môn học";
-        //    }
-        //    return null;
-        //}
+        
     }
 }

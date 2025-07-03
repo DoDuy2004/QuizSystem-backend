@@ -35,6 +35,10 @@ builder.Services.AddTransient<IStudentService, StudentService>();
 builder.Services.AddTransient<IExamRepository, ExamRepository>();
 builder.Services.AddTransient<IExamServices, ExamServices>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddTransient<IChapterRepository, ChapterRepository>();
+
+
+
 
 
 builder.Services.AddControllers()

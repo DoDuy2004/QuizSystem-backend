@@ -699,7 +699,9 @@ namespace QuizSystem_backend.Models
                             Content = "Khái niệm nào dưới đây là đặc trưng của Lập trình hướng đối tượng?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+
+                            Type = TypeOfQuestion.MultipleChoice,
+
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "OOP Basics",
@@ -722,7 +724,7 @@ namespace QuizSystem_backend.Models
                             Content = "Lập trình hướng đối tượng khác với lập trình thủ tục ở điểm nào?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "OOP Basics",
@@ -746,7 +748,9 @@ namespace QuizSystem_backend.Models
                             Content = "Lớp trong Lập trình hướng đối tượng được định nghĩa như thế nào?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+
+                            Type = TypeOfQuestion.MultipleChoice,
+
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
                             Topic = "Classes",
@@ -769,7 +773,9 @@ namespace QuizSystem_backend.Models
                             Content = "Đối tượng là gì trong Lập trình hướng đối tượng?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+
+                            Type = TypeOfQuestion.MultipleChoice,
+
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Objects",
@@ -792,7 +798,7 @@ namespace QuizSystem_backend.Models
                             Content = "Phương thức khởi tạo (constructor) có thể trả về giá trị không?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "TrueFalse",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Constructors",
@@ -816,7 +822,7 @@ namespace QuizSystem_backend.Models
                             Content = "Java là ngôn ngữ lập trình thuộc loại nào?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Java Basics",
@@ -839,7 +845,7 @@ namespace QuizSystem_backend.Models
                             Content = "JVM là viết tắt của gì?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = "SingleChoice",
+                            Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
                             Topic = "Java Basics",

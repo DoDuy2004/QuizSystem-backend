@@ -205,15 +205,15 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpPost("Add-List-Questions")]
-        public async Task<ActionResult> AddListQuestionsToQuestionBank([FromBody]AddListQuestionToBankDto request )
+        public async Task<ActionResult> AddListQuestionsToQuestionBank([FromBody]List<QuestionImportPreviewDto> listPreview )
         {
-            if (request.Questions == null || !request.Questions.Any() || Guid.Empty == request.QuestionBankId)
+            if (listPreview == null || !listPreview.Any())
             {
-                return BadRequest(new { message = "Invalid input data." });
+                return BadRequest(new { message = "Danh sách không hợp lệ" });
             }
             try
             {
-                var addedQuestions = await _questionBankService.AddListQuestionsToQuestionBankAsync(request.QuestionBankId,request.Questions);
+                var addedQuestions = await _questionBankService.ImPortQuestionConfirm(listPreview);
                 return Ok(new
                 {
                     code = 200,

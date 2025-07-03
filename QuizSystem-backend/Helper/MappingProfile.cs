@@ -56,6 +56,25 @@ namespace QuizSystem_backend.Helper
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ReverseMap();
             //CreateMap<QuestionsAddedToExamDto,Question>().ReverseMap();
+
+          
+
+            CreateMap<QuestionImportPreviewDto, Question>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+
+                .ForMember(dest => dest.Answers, opt => opt.MapFrom(src => src.Answer != null
+                    ? src.Answer.Select(a => new Answer
+                    {
+                        Id = Guid.NewGuid(),
+                        Content = a.Content,
+                        IsCorrect = a.IsCorrect,
+
+                    }).ToList()
+                    : new List<Answer>()))
+                .ForMember(dest => dest.Teacher, opt => opt.Ignore())
+                .ForMember(dest => dest.Chapter, opt => opt.Ignore())
+                .ForMember(dest => dest.QuestionBank, opt => opt.Ignore());
         }
 
     }

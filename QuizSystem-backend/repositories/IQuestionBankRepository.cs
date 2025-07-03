@@ -10,5 +10,7 @@ namespace QuizSystem_backend.repositories
         Task<IEnumerable<Question>> GetQuestionsByQuestionBankAsync(Guid id);
         Task SaveChangesAsync();
         Task AddQuestionAsync(Question newQuestion);
+        Task<string?> CheckErrorSubChap(string nameSubject, string nameChapter);
+        Task<List<Question>> AddListQuestionAsync(List<Question> listQuestion);
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Models;
 using QuizSystem_backend.services;
 using System.Drawing;
 
@@ -12,9 +14,12 @@ namespace QuizSystem_backend.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly UserManager<AppUser> _userManager;
+
+        public UserController(IUserService userService,UserManager<AppUser>userManager)
         {
             _userService = userService;
+            _userManager = userManager;
         }
 
         [Authorize]
@@ -32,14 +37,19 @@ namespace QuizSystem_backend.Controllers
             {
                 return Unauthorized("User not found");
             }
-
-            var userDto = new UserDto(user);
-
+            var role = _userManager.GetRolesAsync(user);
+            var userDto = new UserDto(user)
+            {
+                role = role.Result.First()
+            };
+            
             return Ok(new
             {
+
                 code = 200,
                 message = "Success",
-                data = userDto
+                data = userDto,
+                
             });
         }
 

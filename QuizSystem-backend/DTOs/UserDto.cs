@@ -32,6 +32,7 @@ namespace QuizSystem_backend.DTOs
         public string? AvatarUrl { get; set; } = null!;
         public string? Status { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
+        public string role { get; set; }
        
     }
 

@@ -46,7 +46,7 @@ namespace QuizSystem_backend.Controllers
 
         public async Task<ActionResult> GetClassByTeacher(Guid id)
         {
-            var classes = await _context.CourseClasses.Where(cc => cc.TeacherId == id).ToListAsync();
+            var classes = await _context.CourseClasses.Where(cc => cc.UserId == id).ToListAsync();
 
             return Ok(new
             {

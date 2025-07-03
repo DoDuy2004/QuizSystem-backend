@@ -6,14 +6,17 @@ namespace QuizSystem_backend.Models
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid StudentId { get; set; }
-        public Guid CourseClassId { get; set; }
+        public Guid RoomId { get; set; }
         public Guid ExamId { get; set; }
         public int DurationMinutes { get; set; }
         public Status Status { get; set; }
+        public float Grade { get; set; }
+        public string Note { get; set; } = string.Empty;
 
-        public virtual StudentCourseClass Student { get; set; } = null!;
+        public virtual StudentRoomExam StudentRoomExam { get; set; } = null!;
         public virtual Exam Exam { get; set; } = null!;
+        public virtual RoomExam Room { get; set; } = null!;
 
-        public ICollection<StudentExamDetail> StudentExamDetails { get; set; } = null!;
+        public virtual ICollection<StudentExamDetail> StudentExamDetails { get; set; } = null!;
     }
 }

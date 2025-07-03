@@ -36,7 +36,7 @@ namespace QuizSystem_backend.Helper
             CreateMap<ExamQuestionDto, ExamQuestion>().ReverseMap();
             CreateMap<QuestionDto, Question>()
                 .ForMember(dest=>dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
-                .ForMember(dest=>dest.Teacher,opt=>opt.Ignore())
+                .ForMember(dest=>dest.User,opt=>opt.Ignore())
                 .ForMember(dest => dest.Chapter, opt => opt.Ignore())
                 .ForMember(dest => dest.QuestionBank, opt => opt.Ignore())
                 .ReverseMap();

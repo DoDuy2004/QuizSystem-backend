@@ -13,6 +13,6 @@ namespace QuizSystem_backend.Models
         //Navigation
         //public virtual Facutly Facutly { get; set; } = null!;
         public ICollection<StudentCourseClass> Courses { get; set; } = null!;
-
+        public ICollection<StudentRoomExam> RoomExams { get; set; } = null!;
     }
 }

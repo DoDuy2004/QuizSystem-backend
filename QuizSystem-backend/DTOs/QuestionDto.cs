@@ -17,15 +17,15 @@ namespace QuizSystem_backend.DTOs
                 QuestionId = a.QuestionId,
             }).ToList() : null;
 
-            var teacher = question.Teacher != null ? new TeacherDto
+            var teacher = question.User != null ? new UserDto
             {
-                Id = question!.Teacher.Id,
-                FullName = question.Teacher.FullName,
-                Username = question.Teacher.Username,
-                Email = question.Teacher.Email,
-                PhoneNumber = question.Teacher.PhoneNumber,
-                Gender = question.Teacher.Gender,
-                DateOfBirth = question.Teacher.DateOfBirth,
+                Id = question!.User.Id,
+                FullName = question.User.FullName,
+                Username = question.User.Username,
+                Email = question.User.Email,
+                PhoneNumber = question.User.PhoneNumber,
+                Gender = question.User.Gender,
+                DateOfBirth = question.User.DateOfBirth,
             } : null;
 
             var chapter = question.Chapter != null ? new ChapterDto(question.Chapter) : null;
@@ -60,7 +60,7 @@ namespace QuizSystem_backend.DTOs
         public Guid? ChapterId { get; set; }
         public Guid? QuestionBankId { get; set; }
         public Guid? CreatedBy { get; set; }
-        public TeacherDto? Teacher { get; set; } = null!;
+        public UserDto? Teacher { get; set; } = null!;
         public ChapterDto? Chapter { get; set; } = null!;
         public QuestionBankDto? QuestionBank { get; set; } = null!;
         public List<AnswerDto>? Answers { get; set; } = null!;

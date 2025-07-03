@@ -135,7 +135,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                         new Student {
                             Id = Guid.NewGuid(),
@@ -149,7 +150,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                         new Student {
                             Id = Guid.NewGuid(),
@@ -163,7 +165,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                         new Student {
                             Id = Guid.NewGuid(),
@@ -177,7 +180,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                         new Student {
                             Id = Guid.NewGuid(),
@@ -191,7 +195,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                         new Student {
                             Id = Guid.NewGuid(),
@@ -205,7 +210,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                         new Student {
                             Id = Guid.NewGuid(),
@@ -219,7 +225,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                         new Student {
                             Id = Guid.NewGuid(),
@@ -233,7 +240,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                         new Student {
                             Id = Guid.NewGuid(),
@@ -247,7 +255,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                         new Student {
                             Id = Guid.NewGuid(),
@@ -261,7 +270,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                         new Student {
                             Id = Guid.NewGuid(),
@@ -275,7 +285,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                         new Student {
                             Id = Guid.NewGuid(),
@@ -289,7 +300,8 @@ namespace QuizSystem_backend.Models
                             Status = Status.ACTIVE,
                             Facutly = "Công Nghệ Thông Tin",
                             PasswordHash = "123456789",
-                            CreatedAt = currentDate
+                            CreatedAt = currentDate,
+                            Role = Role.STUDENT
                         },
                     };
                    

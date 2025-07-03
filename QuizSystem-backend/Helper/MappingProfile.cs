@@ -85,7 +85,10 @@ namespace QuizSystem_backend.Helper
                 .ForMember(dest => dest.QuestionBank, opt => opt.Ignore());
 
             CreateMap<RegisterDto, AppUser>().ReverseMap();
-                
+            CreateMap<RoomExamDto, RoomExam>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ReverseMap();
+
 
         }
 

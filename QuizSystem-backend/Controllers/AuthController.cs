@@ -27,8 +27,9 @@ namespace QuizSystem_backend.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IUserService userService, TokenService tokenService,IMapper mapper,UserManager<AppUser>userManager,SignInManager<AppUser>signInManager,IConfiguration configuration)
+        public AuthController(IUserService userService, TokenService tokenService,IMapper mapper,UserManager<AppUser>userManager,SignInManager<AppUser>signInManager,IConfiguration configuration,ILogger<AuthController>logger)
         {
             _userService = userService;
             _tokenService = tokenService;
@@ -36,13 +37,16 @@ namespace QuizSystem_backend.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _logger = logger;
 
         }
 
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginDto dto)
         {
-            var user = await _userService.GetUserByUsernameAsync(dto.Email);
+            var user = await _userManager.FindByEmailAsync(dto.UserName);
+            var test = _userService.GetUserByUsernameAsync(dto.UserName);
+
             if (user == null)
             {
                 return Unauthorized(new
@@ -51,31 +55,27 @@ namespace QuizSystem_backend.Controllers
                     message = "Tài khoản hoặc mật khẩu không đúng"
                 });
             }
+            //user.LockoutEnabled = false;                          // Vô hiệu hoá hẳn
+            //await _userManager.ResetAccessFailedCountAsync(user); // Xoá bộ đếm
+            //await _userManager.SetLockoutEndDateAsync(user, null); // Mở khoá ngay
+            //await _userManager.UpdateAsync(user);
 
-            var userRoles = await _userManager.GetRolesAsync(user);
-            // Tạo claims cho token
-            var authClaims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+            var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: false);
+            var passwordValid = await _userManager.CheckPasswordAsync(user, dto.Password);
+            _logger.LogInformation("Password valid: {passwordValid}", passwordValid);
 
-            foreach (var role in userRoles)
+            _logger.LogInformation("Login result: Succeeded={Succeeded}, IsLockedOut={IsLockedOut}, IsNotAllowed={IsNotAllowed}, RequiresTwoFactor={RequiresTwoFactor}",
+                result.Succeeded, result.IsLockedOut, result.IsNotAllowed, result.RequiresTwoFactor);
+
+            if (!result.Succeeded)
             {
-                authClaims.Add(new Claim(ClaimTypes.Role, role));
+                return Unauthorized(new
+                {
+                    code = 401,
+                    message = "Tài khoản hoặc mật khẩu không đúng"
+                });
             }
-
-            var jwtSettings = _configuration.GetSection("Jwt");
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
-
-            var token = new JwtSecurityToken(
-                issuer: jwtSettings["Issuer"],
-                audience: jwtSettings["Audience"],
-                expires: DateTime.UtcNow.AddHours(6),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-            );
+                var token = await _tokenService.CreateTokenAsync(user);
 
             return Ok(new
             {
@@ -83,52 +83,52 @@ namespace QuizSystem_backend.Controllers
                 message = "Success",
                 data = new
                 {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
+                    token = token,
+                    user = new UserDto(user)
+                }
+            });
+         }
+
+        [Authorize]
+        [HttpPost("token")]
+        public async Task<ActionResult> AuthenticateByToken()
+        {
+            // Lấy userId từ token
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new
+                {
+                    code = 401,
+                    message = "Token không hợp lệ hoặc đã hết hạn"
+                });
+            }
+
+            // Lấy thông tin người dùng từ CSDL
+            var user = await _userService.GetUserByIdAsync(Guid.Parse(userId));
+            if (user == null)
+            {
+                return Unauthorized(new
+                {
+                    code = 401,
+                    message = "Người dùng không tồn tại"
+                });
+            }
+
+            var token = await _tokenService.CreateTokenAsync(user);
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Authenticated by token",
+                data = new
+                {
+                    token,
                     user = new UserDto(user)
                 }
             });
         }
-
-        //[HttpPost("token")]
-        //[Authorize]
-        //public async Task<ActionResult> AuthenticateByToken()
-        //{
-        //    // Lấy userId từ token
-        //    var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-        //    if (string.IsNullOrEmpty(userId))
-        //    {
-        //        return Unauthorized(new
-        //        {
-        //            code = 401,
-        //            message = "Token không hợp lệ hoặc đã hết hạn"
-        //        });
-        //    }
-
-        //    // Lấy thông tin người dùng từ CSDL
-        //    var user = await _userService.GetUserByIdAsync(Guid.Parse(userId));
-        //    if (user == null)
-        //    {
-        //        return Unauthorized(new
-        //        {
-        //            code = 401,
-        //            message = "Người dùng không tồn tại"
-        //        });
-        //    }
-
-        //    var token = _tokenService.CreateToken(user);
-
-        //    return Ok(new
-        //    {
-        //        code = 200,
-        //        message = "Authenticated by token",
-        //        data = new
-        //        {
-        //            token,
-        //            user = new UserDto(user)
-        //        }
-        //    });
-        //}
 
 
         //[HttpPost("logout")]

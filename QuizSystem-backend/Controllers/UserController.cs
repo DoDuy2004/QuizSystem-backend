@@ -17,8 +17,8 @@ namespace QuizSystem_backend.Controllers
             _userService = userService;
         }
 
-        [HttpGet("current")]
         [Authorize]
+        [HttpGet("current")]
         public async Task<ActionResult> Current([FromHeader] Guid userId)
         {
             if (Guid.Empty == userId)
@@ -44,6 +44,7 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpPost("import-file-student")]
+        //[Authorize(Roles ="Admin")]
         public async Task<IActionResult> ImportFileStudent(IFormFile file)
         {
             if (file == null || file.Length == 0)

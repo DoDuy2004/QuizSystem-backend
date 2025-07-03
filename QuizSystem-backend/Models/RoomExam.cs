@@ -1,4 +1,7 @@
 ﻿using QuizSystem_backend.Enums;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.Models
 {

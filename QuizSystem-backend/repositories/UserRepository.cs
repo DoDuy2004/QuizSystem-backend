@@ -19,7 +19,7 @@ namespace QuizSystem_backend.repositories
         }
         public async Task<AppUser> GetByIdAsync(Guid userId)
         {
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             return user!;
         }

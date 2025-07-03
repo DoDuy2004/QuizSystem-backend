@@ -16,7 +16,7 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "TEACHER, ADMIN")]
+    //[Authorize(Roles = "TEACHER, ADMIN")]
     public class QuestionBanksController : ControllerBase
     {
         private readonly IQuestionBankService _questionBankService;
@@ -225,6 +225,34 @@ namespace QuizSystem_backend.Controllers
             {
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
+        }
+
+        [HttpPost("ImportQuestionsFile-preview")]
+        public async Task<IActionResult> ImportQuestionsPreview(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("File không hợp lệ!");
+            }
+            try
+            {
+                var result = await _questionBankService.ImportQuestionsPreview(file);
+                if (result == null || !result.Any())
+                {
+                    return NotFound(new { message = "No questions found in the file" });
+                }
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+
         }
     }
 }

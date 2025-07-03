@@ -5,7 +5,7 @@ using QuizSystem_backend.repositories;
 
 namespace QuizSystem_backend.services
 {
-    public class RoomExamService
+    public class RoomExamService: IRoomExamService
     {
         private readonly IRoomExamRepository _roomExamRepository;
         private readonly IMapper _mapper;
@@ -48,6 +48,10 @@ namespace QuizSystem_backend.services
             if (roomExamDto == null) return false;
             var roomExam = _mapper.Map<RoomExam>(roomExamDto);
             return await _roomExamRepository.UpdateAsync(roomExam);
+        }
+        public async Task SaveChangesAsync()
+        {
+            await _roomExamRepository.SaveChangesAsync();
         }
     }
 }

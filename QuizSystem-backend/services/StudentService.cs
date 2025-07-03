@@ -1,4 +1,7 @@
-﻿using OfficeOpenXml;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Identity;
+using OfficeOpenXml;
+using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
@@ -25,29 +28,39 @@ namespace QuizSystem_backend.services
 
             return student;
         }
+        public async Task<List<Student>> ImportStudentConfirm(List<StudentImportDto> studentsPreview)
+        {
 
-        //public async Task<bool> ImportStudentConfirm(List<StudentImportDto> studentsImportPreviewDto)
-        //{
-        //    var students = new List<Student>();
-        //    foreach (var studentDto in studentsImportPreviewDto)
-        //    {
-        //        if (studentDto.IsValid)
-        //        {
-        //            var student = new Student
-        //            {
-        //                StudentCode = studentDto.StudentCode,
-        //                Password = studentDto.Password,
-        //                Email = studentDto.Email,
-        //                FullName = studentDto.FullName,
-        //                status = studentDto.status ?? Status.Active
-        //            };
-        //            students.Add(student);
-        //        }
-        //    }
-        //    // Lưu danh sách sinh viên hợp lệ vào cơ sở dữ liệu
-        //    // Giả sử bạn có một phương thức SaveStudentsAsync trong repository
-        //    return await _studentRepository.SaveStudentsAsync(students);
-        //}
+            var students = new List<Student>();
+            var hasher = new PasswordHasher<User>();
+            // Kiểm tra xem danh sách có rỗng không
+            if (studentsPreview == null || !studentsPreview.Any())
+            {
+                return students;
+            }
+
+            foreach (var studentDto in studentsPreview)
+            {
+                if (!studentDto.IsValid)
+                    continue;
+
+                var student = new Student
+                {
+                    Id = Guid.NewGuid(),
+                    StudentCode = studentDto.StudentCode!,
+                    PasswordHash = hasher.HashPassword(null, studentDto.Password!),
+                    Email = studentDto.Email!,
+                    FullName = studentDto.FullName!,
+                    Status = studentDto.status ?? Status.ACTIVE,
+                    Username = studentDto.Email!,
+                    Role=Role.STUDENT,
+                };
+                students.Add(student);
+            }
+            await _studentRepository.SaveStudentsAsync(students);
+
+            return students;
+        }
         public async Task<List<StudentImportDto>> ImportFileStudentPreview(IFormFile file)
         {
             var listStudent = new List<StudentImportDto>();
@@ -72,20 +85,37 @@ namespace QuizSystem_backend.services
                             status = Enum.TryParse<Status>(worksheet.Cells[row, 5].Text, out var status) ? status : null
                         };
 
+                        // Kiểm tra trùng mã sinh viên
+                        var existingStudent = await _studentRepository.GetStudentsAsync();
+                        
+                        // Kiểm tra trùng email
+                        
+                        // Tạo đối tượng Student từ StudentImportDto
+
                         student.ErrorMessages = new List<string>();
                         //Validate dữ liệu
                         if (string.IsNullOrEmpty(student.StudentCode))
                             student.ErrorMessages.Add("Mã sinh viên không được để trống.");
-                        else if (student.StudentCode.Length != 10)
-                            student.ErrorMessages.Add("Mã sinh viên phải có 10 ký tự.");
+
+                        else if (existingStudent.Any(s => s.StudentCode == student.StudentCode))
+                        {
+                            student.ErrorMessages.Add("Mã sinh viên đã tồn tại.");
+                        }
 
                         if (string.IsNullOrEmpty(student.Password))
                             student.ErrorMessages.Add("Mật khẩu không được để trống.");
 
                         if (string.IsNullOrEmpty(student.Email))
                             student.ErrorMessages.Add("Email không được để trống.");
+
                         else if (!student.Email.EndsWith("@caothang.edu.vn"))
                             student.ErrorMessages.Add("Email không hợp lệ.");
+
+                        else if (existingStudent.Any(s => s.Email == student.Email))
+                        {
+                            student.ErrorMessages.Add("Email đã tồn tại.");
+                            student.IsValid = false;
+                        }
 
                         if (string.IsNullOrEmpty(student.FullName))
                             student.ErrorMessages.Add("Họ và tên không được để trống.");

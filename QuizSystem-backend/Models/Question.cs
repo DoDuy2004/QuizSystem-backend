@@ -7,7 +7,7 @@ namespace QuizSystem_backend.Models
     {
         public Question() { }
 
-        public Question(QuestionDto dto) 
+        public Question(QuestionDto dto)
         {
             var chapterId = dto.Chapter != null ? dto.Chapter.Id : dto.ChapterId;
             var createdBy = dto.Teacher != null ? dto.Teacher.Id : dto.CreatedBy;
@@ -39,9 +39,9 @@ namespace QuizSystem_backend.Models
         public string Content { get; set; } = string.Empty;
         public string? Image { get; set; } = string.Empty;
         public Guid? CreatedBy { get; set; }
-        public string Type { get; set; } = null!;
+        public TypeOfQuestion? Type { get; set; } = null!;
 
-        public Difficulty Difficulty { get; set; }
+        public Difficulty? Difficulty { get; set; } = null!;
         public Status Status { get; set; }
         public string Topic { get; set; } = null!;
         public Guid? QuestionBankId { get; set; }
@@ -53,6 +53,6 @@ namespace QuizSystem_backend.Models
         public virtual ICollection<StudentExamDetail> StudentExamDetails { get; set; } = null!;
         public virtual QuestionBank QuestionBank { get; set; } = null!;
         public virtual ICollection<Answer> Answers { get; set; } = null!;
-        public virtual Chapter Chapter { get; set; } = null!;
+        public virtual Chapter? Chapter { get; set; }
     }
 }

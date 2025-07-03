@@ -1,4 +1,5 @@
 ﻿using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.services
 {
@@ -11,9 +12,9 @@ namespace QuizSystem_backend.services
         Task<QuestionBankDto> UpdateQuestionBankAsync(Guid id ,QuestionBankDto questionBank);
         Task<IEnumerable<QuestionDto>> GetQuestionsByQuestionBankAsync(Guid id);
         Task<bool> DeleteQuestionBankAsync(Guid id);
-        Task<List<QuestionDto>> AddListQuestionsToQuestionBankAsync(Guid questionBankId, List<QuestionDto> question);
+       
         Task<List<QuestionImportPreviewDto>> ImportQuestionsPreview(IFormFile file);
-        Task<List<QuestionImportPreviewDto>> ImPortQuestionConfirm(List<QuestionImportPreviewDto> questionsImportPreviewDto);
+        Task<List<Question>> ImPortQuestionConfirm(List<QuestionImportPreviewDto> listPreview);
 
     }
 }

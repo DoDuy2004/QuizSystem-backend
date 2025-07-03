@@ -13,17 +13,10 @@ namespace QuizSystem_backend.repositories
             _context = context;
         }
 
-
-        public async Task<List<Question>> AddListQuestionAsync(List<Question> listQuestion)
-        {
-            await _context.Questions.AddRangeAsync(listQuestion);
-            await _context.SaveChangesAsync();
-            return listQuestion;
-        }
         public async Task<string?> CheckErrorSubChap(string nameSubject, string nameChapter)
         {
             if (string.IsNullOrEmpty(nameSubject) || string.IsNullOrEmpty(nameChapter))
-            {   
+            {
                 return "Tên môn học hoặc chương không được để trống";
             }
             var result = await _context.Subjects.Include(s => s.Chapters).FirstOrDefaultAsync(s => s.Name == nameSubject);
@@ -34,6 +27,13 @@ namespace QuizSystem_backend.repositories
             }
             return null;
         }
+        public async Task<List<Question>> AddListQuestionAsync(List<Question> listQuestion)
+        {
+            await _context.Questions.AddRangeAsync(listQuestion);
+            await _context.SaveChangesAsync();
+            return listQuestion;
+        }
+        
         public async Task<IEnumerable<QuestionBank>> GetQuestionBanksAsync()
         {
             var questionBanks = await _context.QuestionBanks

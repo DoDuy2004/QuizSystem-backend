@@ -99,7 +99,7 @@ namespace QuizSystem_backend.services
             updatedCourseClass.ClassCode = dto.ClassCode!;
             updatedCourseClass.Name = dto.Name;
             updatedCourseClass.Credit = dto.Credit;
-            updatedCourseClass.UserId = dto.TeacherId;
+            //updatedCourseClass.UserId = dto.TeacherId;
             updatedCourseClass.SubjectId = dto.SubjectId;
             updatedCourseClass.Description = dto.Description!;
 

@@ -660,8 +660,8 @@ namespace QuizSystem_backend.Models
                         new QuestionBank
                         {
                             Id = Guid.NewGuid(),
-                            Name = "Ngân hàng câu hỏi OOP",
-                            Description = "Câu hỏi liên quan đến Lập trình hướng đối tượng",
+                            Name = "Ngân hàng câu hỏi",
+                            Description = "Bộ câu hỏi về công nghệ thông tin",
                             Status = Status.ACTIVE,
                             //CourseClassId = courseClassId
                             //TeacherId = teacherId
@@ -689,10 +689,10 @@ namespace QuizSystem_backend.Models
                     var javaChapter2 = chapters.First(c => c.Name.Contains("Chương 02") && c.Subject.SubjectCode == "JAVA").Id;
                     var javaChapter5 = chapters.First(c => c.Name.Contains("Chương 05") && c.Subject.SubjectCode == "JAVA").Id;
 
+                    var questionsWithAnswers = new List<(Question Question, List<Answer> Answers)>();
 
-                    var questions = new List<Question>
-                    {
-                        // OOP Chapter 1 Questions
+                    // OOP Chapter 1 Questions
+                    questionsWithAnswers.Add((
                         new Question
                         {
                             Id = Guid.NewGuid(),
@@ -706,6 +706,16 @@ namespace QuizSystem_backend.Models
                             QuestionBankId = questionBankId,
                             ChapterId = oopChapter1
                         },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Kế thừa", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Đóng gói", IsCorrect = true, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Vòng lặp", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Hàm toán học", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
                         new Question
                         {
                             Id = Guid.NewGuid(),
@@ -719,8 +729,17 @@ namespace QuizSystem_backend.Models
                             QuestionBankId = questionBankId,
                             ChapterId = oopChapter1
                         },
-        
-                        // OOP Chapter 2 Questions
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Tập trung vào đối tượng và dữ liệu", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Sử dụng các hàm độc lập", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Không có sự khác biệt", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Chỉ khác về cú pháp", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    // OOP Chapter 2 Questions
+                    questionsWithAnswers.Add((
                         new Question
                         {
                             Id = Guid.NewGuid(),
@@ -734,6 +753,16 @@ namespace QuizSystem_backend.Models
                             QuestionBankId = questionBankId,
                             ChapterId = oopChapter2
                         },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Một bản thiết kế cho đối tượng", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Một biến số", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Một hàm", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Một vòng lặp", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
                         new Question
                         {
                             Id = Guid.NewGuid(),
@@ -747,6 +776,16 @@ namespace QuizSystem_backend.Models
                             QuestionBankId = questionBankId,
                             ChapterId = oopChapter2
                         },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Thực thể được tạo từ lớp", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Một biến toàn cục", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Một hàm tĩnh", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Một mảng", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
                         new Question
                         {
                             Id = Guid.NewGuid(),
@@ -760,92 +799,17 @@ namespace QuizSystem_backend.Models
                             QuestionBankId = questionBankId,
                             ChapterId = oopChapter2
                         },
-        
-                        // OOP Chapter 3 Questions (Encapsulation)
-                        new Question
+                        new List<Answer>
                         {
-                            Id = Guid.NewGuid(),
-                            Content = "Tính đóng gói trong OOP thể hiện qua:",
-                            Image = "",
-                            CreatedBy = teacherId,
-                            Type = "SingleChoice",
-                            Difficulty = Difficulty.MEDIUM,
-                            Status = Status.ACTIVE,
-                            Topic = "Encapsulation",
-                            QuestionBankId = questionBankId,
-                            ChapterId = oopChapter3
-                        },
-                        new Question
-                        {
-                            Id = Guid.NewGuid(),
-                            Content = "Access modifier nào cho phép truy cập từ bất kỳ đâu?",
-                            Image = "",
-                            CreatedBy = teacherId,
-                            Type = "SingleChoice",
-                            Difficulty = Difficulty.EASY,
-                            Status = Status.ACTIVE,
-                            Topic = "Access Modifiers",
-                            QuestionBankId = questionBankId,
-                            ChapterId = oopChapter3
-                        },
-        
-                        // OOP Chapter 4 Questions (Inheritance)
-                        new Question
-                        {
-                            Id = Guid.NewGuid(),
-                            Content = "Lớp con có thể kế thừa từ bao nhiêu lớp cha trong C#?",
-                            Image = "",
-                            CreatedBy = teacherId,
-                            Type = "SingleChoice",
-                            Difficulty = Difficulty.EASY,
-                            Status = Status.ACTIVE,
-                            Topic = "Inheritance",
-                            QuestionBankId = questionBankId,
-                            ChapterId = oopChapter4
-                        },
-                        new Question
-                        {
-                            Id = Guid.NewGuid(),
-                            Content = "Từ khóa 'base' trong C# dùng để làm gì?",
-                            Image = "",
-                            CreatedBy = teacherId,
-                            Type = "SingleChoice",
-                            Difficulty = Difficulty.MEDIUM,
-                            Status = Status.ACTIVE,
-                            Topic = "Inheritance",
-                            QuestionBankId = questionBankId,
-                            ChapterId = oopChapter4
-                        },
-        
-                        // OOP Chapter 5 Questions (Polymorphism)
-                        new Question
-                        {
-                            Id = Guid.NewGuid(),
-                            Content = "Đa hình (polymorphism) trong OOP là gì?",
-                            Image = "",
-                            CreatedBy = teacherId,
-                            Type = "SingleChoice",
-                            Difficulty = Difficulty.MEDIUM,
-                            Status = Status.ACTIVE,
-                            Topic = "Polymorphism",
-                            QuestionBankId = questionBankId,
-                            ChapterId = oopChapter5
-                        },
-                        new Question
-                        {
-                            Id = Guid.NewGuid(),
-                            Content = "Phương thức ảo (virtual method) khác phương thức trừu tượng (abstract method) như thế nào?",
-                            Image = "",
-                            CreatedBy = teacherId,
-                            Type = "SingleChoice",
-                            Difficulty = Difficulty.HARD,
-                            Status = Status.ACTIVE,
-                            Topic = "Polymorphism",
-                            QuestionBankId = questionBankId,
-                            ChapterId = oopChapter5
-                        },
-        
-                        // Java Chapter 1 Questions
+                            new Answer { Id = Guid.NewGuid(), Content = "Không", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Có", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    // Thêm các câu hỏi khác tương tự cho các chapter còn lại...
+
+                    // Java Chapter 1 Questions
+                    questionsWithAnswers.Add((
                         new Question
                         {
                             Id = Guid.NewGuid(),
@@ -859,6 +823,16 @@ namespace QuizSystem_backend.Models
                             QuestionBankId = questionBankId,
                             ChapterId = javaChapter1
                         },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Hướng đối tượng", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Thủ tục", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Hàm", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Logic", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
                         new Question
                         {
                             Id = Guid.NewGuid(),
@@ -872,128 +846,48 @@ namespace QuizSystem_backend.Models
                             QuestionBankId = questionBankId,
                             ChapterId = javaChapter1
                         },
-        
-                        // Java Chapter 2 Questions
-                        new Question
+                        new List<Answer>
                         {
-                            Id = Guid.NewGuid(),
-                            Content = "Phương thức main trong Java phải được khai báo như thế nào?",
-                            Image = "",
-                            CreatedBy = teacherId,
-                            Type = "SingleChoice",
-                            Difficulty = Difficulty.MEDIUM,
-                            Status = Status.ACTIVE,
-                            Topic = "Java Syntax",
-                            QuestionBankId = questionBankId,
-                            ChapterId = javaChapter2
-                        },
-        
-                        // Java Chapter 5 Questions (OOP in Java)
-                        new Question
-                        {
-                            Id = Guid.NewGuid(),
-                            Content = "Từ khóa nào trong Java dùng để kế thừa lớp?",
-                            Image = "",
-                            CreatedBy = teacherId,
-                            Type = "SingleChoice",
-                            Difficulty = Difficulty.EASY,
-                            Status = Status.ACTIVE,
-                            Topic = "Java OOP",
-                            QuestionBankId = questionBankId,
-                            ChapterId = javaChapter5
+                            new Answer { Id = Guid.NewGuid(), Content = "Java Virtual Machine", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Java Variable Method", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Java Visual Machine", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Java Virtual Method", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
                         }
-                    };
-                    context.Questions.AddRange(questions);
-                    context.SaveChanges();
+                    ));
 
+                    // Thêm các câu hỏi cho các chapter khác...
 
-                    var answers = new List<Answer>();
-                    foreach (var question in questions)
+                    // Lưu vào context
+                    foreach (var (question, answers) in questionsWithAnswers)
                     {
-                        switch (question.Topic)
+                        context.Questions.Add(question);
+                        foreach (var answer in answers)
                         {
-                            case "OOP Basics":
-                                if (question.Content.Contains("đặc trưng"))
-                                {
-                                    answers.AddRange(new[]
-                                    {
-                                        new Answer { Id = Guid.NewGuid(), Content = "Kế thừa", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Đóng gói", IsCorrect = true, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Vòng lặp", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Hàm toán học", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE, QuestionId = question.Id }
-                                    });
-                                }
-                                else if (question.Content.Contains("khác với"))
-                                {
-                                    answers.AddRange(new[]
-                                    {
-                                        new Answer { Id = Guid.NewGuid(), Content = "Tập trung vào đối tượng và dữ liệu", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Sử dụng các hàm độc lập", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Không có sự khác biệt", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Chỉ khác về cú pháp", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE, QuestionId = question.Id }
-                                    });
-                                }
-                                break;
-
-                            case "Classes":
-                                answers.AddRange(new[]
-                                {
-                                    new Answer { Id = Guid.NewGuid(), Content = "Một bản thiết kế cho đối tượng", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = question.Id },
-                                    new Answer { Id = Guid.NewGuid(), Content = "Một biến số", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = question.Id },
-                                    new Answer { Id = Guid.NewGuid(), Content = "Một hàm", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE, QuestionId = question.Id },
-                                    new Answer { Id = Guid.NewGuid(), Content = "Một vòng lặp", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE, QuestionId = question.Id }
-                                });
-                                break;
-
-                            // Thêm các case khác tương tự...
-
-                            case "Java Basics":
-                                if (question.Content.Contains("loại nào"))
-                                {
-                                    answers.AddRange(new[]
-                                    {
-                                        new Answer { Id = Guid.NewGuid(), Content = "Hướng đối tượng", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Thủ tục", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Hàm", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Logic", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE, QuestionId = question.Id }
-                                    });
-                                }
-                                else if (question.Content.Contains("JVM"))
-                                {
-                                    answers.AddRange(new[]
-                                    {
-                                        new Answer { Id = Guid.NewGuid(), Content = "Java Virtual Machine", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Java Variable Method", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Java Visual Machine", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE, QuestionId = question.Id },
-                                        new Answer { Id = Guid.NewGuid(), Content = "Java Virtual Method", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE, QuestionId = question.Id }
-                                    });
-                                }
-                                break;
+                            answer.QuestionId = question.Id; // Gán QuestionId cho các đáp án
+                            context.Answers.Add(answer);
                         }
                     }
-
-                    context.Answers.AddRange(answers);
                     context.SaveChanges();
                 }
 
                 var questionIds = context.Questions.Select(q => q.Id).ToList();
 
                 // Seed Answers
-                if (!context.Answers.Any())
-                {
-                    var answers = new[]
-                    {
-                        new Answer { Id = Guid.NewGuid(), Content = "Kế thừa", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = questionIds[0] },
-                        new Answer { Id = Guid.NewGuid(), Content = "Vòng lặp", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = questionIds[0] },
-                        new Answer { Id = Guid.NewGuid(), Content = "Hàm toán học", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE, QuestionId = questionIds[0] },
-                        new Answer { Id = Guid.NewGuid(), Content = "Một bản thiết kế cho đối tượng", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = questionIds[1] },
-                        new Answer { Id = Guid.NewGuid(), Content = "Một biến số", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = questionIds[1] },
-                        new Answer { Id = Guid.NewGuid(), Content = "Một instance của lớp", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = questionIds[2] },
-                        new Answer { Id = Guid.NewGuid(), Content = "Một hàm tĩnh", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = questionIds[2] }
-                    };
-                    context.Answers.AddRange(answers);
-                    context.SaveChanges();
-                }
+                //if (!context.Answers.Any())
+                //{
+                //    var answers = new[]
+                //    {
+                //        new Answer { Id = Guid.NewGuid(), Content = "Kế thừa", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = questionIds[0] },
+                //        new Answer { Id = Guid.NewGuid(), Content = "Vòng lặp", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = questionIds[0] },
+                //        new Answer { Id = Guid.NewGuid(), Content = "Hàm toán học", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE, QuestionId = questionIds[0] },
+                //        new Answer { Id = Guid.NewGuid(), Content = "Một bản thiết kế cho đối tượng", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = questionIds[1] },
+                //        new Answer { Id = Guid.NewGuid(), Content = "Một biến số", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = questionIds[1] },
+                //        new Answer { Id = Guid.NewGuid(), Content = "Một instance của lớp", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = questionIds[2] },
+                //        new Answer { Id = Guid.NewGuid(), Content = "Một hàm tĩnh", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = questionIds[2] }
+                //    };
+                //    context.Answers.AddRange(answers);
+                //    context.SaveChanges();
+                //}
 
                 // Seed RoomExams
                 if (!context.RoomExams.Any())
@@ -1021,7 +915,7 @@ namespace QuizSystem_backend.Models
                         ExamCode = "PPLTHDT-MID",
                         Name = "Giữa kỳ Lập trình hướng đối tượng",
                         DurationMinutes = 90,
-                        NoOfQuestions = 3,
+                        NoOfQuestions = 40,
                         RoomExamId = roomExamId,
                         SubjectId = subjectsList[0].Id,
                         UserId = teacherId,

@@ -124,6 +124,29 @@ namespace QuizSystem_backend.services
 
                         listStudent.Add(student);
                     }
+                    var duplicateEmails = listStudent
+                        .GroupBy(x => x.Email)
+                        .Where(g => g.Count() > 1)
+                        .Select(g => g.Key)
+                        .ToList();
+                    var duplicateStudentCodes = listStudent
+                        .GroupBy(x => x.StudentCode)
+                        .Where(g => g.Count() > 1)
+                        .Select(g => g.Key)
+                        .ToList();
+                    foreach (var student in listStudent)
+                    {
+                        if (duplicateEmails.Contains(student.Email))
+                        {
+                            student.ErrorMessages.Add("Email đã tồn tại trong danh sách.");
+                            student.IsValid = false;
+                        }
+                        if (duplicateStudentCodes.Contains(student.StudentCode))
+                        {
+                            student.ErrorMessages.Add("Mã sinh viên đã tồn tại trong danh sách.");
+                            student.IsValid = false;
+                        }
+                    }
                     return listStudent;
                 }
             }

@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizSystem_backend.Models;
 
@@ -12,11 +11,9 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250703220156_Initial")]
-    partial class Initial
+    partial class QuizSystemDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,6 +229,40 @@ namespace QuizSystem_backend.Migrations
                     b.ToTable("ChiTietDeThi", (string)null);
                 });
 
+            modelBuilder.Entity("QuizSystem_backend.Models.NotificationForCourseClass", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<Guid>("CourseClassId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("TeacherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseClassId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("NotificationForCourseClasses");
+                });
+
             modelBuilder.Entity("QuizSystem_backend.Models.Question", b =>
                 {
                     b.Property<Guid>("Id")
@@ -327,6 +358,9 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
+                    b.Property<Guid>("CourseClassId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_ket_thuc");
@@ -345,7 +379,14 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("trang_thai");
 
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseClassId");
+
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("PhongThi", (string)null);
                 });
@@ -422,8 +463,6 @@ namespace QuizSystem_backend.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.HasIndex("StudentId", "RoomId");
-
                     b.ToTable("KetQuaBaiThi", (string)null);
                 });
 
@@ -448,33 +487,6 @@ namespace QuizSystem_backend.Migrations
                     b.HasIndex("StudentExamId");
 
                     b.ToTable("ChiTietKetQuaBaiThi", (string)null);
-                });
-
-            modelBuilder.Entity("QuizSystem_backend.Models.StudentRoomExam", b =>
-                {
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ma_sinh_vien");
-
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ma_phong_thi");
-
-                    b.Property<float?>("Grade")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int")
-                        .HasColumnName("trang_thai");
-
-                    b.HasKey("StudentId", "RoomId");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("DSSinhVienPhongThi", (string)null);
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Subject", b =>
@@ -717,6 +729,29 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("QuizSystem_backend.Models.NotificationForCourseClass", b =>
+                {
+                    b.HasOne("QuizSystem_backend.Models.CourseClass", "CourseClass")
+                        .WithMany()
+                        .HasForeignKey("CourseClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuizSystem_backend.Models.Teacher", null)
+                        .WithMany("NotificationForCourseClasses")
+                        .HasForeignKey("TeacherId");
+
+                    b.HasOne("QuizSystem_backend.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CourseClass");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("QuizSystem_backend.Models.Question", b =>
                 {
                     b.HasOne("QuizSystem_backend.Models.Chapter", "Chapter")
@@ -739,6 +774,25 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("QuestionBank");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("QuizSystem_backend.Models.RoomExam", b =>
+                {
+                    b.HasOne("QuizSystem_backend.Models.CourseClass", "Course")
+                        .WithMany("RoomExams")
+                        .HasForeignKey("CourseClassId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
+                        .WithMany("RoomExams")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.StudentCourseClass", b =>
@@ -774,17 +828,9 @@ namespace QuizSystem_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("QuizSystem_backend.Models.StudentRoomExam", "StudentRoomExam")
-                        .WithMany()
-                        .HasForeignKey("StudentId", "RoomId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Exam");
 
                     b.Navigation("Room");
-
-                    b.Navigation("StudentRoomExam");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.StudentExamDetail", b =>
@@ -814,25 +860,6 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("StudentExam");
                 });
 
-            modelBuilder.Entity("QuizSystem_backend.Models.StudentRoomExam", b =>
-                {
-                    b.HasOne("QuizSystem_backend.Models.RoomExam", "Room")
-                        .WithMany("Students")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("QuizSystem_backend.Models.Student", "Student")
-                        .WithMany("RoomExams")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Room");
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("QuizSystem_backend.Models.Student", b =>
                 {
                     b.HasOne("QuizSystem_backend.Models.User", null)
@@ -859,6 +886,8 @@ namespace QuizSystem_backend.Migrations
             modelBuilder.Entity("QuizSystem_backend.Models.CourseClass", b =>
                 {
                     b.Navigation("Chapters");
+
+                    b.Navigation("RoomExams");
 
                     b.Navigation("Students");
                 });
@@ -889,8 +918,6 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("Exams");
 
                     b.Navigation("StudentExams");
-
-                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.StudentExam", b =>
@@ -905,6 +932,8 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("Courses");
 
                     b.Navigation("Exams");
+
+                    b.Navigation("RoomExams");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.User", b =>
@@ -919,8 +948,11 @@ namespace QuizSystem_backend.Migrations
             modelBuilder.Entity("QuizSystem_backend.Models.Student", b =>
                 {
                     b.Navigation("Courses");
+                });
 
-                    b.Navigation("RoomExams");
+            modelBuilder.Entity("QuizSystem_backend.Models.Teacher", b =>
+                {
+                    b.Navigation("NotificationForCourseClasses");
                 });
 #pragma warning restore 612, 618
         }

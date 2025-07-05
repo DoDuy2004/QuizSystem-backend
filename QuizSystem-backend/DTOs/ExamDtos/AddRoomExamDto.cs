@@ -13,8 +13,10 @@ namespace QuizSystem_backend.DTOs.ExamDtos
         public Status Status { get; set; }
         
         public Guid SubjectId { get; set; } // Assuming SubjectId is a Guid, adjust as necessary
+        public Guid CourseClassId { get; set; } // Assuming CourseClassId is a Guid, adjust as necessary
+        public Guid ExamId { get; set; } // Assuming ExamId is a Guid, adjust as necessary
 
         // Navigation   
-      
+
     }
 }

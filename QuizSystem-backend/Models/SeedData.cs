@@ -892,23 +892,6 @@ namespace QuizSystem_backend.Models
 
                 var questionIds = context.Questions.Select(q => q.Id).ToList();
 
-                // Seed Answers
-                //if (!context.Answers.Any())
-                //{
-                //    var answers = new[]
-                //    {
-                //        new Answer { Id = Guid.NewGuid(), Content = "Kế thừa", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = questionIds[0] },
-                //        new Answer { Id = Guid.NewGuid(), Content = "Vòng lặp", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = questionIds[0] },
-                //        new Answer { Id = Guid.NewGuid(), Content = "Hàm toán học", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE, QuestionId = questionIds[0] },
-                //        new Answer { Id = Guid.NewGuid(), Content = "Một bản thiết kế cho đối tượng", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = questionIds[1] },
-                //        new Answer { Id = Guid.NewGuid(), Content = "Một biến số", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = questionIds[1] },
-                //        new Answer { Id = Guid.NewGuid(), Content = "Một instance của lớp", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE, QuestionId = questionIds[2] },
-                //        new Answer { Id = Guid.NewGuid(), Content = "Một hàm tĩnh", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE, QuestionId = questionIds[2] }
-                //    };
-                //    context.Answers.AddRange(answers);
-                //    context.SaveChanges();
-                //}
-
                 // Seed RoomExams
                 if (!context.RoomExams.Any())
                 {
@@ -919,6 +902,9 @@ namespace QuizSystem_backend.Models
                         StartDate = new DateTime(2025, 7, 4, 10, 30, 0),
                         EndDate = new DateTime(2025, 7, 4, 13, 0, 0),
                         Status = Status.ACTIVE,
+                        SubjectId = subjectsList.First(s => s.SubjectCode == "PYTHON").Id,
+                        CourseClassId  = courseClassId,
+
                     };
                     context.RoomExams.Add(roomExam);
                     context.SaveChanges();
@@ -933,11 +919,11 @@ namespace QuizSystem_backend.Models
                     {
                         Id = Guid.NewGuid(),
                         ExamCode = "PPLTHDT-MID",
-                        Name = "Giữa kỳ Lập trình hướng đối tượng",
+                        Name = "Giữa kỳ Lập trình Python",
                         DurationMinutes = 90,
                         NoOfQuestions = 40,
                         RoomExamId = roomExamId,
-                        SubjectId = subjectsList[0].Id,
+                        SubjectId = subjectsList.First(s => s.SubjectCode == "PYTHON").Id,
                         UserId = teacherId,
                         Status = Status.ACTIVE
                     };

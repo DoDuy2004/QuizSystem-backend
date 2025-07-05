@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Metadata;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
@@ -12,11 +14,13 @@ namespace QuizSystem_backend.services
     {
         private readonly ICourseClassRepository _courseClassRepository;
         private readonly IStudentRepository _studentRepository;
+        private readonly IMapper _mapper;
 
-        public CourseClassService(ICourseClassRepository courseClassRepository, IStudentRepository studentRepository)
+        public CourseClassService(ICourseClassRepository courseClassRepository, IStudentRepository studentRepository, IMapper mapper)
         {
             _courseClassRepository = courseClassRepository;
             _studentRepository = studentRepository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<CourseClassDto>> GetCourseClassesAsync(Guid userId, string role)
@@ -51,7 +55,7 @@ namespace QuizSystem_backend.services
                 return (false, $"Student with {scc.StudentId} not found", null!);
             }
 
-            if(courseClass == null)
+            if (courseClass == null)
             {
                 return (false, $"Course class with {scc.CourseClassId} not found", null!);
             }
@@ -91,7 +95,7 @@ namespace QuizSystem_backend.services
         {
             var updatedCourseClass = await _courseClassRepository.GetByIdAsync(id);
 
-            if(updatedCourseClass == null)
+            if (updatedCourseClass == null)
             {
                 return null!;
             }
@@ -113,5 +117,20 @@ namespace QuizSystem_backend.services
 
             return subjects.Select(s => new SubjectDto(s));
         }
+
+        public async Task<(bool success, string? message, object? data)> DeleteStudentFromCourseAsync(StudentCourseClassDto scc)
+        {
+            var student = await _courseClassRepository.GetStudentCourseClassAsync(scc.StudentId, scc.CourseClassId);
+            if (student == null)
+            {
+                return (false, $"Student with {scc.StudentId} not found in course class {scc.CourseClassId}", null!);
+            }
+
+            await _courseClassRepository.DeleteStudentFromCourseClass(student);
+
+            return (true, null, _mapper.Map<StudentDto>(student));
+        }
+
+
     }
 }

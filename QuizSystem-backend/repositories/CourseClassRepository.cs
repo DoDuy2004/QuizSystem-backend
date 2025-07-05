@@ -39,6 +39,13 @@ namespace QuizSystem_backend.repositories
             
             return student!;
         }
+        public async Task<Student?>DeleteStudentFromCourseClass(StudentCourseClass scc)
+        {
+            _context.StudentCourseClasses.Remove(scc);
+            await _context.SaveChangesAsync();
+            var student = await _context.Students.FindAsync(scc.StudentId);
+            return student;
+        }
         public async Task<IEnumerable<Student>> GetStudentByCourseClassAsync(Guid id)
         {
             var students = await _context.StudentCourseClasses.Include(c => c.Student).Where(scc => scc.CourseClassId == id).Select(scc => scc.Student).ToListAsync();
@@ -63,5 +70,16 @@ namespace QuizSystem_backend.repositories
 
             return subjects;
         }
+
+        public async Task<StudentCourseClass?> GetStudentCourseClassAsync(Guid studentId, Guid courseClassId)
+        {
+
+            var studentCourseClass = await _context.StudentCourseClasses
+                .FirstOrDefaultAsync(scc => scc.StudentId == studentId && scc.CourseClassId == courseClassId);
+
+            return studentCourseClass;
+        }
+
+      
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.services;
@@ -157,6 +158,34 @@ namespace QuizSystem_backend.Controllers
             }                 
             return Ok(listStudent);
             
+        }
+
+
+        [HttpPost("search")]
+        public async Task<ActionResult> SeachStudents(string key, int limit)
+        {
+            if (string.IsNullOrEmpty(key) || limit <= 0)
+            {
+                return BadRequest(new { message = "Invalid search parameters." });
+            }
+
+            var listStudent = await _studentService.GetStudentsAsync();
+            if (listStudent == null || !listStudent.Any())
+            {
+                return NotFound(new { message = "No students found." });
+            }
+            string searchKey = key.ToLowerInvariant();
+
+            listStudent = listStudent.Where(s => s.StudentCode.ToLowerInvariant().Contains(searchKey) ||
+                                                 s.FullName.ToLowerInvariant().Contains(searchKey) ||
+                                                 s.Email.ToLowerInvariant().Contains(searchKey))
+                                     .Take(limit).ToList();
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = listStudent.Select(s => new StudentDto(s))
+            });
         }
         [HttpPost("Import-Confirm")]
         public async Task<IActionResult> ImportStudentsConfirm(List<StudentImportDto> studentsPreview)

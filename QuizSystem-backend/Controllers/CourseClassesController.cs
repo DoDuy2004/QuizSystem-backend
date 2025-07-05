@@ -22,10 +22,12 @@ namespace QuizSystem_backend.Controllers
     public class CourseClassesController : ControllerBase
     {
         private readonly ICourseClassService _courseClassService;
+        private readonly IStudentService _studentService;
 
-        public CourseClassesController(ICourseClassService courseClassService)
+        public CourseClassesController(ICourseClassService courseClassService, IStudentService studentService)
         {
             _courseClassService = courseClassService;
+            _studentService = studentService;
         }
 
         // GET: api/CourseClasses
@@ -55,7 +57,7 @@ namespace QuizSystem_backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetCourseClass(Guid id)
         {
-            if(id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 return BadRequest();
             }
@@ -116,9 +118,9 @@ namespace QuizSystem_backend.Controllers
             {
                 var updatedCourseClass = await _courseClassService.UpdateCourseClassAsync(id, dto);
 
-                if(updatedCourseClass == null)
+                if (updatedCourseClass == null)
                 {
-                    return NotFound(new {message = $"Course class with {id} not found"});
+                    return NotFound(new { message = $"Course class with {id} not found" });
                 }
 
                 return Ok(new
@@ -139,7 +141,7 @@ namespace QuizSystem_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<CourseClass>> PostCourseClass(CourseClassDto dto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -148,7 +150,7 @@ namespace QuizSystem_backend.Controllers
             {
                 var newCourseClass = await _courseClassService.AddCourseClassAsync(dto);
 
-                if(newCourseClass == null)
+                if (newCourseClass == null)
                 {
                     return StatusCode(500, new { message = "Internal server error.", error = "Failed to add new course class" });
                 }
@@ -170,7 +172,7 @@ namespace QuizSystem_backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCourseClass(Guid id)
         {
-            if(id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 return BadRequest();
             }
@@ -179,7 +181,7 @@ namespace QuizSystem_backend.Controllers
             {
                 var isDeleted = await _courseClassService.DeleteCourseClassAsync(id);
 
-                if(!isDeleted)
+                if (!isDeleted)
                 {
                     return NotFound();
                 }
@@ -195,7 +197,7 @@ namespace QuizSystem_backend.Controllers
         [HttpPost("{id}/add-student")]
         public async Task<ActionResult> AddStudentToCourse(StudentCourseClassDto dto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -209,7 +211,8 @@ namespace QuizSystem_backend.Controllers
                     return NotFound(new { message = message });
                 }
 
-                return Ok(new {
+                return Ok(new
+                {
                     code = 200,
                     message = "Success",
                     data = data
@@ -281,5 +284,44 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
+
+
+        [HttpPost("{id}/AddListStudent")]
+        public async Task<ActionResult> AddListStudentToCourse(List<StudentCourseClassDto> dtos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                var result = new List<object>();
+                foreach (var dto in dtos)
+                {
+                    var (success, message, data) = await _courseClassService.AddStudentToCourseAsync(dto);
+                    if (data != null)
+                    {
+                        result.Add(data);
+                    }
+                    else
+                    {
+                        return NotFound(new { message = message });
+                    }
+                }
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
+        
+
     }
 }

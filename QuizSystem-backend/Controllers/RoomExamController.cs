@@ -67,20 +67,7 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
-        [HttpPost("CreateRoom")]
-        public async Task<ActionResult> CreateRoomExam([FromBody] RoomExamDto roomExamDto)
-        {
-
-            try
-            {
-                await _roomExamService.AddRoomExamAsync(roomExamDto);
-                return CreatedAtAction(nameof(GetRoomExamById), new { id = Guid.NewGuid() }, new { message = "Room exam created successfully." });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
-            }
-        }
+        
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateRoomExam(Guid id, [FromBody] string roomExam)
         {
@@ -118,26 +105,6 @@ namespace QuizSystem_backend.Controllers
             }
 
         }
-        [HttpPost("AddStudentToRoomExam")]
-        public async Task<ActionResult> AddStudentToRoomExam(IFormFile file, Guid roomExamId)
-        {
-
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest(new { message = "File is required." });
-            }
-            try
-            {
-                var list = await _roomExamService.ImportStudenInRoomExam(file, roomExamId);
-
-                return Ok(new { message = "Student added to room exam successfully." });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
-            }
-
-
-        }
+        
     }
 }

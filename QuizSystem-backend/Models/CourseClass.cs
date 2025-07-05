@@ -32,8 +32,9 @@ namespace QuizSystem_backend.Models
         public virtual User User { get; set; } = null!;
         public virtual Subject Subject { get; set; } = null!;
         public virtual ICollection<Chapter> Chapters { get; set; } = null!;
-        //public virtual ICollection<RoomExam> RoomExams { get; set;} = null!;
+        public virtual ICollection<RoomExam> RoomExams { get; set; } = null;
         public ICollection<StudentCourseClass> Students { get; set; } = null!;
+        public virtual ICollection<NotFiniteNumberException> Notifications { get; set; } = new List<NotFiniteNumberException>();
 
 
     }

@@ -81,7 +81,10 @@ builder.Services.AddCors(options =>
         });
 });
 
-//builder.Servives.Configuration<MailSettings>(builder.Configuration["Mail"])
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
+builder.Services.AddTransient<IMailService, SendMailService>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

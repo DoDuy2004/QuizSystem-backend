@@ -161,8 +161,8 @@ namespace QuizSystem_backend.Controllers
         }
 
 
-        [HttpPost("search")]
-        public async Task<ActionResult> SeachStudents(string key, int limit)
+        [HttpGet("search")]
+        public async Task<ActionResult> SeachStudents([FromQuery] string key, [FromQuery] int limit)
         {
             if (string.IsNullOrEmpty(key) || limit <= 0)
             {

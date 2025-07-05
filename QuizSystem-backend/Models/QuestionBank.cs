@@ -28,7 +28,7 @@ namespace QuizSystem_backend.Models
         public Guid SubjectId { get; set; } 
         public virtual ICollection<Question>? Questions { get; set; } = null!;
         public virtual Teacher Teacher { get; set; } = null!;
-        public virtual Subject Subjects { get; set; } = null!;
+        public virtual Subject Subject { get; set; } = null!;
         //public virtual CourseClass Course { get; set; } = null!;
     }
 }

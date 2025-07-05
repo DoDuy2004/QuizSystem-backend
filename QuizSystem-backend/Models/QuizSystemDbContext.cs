@@ -554,10 +554,10 @@ namespace QuizSystem_backend.Models
                 //    .HasForeignKey(qb => qb.CourseClassId)
                 //    .OnDelete(DeleteBehavior.Restrict);
 
-                //entity.HasOne(qb => qb.Subject)
-                //    .WithMany(s => s.QuestionBanks)
-                //    .HasForeignKey(qb => qb.SubjectId)
-                //    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(qb => qb.Subject)
+                    .WithMany(s => s.QuestionBanks)
+                    .HasForeignKey(qb => qb.SubjectId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // RoomExam

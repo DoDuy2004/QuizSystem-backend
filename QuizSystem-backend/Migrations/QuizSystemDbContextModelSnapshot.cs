@@ -788,10 +788,10 @@ namespace QuizSystem_backend.Migrations
 
             modelBuilder.Entity("QuizSystem_backend.Models.QuestionBank", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.Subject", "Subjects")
+                    b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
                         .WithMany("QuestionBanks")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("QuizSystem_backend.Models.Teacher", "Teacher")
@@ -800,7 +800,7 @@ namespace QuizSystem_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Subjects");
+                    b.Navigation("Subject");
 
                     b.Navigation("Teacher");
                 });

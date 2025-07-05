@@ -220,6 +220,36 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
+
+        [HttpPost("{id}/remove-student")]
+        public async Task<ActionResult> RemoveStudentFromCourse(StudentCourseClassDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var (success, message, data) = await _courseClassService.DeleteStudentFromCourseAsync(dto);
+
+                if (data == null)
+                {
+                    return NotFound(new { message = message });
+                }
+
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
         [HttpGet("{id}/students")]
         public async Task<ActionResult> GetStudentsByClass(Guid id)
         {

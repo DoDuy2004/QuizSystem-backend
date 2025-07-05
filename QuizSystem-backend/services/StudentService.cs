@@ -85,14 +85,11 @@ namespace QuizSystem_backend.services
                             status = Enum.TryParse<Status>(worksheet.Cells[row, 5].Text, out var status) ? status : null
                         };
 
-                        // Kiểm tra trùng mã sinh viên
                         var existingStudent = await _studentRepository.GetStudentsAsync();
                         
-                        // Kiểm tra trùng email
-                        
-                        // Tạo đối tượng Student từ StudentImportDto
 
                         student.ErrorMessages = new List<string>();
+
                         //Validate dữ liệu
                         if (string.IsNullOrEmpty(student.StudentCode))
                             student.ErrorMessages.Add("Mã sinh viên không được để trống.");
@@ -101,7 +98,7 @@ namespace QuizSystem_backend.services
                         {
                             student.ErrorMessages.Add("Mã sinh viên đã tồn tại.");
                         }
-
+                        
                         if (string.IsNullOrEmpty(student.Password))
                             student.ErrorMessages.Add("Mật khẩu không được để trống.");
 

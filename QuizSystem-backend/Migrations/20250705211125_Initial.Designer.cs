@@ -12,7 +12,7 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250705184028_Initial")]
+    [Migration("20250705211125_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -349,7 +349,17 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("trang_thai");
 
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("NganHangCauHoi", (string)null);
                 });
@@ -779,6 +789,25 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("QuizSystem_backend.Models.QuestionBank", b =>
+                {
+                    b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
+                        .WithMany("QuestionBanks")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QuizSystem_backend.Models.Teacher", "Teacher")
+                        .WithMany("QuestionBanks")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
+                });
+
             modelBuilder.Entity("QuizSystem_backend.Models.RoomExam", b =>
                 {
                     b.HasOne("QuizSystem_backend.Models.CourseClass", "Course")
@@ -936,6 +965,8 @@ namespace QuizSystem_backend.Migrations
 
                     b.Navigation("Exams");
 
+                    b.Navigation("QuestionBanks");
+
                     b.Navigation("RoomExams");
                 });
 
@@ -956,6 +987,8 @@ namespace QuizSystem_backend.Migrations
             modelBuilder.Entity("QuizSystem_backend.Models.Teacher", b =>
                 {
                     b.Navigation("NotificationForCourseClasses");
+
+                    b.Navigation("QuestionBanks");
                 });
 #pragma warning restore 612, 618
         }

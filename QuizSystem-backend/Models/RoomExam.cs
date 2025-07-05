@@ -10,14 +10,16 @@ namespace QuizSystem_backend.Models
         public DateTime EndDate { get; set; }
 
         public Status Status { get; set; }
-        //public Guid CourseClassId { get; set; }
+        public Guid CourseClassId { get; set; }
+        public Subject SubjectId { get; set; } = null!; // Assuming SubjectId is a Guid, adjust as necessary
+       
 
         // Navigation   
-        //public virtual CourseClass Course { get; set; } = null!;
+        public virtual CourseClass Course { get; set; } = null!;
         public virtual ICollection<Exam> Exams { get; set; } = null!;
 
-        public virtual ICollection<StudentRoomExam> Students { get; set;} = null!;
 
         public virtual ICollection<StudentExam> StudentExams { get; set; } = null!;
+        public virtual Subject Subject { get; set; } = null!;
     }
 }

@@ -15,6 +15,7 @@ namespace QuizSystem_backend.repositories
         Task<bool> ExistsAsync(Guid id);
         
         
-        Task<bool> IsStudentInRoomAsync(Guid roomExamId, string Email);
+        //Task<bool> IsStudentInRoomAsync(Guid roomExamId, string Email);
+        Task <List<Exam>>GetListExamAsync(int limit, string key);
     }
 }

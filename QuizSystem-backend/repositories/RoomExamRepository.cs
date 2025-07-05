@@ -62,18 +62,20 @@ namespace QuizSystem_backend.repositories
             return await _context.RoomExams.AnyAsync(re => re.Id == id);
         }
 
-        public async Task<bool> IsStudentInRoomAsync(Guid roomExamId,string Email)
-        {
-            
-            var room = await _context.RoomExams
-                .Include(r => r.Students)
-                .ThenInclude(sre => sre.Student) 
-                .FirstOrDefaultAsync(r => r.Id == roomExamId);
-            if (room == null) return false;
-            // Kiểm tra xem có sinh viên nào trong phòng thi có email trùng với email đã cho không
-            return room.Students.Any(sre => sre.Student.Email == Email);
+        //public async Task<bool> IsStudentInRoomAsync(Guid roomExamId,string Email)
+        //{
+        //    var roomExam = await _context.RoomExams
+        //        .Include(re => re.Course)
+        //            .ThenInclude(c => c.Students)
+        //        .FirstOrDefaultAsync(re => re.Id == roomExamId)
+        //        .;
+        //    if (roomExam == null) return false;
+        //    return roomExam.StudentExams.Any(se => se.Student.Email == Email);
+        //}
 
-            
+        public Task<List<Exam>> GetListExamAsync(int limit, string key)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -13,7 +13,6 @@ namespace QuizSystem_backend.Models
         public float Grade { get; set; }
         public string Note { get; set; } = string.Empty;
 
-        public virtual StudentRoomExam StudentRoomExam { get; set; } = null!;
         public virtual Exam Exam { get; set; } = null!;
         public virtual RoomExam Room { get; set; } = null!;
 

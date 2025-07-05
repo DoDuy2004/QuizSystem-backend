@@ -16,5 +16,6 @@ namespace QuizSystem_backend.services
 
         Task<IEnumerable<SubjectDto>> GetSubjectsAsync();
         Task<(bool success, string? message, object? data)> DeleteStudentFromCourseAsync(StudentCourseClassDto scc);
+        
     }
 }

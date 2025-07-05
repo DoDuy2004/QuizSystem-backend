@@ -1,4 +1,5 @@
-﻿using QuizSystem_backend.Models;
+﻿using QuizSystem_backend.DTOs.StudentDtos;
+using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.repositories
 {
@@ -15,5 +16,6 @@ namespace QuizSystem_backend.repositories
         
         Task<Student?> DeleteStudentFromCourseClass(StudentCourseClass scc);
         Task<StudentCourseClass?> GetStudentCourseClassAsync(Guid studentId, Guid courseClassId);
+        
     }
 }

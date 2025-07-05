@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata;
+using OfficeOpenXml;
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.Enums;
@@ -64,6 +66,39 @@ namespace QuizSystem_backend.services
 
             return (true, null, new StudentDto(student));
         }
+
+        public async Task<(bool success, string? message, object? data)> AddListStudentToCourseAsync(List<StudentCourseClassDto> listScc)
+        {
+
+            if (listScc == null || listScc.Count == 0)
+            {
+                return (false, "List of students is empty", null!);
+            }
+            var list=new List<StudentCourseClassDto>();
+            foreach (var scc in listScc)
+            {
+                var student = await _studentRepository.GetByIdAsync(scc.StudentId);
+                var courseClass = await _courseClassRepository.GetByIdAsync(scc.CourseClassId);
+                //var existed = 
+
+                if (student == null)
+                {
+                    return (false, $"Student with {scc.StudentId} not found", null!);
+                }
+
+                if (courseClass == null)
+                {
+                    return (false, $"Course class with {scc.CourseClassId} not found", null!);
+                }
+
+                await _courseClassRepository.AddStudentToCourseAsync(new StudentCourseClass(scc));
+                list.Add(scc);
+            }
+            
+
+            return (true, null,list);
+        }
+
         public async Task<IEnumerable<StudentDto>> GetStudentByCourseClassAsync(Guid id)
         {
             var students = await _courseClassRepository.GetStudentByCourseClassAsync(id);
@@ -131,6 +166,7 @@ namespace QuizSystem_backend.services
             return (true, null, _mapper.Map<StudentDto>(student));
         }
 
+       
 
     }
 }

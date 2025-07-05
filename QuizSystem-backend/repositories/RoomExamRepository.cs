@@ -62,6 +62,11 @@ namespace QuizSystem_backend.repositories
             return await _context.RoomExams.AnyAsync(re => re.Id == id);
         }
 
+        public Task<List<Exam>> GetListExamAsync(int limit, string key)
+        {
+            throw new NotImplementedException();
+        }
+
         //public async Task<bool> IsStudentInRoomAsync(Guid roomExamId,string Email)
         //{
         //    var roomExam = await _context.RoomExams
@@ -73,9 +78,7 @@ namespace QuizSystem_backend.repositories
         //    return roomExam.StudentExams.Any(se => se.Student.Email == Email);
         //}
 
-        public Task<List<Exam>> GetListExamAsync(int limit, string key)
-        {
-            throw new NotImplementedException();
-        }
+
+
     }
 }

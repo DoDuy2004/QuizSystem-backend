@@ -2,6 +2,7 @@
 using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.DTOs.ResultInfoDto;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
@@ -154,6 +155,13 @@ namespace QuizSystem_backend.services
             var result = await _examRepository.DeleteQuestionFromExamAsync(examId, questionId);
 
             return result;
+        }
+
+        public async Task<List<SearchExam>>SearchExam(string key, int limit)
+        {
+            var exams = await _examRepository.GetListExamAsync(limit,key);
+            var searchExam = _mapper.Map<List<SearchExam>>(exams);
+            return searchExam;
         }
     }
 }

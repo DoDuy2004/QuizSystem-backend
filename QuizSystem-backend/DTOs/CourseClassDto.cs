@@ -23,12 +23,12 @@ namespace QuizSystem_backend.DTOs
         public Guid Id { get; set; } = Guid.NewGuid();
         public string? ClassCode { get; set; } = null!;
         public string Name { get; set; } = null!;
+        public string? Description { get; set; }
 
         public int Credit { get; set; } // số tín chỉ
         public Status Status { get; set; }
         public Guid TeacherId { get; set; }
         public Guid SubjectId { get; set; }
-        public string? Description { get; set; }
 
         // Navigation
         public virtual UserDto? Teacher { get; set; } = null!;

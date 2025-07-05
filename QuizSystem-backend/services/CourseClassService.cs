@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata;
 using OfficeOpenXml;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.CourseClassDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
@@ -167,6 +168,6 @@ namespace QuizSystem_backend.services
         }
 
        
-
+        //public async Task<CourseClassSearchDto>SearchCourseClass(string key,)
     }
 }

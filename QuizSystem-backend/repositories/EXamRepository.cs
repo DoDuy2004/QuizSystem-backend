@@ -133,5 +133,13 @@ namespace QuizSystem_backend.repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public Task<List<Exam>> GetListExamAsync(int limit, string key)
+        {
+            var list = _context.Exams.Where(e => e.Name.Contains(key))
+                .Take(limit)
+                .ToListAsync();
+            return list;
+        }
     }
 }

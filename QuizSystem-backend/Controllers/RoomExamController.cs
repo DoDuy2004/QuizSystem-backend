@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.services;
@@ -105,6 +106,29 @@ namespace QuizSystem_backend.Controllers
             }
 
         }
-        
+
+        [HttpPost]
+        public async Task<ActionResult> AddRoomExam([FromBody] AddRoomExamDto roomExamDto,Guid ExamId,Guid CourseClassId)
+        {
+            if(roomExamDto == null || ExamId == Guid.Empty || CourseClassId == Guid.Empty)
+            {
+                return BadRequest(new { message = "Invalid room exam data or IDs." });
+            }
+
+            try
+            {
+                var result = await _roomExamService.AddRoomExamAsync(roomExamDto, ExamId, CourseClassId);
+                if (!result.Success)
+                {
+                    return BadRequest(new { message = result.ErrorMessages });
+                }
+                return CreatedAtAction(nameof(GetRoomExamById), new { id = result.RoomExam.Id }, result.RoomExam);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
     }
 }

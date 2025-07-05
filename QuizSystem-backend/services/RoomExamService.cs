@@ -2,6 +2,7 @@
 using Microsoft.DotNet.Scaffolding.Shared;
 using OfficeOpenXml;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.DTOs.RoomExamDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.Enums;
@@ -27,7 +28,7 @@ public class RoomExamService: IRoomExamService
         _courseClassRepository = courseClassRepository;
 
     }
-    public async Task<AddRoomExamResult> AddRoomExamAsync(RoomExamDto roomExamDto,Guid ExamId,Guid CourseClassId)
+    public async Task<AddRoomExamResult> AddRoomExamAsync(AddRoomExamDto roomExamDto,Guid ExamId,Guid CourseClassId)
     {
         if (roomExamDto == null) return new AddRoomExamResult
         {
@@ -61,7 +62,7 @@ public class RoomExamService: IRoomExamService
        return new AddRoomExamResult
        {
            Success = true,
-           RoomExam = _mapper.Map<RoomExamDto>(addedRoomExam)
+           RoomExam = _mapper.Map<AddRoomExamDto>(addedRoomExam)
        };
     }
 

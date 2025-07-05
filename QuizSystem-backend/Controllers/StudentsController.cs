@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
@@ -32,7 +33,29 @@ namespace QuizSystem_backend.Controllers
     
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
-            return await _context.Students.ToListAsync();
+            var students =  await _context.Students.ToListAsync();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = students
+            });
+        }
+
+        [HttpGet("{id}/classes")]
+        public async Task<ActionResult> GetClassByStudent(Guid id)
+        {
+            var classes = await _context.CourseClasses
+                    .Where(cc => cc.Students.Any(s => s.StudentId == id))
+                    .ToListAsync();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = classes
+            });
         }
 
         // GET: api/Students/5
@@ -47,7 +70,13 @@ namespace QuizSystem_backend.Controllers
                 return NotFound();
             }
 
-            return student;
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = student
+            });
         }
 
         // PUT: api/Students/5

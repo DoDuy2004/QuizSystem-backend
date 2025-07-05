@@ -24,7 +24,7 @@ namespace QuizSystem_backend.Models
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionBank> QuestionBanks { get; set; }
         public DbSet<RoomExam> RoomExams { get; set; }
-        
+        public DbSet<NotificationForCourseClass> NotificationForCourseClasses { get; set; }
         public DbSet<StudentCourseClass> StudentCourseClasses { get; set; }
         public DbSet<StudentExam> StudentExams { get; set; }
         public DbSet<StudentExamDetail> StudentExamDetails { get; set; }
@@ -32,6 +32,7 @@ namespace QuizSystem_backend.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Ignore<NotFiniteNumberException>();
             // User
             modelBuilder.Entity<User>(entity =>
             {
@@ -755,6 +756,26 @@ namespace QuizSystem_backend.Models
                     .WithOne(c => c.Subject)
                     .HasForeignKey(c => c.SubjectId)
                     .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<NotificationForCourseClass>(entity =>
+            {
+                entity.HasKey(n => n.Id);
+
+                entity.Property(n => n.Content)
+                      .IsRequired()
+                      .HasMaxLength(1000); // nếu bạn muốn giới hạn
+
+                entity.HasOne(n => n.CourseClass)
+                      .WithMany() // hoặc .WithMany(c => c.Notifications) nếu có navigation ngược
+                      .HasForeignKey(n => n.CourseClassId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(n => n.User)
+                      .WithMany()
+                      .HasForeignKey(n => n.UserId)
+                      .OnDelete(DeleteBehavior.Restrict); // tuỳ bạn
+
             });
         }
     }

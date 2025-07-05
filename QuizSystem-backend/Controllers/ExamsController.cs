@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.services;
 
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -114,6 +115,7 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
+
         [HttpPut("{id}")]
 
         public async Task<ActionResult> UpdateExam(Guid id, [FromBody] ExamDto examDto)
@@ -213,6 +215,20 @@ namespace QuizSystem_backend.Controllers
             {
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult> SearchExams(string key,int limit)
+        {
+           
+                var result = await _examService.SearchExam(key,limit);
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = result
+                });
+          
         }
     }
 }

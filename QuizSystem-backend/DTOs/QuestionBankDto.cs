@@ -28,9 +28,10 @@ namespace QuizSystem_backend.DTOs
         public string? Description { get; set; } = null!;
         public Status Status { get; set; }
         public int NoOfQuestions { get; set; }
-        //public Guid TeacherId { get; set; }
+        
+        public Guid TeacherId { get; set; }
 
         //public List<QuestionDto>? Questions { get; set; } = null!;
-        //public TeacherDto? Teacher { get; set; } = null!;
+        public TeacherDto? Teacher { get; set; } = null!;
     }
 }

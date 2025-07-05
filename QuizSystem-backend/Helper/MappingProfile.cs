@@ -1,6 +1,8 @@
 ﻿using QuizSystem_backend.DTOs;
 using QuizSystem_backend.Models;
 using AutoMapper;
+using QuizSystem_backend.DTOs.CourseClassDtos;
+using QuizSystem_backend.DTOs.ExamDtos;
 namespace QuizSystem_backend.Helper
 {
     public class MappingProfile:Profile
@@ -75,7 +77,11 @@ namespace QuizSystem_backend.Helper
                 .ForMember(dest => dest.ExamQuestions, opt => opt.Ignore())
                 .ForMember(dest => dest.StudentExamDetails, opt => opt.Ignore())
                 .ForMember(dest => dest.QuestionBank, opt => opt.Ignore());
-            CreateMap<StudentDto, Student>().ReverseMap();  
+            CreateMap<StudentDto, Student>().ReverseMap();
+            CreateMap<CourseClass, CourseClassSearchDto>().ReverseMap();
+            CreateMap<Exam, SearchExam>().ReverseMap();
+
+
         }
 
     }

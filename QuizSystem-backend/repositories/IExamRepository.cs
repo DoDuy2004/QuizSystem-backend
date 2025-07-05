@@ -18,6 +18,7 @@ namespace QuizSystem_backend.repositories
         Task<Question> AddQuestionToExamAsync(Guid examId, Question question,float score);
         //Task<Exam> UpdateExamAsync(Exam exam);
         Task<bool> DeleteQuestionFromExamAsync(Guid examId, Guid questionId);
+        Task<List<Exam>> GetListExamAsync(int limit, string key);
 
     }
 }

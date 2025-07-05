@@ -17,7 +17,7 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "TEACHER, ADMIN, STUDENT")]
+    //[Authorize(Roles = "TEACHER, ADMIN, STUDENT")]
 
     public class CourseClassesController : ControllerBase
     {
@@ -321,7 +321,28 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
-        
+        [HttpGet("search")]
+        public async Task<ActionResult> SearchStudent(string key, int limit)
+        {
+            if (string.IsNullOrEmpty(key) || limit <= 0)
+            {
+                return BadRequest(new { message = "Invalid search parameters." });
+            }
+            try
+            {
+                var students = await _courseClassService.SearchCourseClass(key, limit);
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = students
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
 
     }
 }

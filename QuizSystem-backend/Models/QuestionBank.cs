@@ -17,18 +17,18 @@ namespace QuizSystem_backend.Models
             Questions = this.Questions;
             //Course = this.Course;
             //CourseClassId = dto.CourseClassId;
-            //TeacherId = dto.TeacherId;
+            TeacherId = dto.TeacherId;
         }
 
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = string.Empty;
         public string Description {  get; set; } = string.Empty;
         public Status Status { get; set; }
-        //public Guid TeacherId { get; set; }
-        //public string Subject { get; set; } = null!;
+        public Guid TeacherId { get; set; }
+        public Guid SubjectId { get; set; } 
         public virtual ICollection<Question>? Questions { get; set; } = null!;
-        //public virtual Teacher Teacher { get; set; } = null!;
-        //public virtual ICollection<Subject> Subjects { get; set; } = null!;
+        public virtual Teacher Teacher { get; set; } = null!;
+        public virtual Subject Subjects { get; set; } = null!;
         //public virtual CourseClass Course { get; set; } = null!;
     }
 }

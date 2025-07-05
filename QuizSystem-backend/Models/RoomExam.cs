@@ -12,7 +12,6 @@ namespace QuizSystem_backend.Models
         public Status Status { get; set; }
         public Guid CourseClassId { get; set; }
         public Guid SubjectId { get; set; } // Assuming SubjectId is a Guid, adjust as necessary
-       
 
         // Navigation   
         public virtual CourseClass Course { get; set; } = null!;

@@ -79,7 +79,13 @@ namespace QuizSystem_backend.repositories
 
             return studentCourseClass;
         }
+        public Task<List<CourseClass>> GetListCourseClassAsync(int limit, string key)
+        {
+            var list = _context.CourseClasses.Where(e => e.Name.Contains(key))
+                .Take(limit)
+                .ToListAsync();
+            return list;
+        }
 
-      
     }
 }

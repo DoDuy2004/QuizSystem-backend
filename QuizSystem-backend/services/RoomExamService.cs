@@ -50,10 +50,14 @@ public class RoomExamService: IRoomExamService
         
 
         var roomExam = _mapper.Map<RoomExam>(roomExamDto);
+
         roomExam.Exams.Add(exam);
-        roomExam.Course = courseClass;
+
+        roomExam.CourseClassId = courseClass.Id;
+        roomExam.SubjectId = courseClass.SubjectId;
 
         var addedRoomExam = await _roomExamRepository.AddAsync(roomExam);
+
        return new AddRoomExamResult
        {
            Success = true,

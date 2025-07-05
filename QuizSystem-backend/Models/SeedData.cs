@@ -674,11 +674,12 @@ namespace QuizSystem_backend.Models
                         new QuestionBank
                         {
                             Id = Guid.NewGuid(),
-                            Name = "Ngân hàng câu hỏi",
+                            Name = "Ngân hàng câu hỏi Python",
                             Description = "Bộ câu hỏi về công nghệ thông tin",
                             Status = Status.ACTIVE,
+                             SubjectId = subjectsList.First(s => s.SubjectCode == "PYTHON").Id,
                             //CourseClassId = courseClassId
-                            //TeacherId = teacherId
+                            TeacherId = teacherId
                         }
                     };
                     context.QuestionBanks.AddRange(questionBanks);

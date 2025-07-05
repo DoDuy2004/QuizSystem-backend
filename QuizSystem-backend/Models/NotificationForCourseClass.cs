@@ -6,16 +6,14 @@ namespace QuizSystem_backend.Models
     public class NotificationForCourseClass
     {
         [Key]
-        Guid Id { get; set; } = Guid.NewGuid();
-        string Content { get; set; } = string.Empty;
-        Guid CourseClassId { get; set; }
-        Guid TeacherId { get; set; }
-        DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        User User { get; set; } = null!;
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Content { get; set; } = string.Empty;
+        public Guid CourseClassId { get; set; }
+        public Guid UserId { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
         // Navigation
-        [ForeignKey("TeacherId")]
-        public virtual Teacher Teacher { get; set; } = null!;
-        [ForeignKey("CourseClassId")]
-        CourseClass CourseClass { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
+        public virtual CourseClass CourseClass { get; set; } = null!;
     }
 }

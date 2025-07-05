@@ -3,6 +3,7 @@ using QuizSystem_backend.Models;
 using AutoMapper;
 using QuizSystem_backend.DTOs.CourseClassDtos;
 using QuizSystem_backend.DTOs.ExamDtos;
+using QuizSystem_backend.DTOs.UserEmailDto;
 namespace QuizSystem_backend.Helper
 {
     public class MappingProfile:Profile
@@ -80,6 +81,11 @@ namespace QuizSystem_backend.Helper
             CreateMap<StudentDto, Student>().ReverseMap();
             CreateMap<CourseClass, CourseClassSearchDto>().ReverseMap();
             CreateMap<Exam, SearchExam>().ReverseMap();
+            CreateMap<RoomExam, AddRoomExamDto>().ReverseMap();
+            CreateMap<UserEmailDto, Student>().ReverseMap();
+              
+
+
 
 
         }

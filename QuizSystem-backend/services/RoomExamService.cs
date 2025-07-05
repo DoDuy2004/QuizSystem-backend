@@ -5,9 +5,11 @@ using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.DTOs.RoomExamDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
+using QuizSystem_backend.DTOs.UserEmailDto;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
+using QuizSystem_backend.services.MailServices;
 
 namespace QuizSystem_backend.services;
 
@@ -18,17 +20,19 @@ public class RoomExamService: IRoomExamService
     private readonly IStudentRepository _studentRepository;
     private readonly IExamRepository _examRepository;
     private readonly ICourseClassRepository _courseClassRepository;
+    private readonly IMailService _mailService;
 
-    public RoomExamService(IRoomExamRepository roomExamRepository,IMapper mapper,IStudentRepository studentRepository,IExamRepository examRepository,ICourseClassRepository courseClassRepository)
+    public RoomExamService(IRoomExamRepository roomExamRepository,IMapper mapper,IStudentRepository studentRepository,IExamRepository examRepository,ICourseClassRepository courseClassRepository,IMailService mailService)
     {
         _roomExamRepository = roomExamRepository;
         _mapper = mapper;
         _studentRepository = studentRepository;
         _examRepository = examRepository;
         _courseClassRepository = courseClassRepository;
+        _mailService = mailService;
 
     }
-    public async Task<AddRoomExamResult> AddRoomExamAsync(AddRoomExamDto roomExamDto,Guid ExamId,Guid CourseClassId)
+    public async Task<AddRoomExamResult> AddRoomExamAsync(AddRoomExamDto roomExamDto)
     {
         if (roomExamDto == null) return new AddRoomExamResult
         {
@@ -36,19 +40,23 @@ public class RoomExamService: IRoomExamService
             ErrorMessages = "Room exam data is null"
         };
 
-        var exam = await _examRepository.GetExamByIdAsync(ExamId);
+        var exam = await _examRepository.GetExamByIdAsync(roomExamDto.ExamId);
+
         if (exam == null) return new AddRoomExamResult
         {
             Success = false,
             ErrorMessages = "Exam not found"
         };
-        var courseClass = await _courseClassRepository.GetByIdAsync(CourseClassId);
+        var courseClass = await _courseClassRepository.GetByIdAsync(roomExamDto.CourseClassId);
         if (courseClass == null) return new AddRoomExamResult
         {
             Success = false,
             ErrorMessages = "Course class not found"
         };
         
+        var listStudent=courseClass.Students.Select(s => s.Student).ToList();
+
+        var listUserEmail=_mapper.Map<List<UserEmailDto>>(listStudent);
 
         var roomExam = _mapper.Map<RoomExam>(roomExamDto);
 
@@ -59,11 +67,21 @@ public class RoomExamService: IRoomExamService
 
         var addedRoomExam = await _roomExamRepository.AddAsync(roomExam);
 
-       return new AddRoomExamResult
+        var result = _mapper.Map<AddRoomExamDto>(addedRoomExam);
+        result.SubjectName=courseClass.Subject.Name;
+        result.CourseClassName = courseClass.Name;
+
+        var mailContent = new MailContent();
+        mailContent.Subject = "Yêu cầu reset mật khẩu";
+        mailContent.Body = "Vui lòng nhập mã OTP 1234 để đặt lại mật khẩu.";
+
+        await _mailService.SendEmailAsync(mailContent, listUserEmail);
+
+        return new AddRoomExamResult
        {
            Success = true,
-           RoomExam = _mapper.Map<AddRoomExamDto>(addedRoomExam)
-       };
+           RoomExam = result,
+        };
     }
 
     public async Task<(bool Success, string? ErrorMessages, IEnumerable<ExamDto>? RoomExams)> GetListExamAsync(int limit,string key)

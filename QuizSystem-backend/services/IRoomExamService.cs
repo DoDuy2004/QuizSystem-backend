@@ -1,4 +1,5 @@
 ﻿using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.DTOs.RoomExamDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.Models;
@@ -15,7 +16,7 @@ namespace QuizSystem_backend.services
         
         Task<bool> UpdateRoomExamAsync(RoomExamDto roomExamDto);
         //Task<List<StudentImportDto>> ImportStudenInRoomExam(IFormFile file, Guid roomExamId);
-        Task<AddRoomExamResult> AddRoomExamAsync(RoomExamDto roomExamDto, Guid ExamId, Guid CourseClassId);
+        Task<AddRoomExamResult> AddRoomExamAsync(AddRoomExamDto roomExamDto, Guid ExamId, Guid CourseClassId);
 
 
     }

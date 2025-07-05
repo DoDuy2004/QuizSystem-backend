@@ -16,6 +16,7 @@ using System.Text;
 using System.Security.Claims;
 using QuizSystem_backend.Helper;
 using System.Text.Json.Serialization;
+using QuizSystem_backend.services.MailServices;
 //using QuizSystem_backend.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -80,6 +81,7 @@ builder.Services.AddCors(options =>
         });
 });
 
+//builder.Servives.Configuration<MailSettings>(builder.Configuration["Mail"])
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

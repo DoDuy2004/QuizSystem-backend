@@ -217,7 +217,7 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
-        [HttpPost("search")]
+        [HttpGet("search")]
         public async Task<ActionResult> SearchExams(string key,int limit)
         {
            

@@ -1,4 +1,5 @@
 ﻿using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.CourseClassDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.Models;
 
@@ -16,6 +17,8 @@ namespace QuizSystem_backend.services
 
         Task<IEnumerable<SubjectDto>> GetSubjectsAsync();
         Task<(bool success, string? message, object? data)> DeleteStudentFromCourseAsync(StudentCourseClassDto scc);
-        
+        Task<List<CourseClassSearchDto>> SearchCourseClass(string key, int limit);
+
+
     }
 }

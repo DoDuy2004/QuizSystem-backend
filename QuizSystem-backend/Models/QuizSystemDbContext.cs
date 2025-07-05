@@ -163,10 +163,10 @@ namespace QuizSystem_backend.Models
                 //    .HasForeignKey(t => t.FacutlyId)
                 //    .OnDelete(DeleteBehavior.Restrict);
 
-                //entity.HasMany(t => t.QuestionBanks)
-                //    .WithOne(q => q.Teacher)
-                //    .HasForeignKey(qb => qb.TeacherId)
-                //    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(t => t.QuestionBanks)
+                    .WithOne(q => q.Teacher)
+                    .HasForeignKey(qb => qb.TeacherId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Answer

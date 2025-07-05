@@ -168,6 +168,12 @@ namespace QuizSystem_backend.services
         }
 
        
-        //public async Task<CourseClassSearchDto>SearchCourseClass(string key,)
+        public async Task<List<CourseClassSearchDto>>SearchCourseClass(string key,int limit)
+        {
+            var courses = await _courseClassRepository.GetListCourseClassAsync(limit, key);
+  
+            return _mapper.Map<List<CourseClassSearchDto>>(courses);
+
+        }
     }
 }

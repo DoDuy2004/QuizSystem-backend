@@ -173,12 +173,12 @@ namespace QuizSystem_backend.Controllers
             
         }
 
-        [HttpPost("{id}/add-list-question")]
-        public async Task<IActionResult> AddListQuestionToExam(Guid id, [FromBody] AddListQuestionDto dto)
+        [HttpPost("{examId}/add-list-question")]
+        public async Task<IActionResult> AddListQuestionToExam(Guid examId, [FromBody] List<QuestionDto> dto)
         {
             try
             {
-                var result = await _examService.AddListQuestionToExamAsync(dto);
+                var result = await _examService.AddListQuestionToExamAsync(dto,examId);
                 return Ok(new
                 {
                     code = 201,

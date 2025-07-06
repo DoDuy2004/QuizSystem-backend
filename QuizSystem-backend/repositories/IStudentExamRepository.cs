@@ -7,5 +7,6 @@ namespace QuizSystem_backend.repositories
     {
         Task<StudentExamResultDto?> GradeStudentExamAsync(Guid studentExamId);
         Task<StudentExam?> AddStudentExamAsync(StudentExam studentExam);
+        Task<List<StudentExamDto>> GetListStudentExamAsync(Guid studentId);
     }
 }

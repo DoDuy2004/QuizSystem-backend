@@ -21,17 +21,21 @@ namespace QuizSystem_backend.Controllers
     //[Authorize(Roles = "TEACHER")]
     public class StudentsController : ControllerBase
     {
+        private readonly IRoomExamRepository _roomExamRepository;
         private readonly QuizSystemDbContext _context;
         private readonly IStudentService _studentService;
         private readonly IRoomExamService _roomExamService;
         private readonly IStudentExamRepository _studentExamRepository;
+        private readonly IStudentRepository _studentRepository;
 
-        public StudentsController(QuizSystemDbContext context, IStudentService studentService, IRoomExamService roomExamService,IStudentExamRepository studentExamRepository)
+        public StudentsController(QuizSystemDbContext context, IStudentService studentService, IRoomExamService roomExamService,IStudentExamRepository studentExamRepository,IRoomExamRepository roomExamRepository,IStudentRepository studentRepository)
         {
+            _roomExamRepository = roomExamRepository;
             _context = context;
             _studentService = studentService;
             _roomExamService = roomExamService;
             _studentExamRepository = studentExamRepository;
+            _studentRepository=studentRepository;
         }
 
         // GET: api/Students
@@ -229,16 +233,18 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
-        [HttpGet("{id}/GetExam")]
-        public async Task<ActionResult> GetExamByStudent(Guid studentId, Guid roomExamId)
+        [HttpGet("{roomExamId}/GetExam")]
+        public async Task<ActionResult> GetExamByStudent( Guid roomExamId)
         {
-            var exam = await _roomExamService.GetRoomExamByIdAsync(roomExamId);
-            if (exam == null)
+            var roomExam = await _roomExamRepository.GetByIdAsync(roomExamId);
+            if (roomExam == null)
             {
                 return NotFound(new { message = "No exam found for this student in the specified room exam." });
             }
+            var exam = roomExam.Exams.First();
+            var examId = exam.Id;
 
-            var examForStudent = await _studentService.GetExamForStudentAsync(exam.Id, studentId);
+            var examForStudent = await _studentService.GetExamForStudentAsync(exam.Id);
 
             return Ok(new
             {
@@ -247,6 +253,7 @@ namespace QuizSystem_backend.Controllers
                 data = examForStudent
             });
         }
+
 
         [HttpPost("submit-exam")]
         public async Task<IActionResult> SubmitExam([FromBody] SubmitStudentExamDto resultDto)
@@ -268,5 +275,14 @@ namespace QuizSystem_backend.Controllers
                 data = result
             });
         }
+
+        [HttpGet("GetStudenExam")]
+        public async Task<IActionResult> GetStudentExam(Guid studentId)
+        {
+            var listStudentExam= await _studentExamRepository.GetListStudentExamAsync(studentId);
+
+            return Ok(listStudentExam);
+        }
+        
     }
 }

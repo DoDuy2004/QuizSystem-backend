@@ -26,7 +26,7 @@ namespace QuizSystem_backend.repositories
         }
         public async Task<RoomExam?> GetByIdAsync(Guid id)
         {
-            return await _context.RoomExams.FindAsync(id);
+            return await _context.RoomExams.Include(re=>re.Exams).FirstOrDefaultAsync(re=>re.Id == id);
         }
         public async Task SaveChangesAsync()
         {

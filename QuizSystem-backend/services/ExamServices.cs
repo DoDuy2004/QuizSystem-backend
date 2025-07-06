@@ -24,26 +24,23 @@ namespace QuizSystem_backend.services
             _mapper = mapper;
         }
 
-        public async Task<AddListQuestionDto> AddListQuestionToExamAsync(AddListQuestionDto dto)
+        public async Task<List<QuestionDto>> AddListQuestionToExamAsync(List<QuestionDto> listQuestionDto,Guid examId)
         {
-            var examId = dto.examId;
-
+          
             
-            if (dto.QuestionScores == null || !dto.QuestionScores.Any())
+            if (listQuestionDto == null || !listQuestionDto.Any())
             {
-                throw new ArgumentException("Question scores cannot be null or empty.", nameof(dto.QuestionScores));
+                throw new ArgumentException("List Question cannot be null or empty.");
             }
             
-            foreach (var questionScore in dto.QuestionScores)
+            foreach (var question in listQuestionDto)
             {
-                var question = _mapper.Map<Question>(questionScore.Question);
-
-
-                var addedQuestion=await _examRepository.AddQuestionToExamAsync(examId, question,questionScore.Score);
+                var ques=_mapper.Map<Question>(question);
+                await _examRepository.AddQuestionToExamAsync(ques,examId);
             }
             await _examRepository.SaveChangesAsync();
 
-            return dto;
+            return listQuestionDto;
         }
         public async Task<IEnumerable<ExamDto>> GetExamsAsync()
         {

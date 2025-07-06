@@ -17,10 +17,12 @@ namespace QuizSystem_backend.Controllers
     public class TeachersController : ControllerBase
     {
         private readonly QuizSystemDbContext _context;
+        private readonly QuizSystemDbContext _dbContext;
 
-        public TeachersController(QuizSystemDbContext context)
+        public TeachersController(QuizSystemDbContext context, QuizSystemDbContext dbContext)
         {
             _context = context;
+            _dbContext= dbContext;
         }
 
         // GET: api/Teachers
@@ -127,6 +129,14 @@ namespace QuizSystem_backend.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpGet("GetRoomExam")]
+        public async Task<IActionResult> GetRoomExam(Guid roomExamId)
+        {
+            if(roomExamId == Guid.Empty) return NotFound();
+            var listRoomExam=_context.RoomExams.Include(r=>r.Exams).Include(r=>r.StartDate).Select(r=>r.StartDate.AddMinutes(r.Exams.First().DurationMinutes)).ToList();
+            return Ok(listRoomExam);    
         }
 
         private bool TeacherExists(Guid id)

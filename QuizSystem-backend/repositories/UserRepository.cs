@@ -42,5 +42,18 @@ namespace QuizSystem_backend.repositories
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> ValidateResetPasswordToken(string email, string token)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null) return false;
+
+            if (user.ResetPasswordToken != token) return false;
+
+            if (user.ResetPasswordTokenExpire < DateTime.UtcNow) return false;
+
+            return true;
+        }
+
     }
 }

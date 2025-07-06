@@ -1,4 +1,5 @@
-﻿using Humanizer;
+﻿using AutoMapper;
+using Humanizer;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs.StudentExamDto;
@@ -10,14 +11,14 @@ namespace QuizSystem_backend.repositories
     public class StudentExamRepository:IStudentExamRepository
     {
         private readonly QuizSystemDbContext _context;
+        private readonly IMapper _mapper;
 
-        public StudentExamRepository(QuizSystemDbContext context)
+        public StudentExamRepository(QuizSystemDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper.Map(mapper);
         }
    
-
-
         public async Task<StudentExam?>AddStudentExamAsync(StudentExam studentExam)
         {
             _context.StudentExams.Add(studentExam);
@@ -102,6 +103,13 @@ namespace QuizSystem_backend.repositories
             };
 
             return studentExamResult;
+        }
+        public async Task<List<StudentExamDto>>GetListStudentExamAsync(Guid studentId)
+        {
+            var listStudentExam=await _context.StudentExams.ToListAsync();
+
+            return  _mapper.Map<List<StudentExamDto>>(listStudentExam);
+            
         }
     }
 }

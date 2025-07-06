@@ -15,8 +15,6 @@ namespace QuizSystem_backend.Controllers
         {
             _studenExamService = studentExamService;
         }
-
-        
         
     }
 }

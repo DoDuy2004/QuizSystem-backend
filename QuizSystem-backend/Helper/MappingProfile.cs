@@ -83,10 +83,6 @@ namespace QuizSystem_backend.Helper
             CreateMap<Exam, SearchExam>().ReverseMap();
             CreateMap<RoomExam, AddRoomExamDto>().ReverseMap();
             CreateMap<UserEmailDto, Student>().ReverseMap();
-              
-
-
-
 
         }
 

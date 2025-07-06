@@ -59,6 +59,7 @@ public class RoomExamService: IRoomExamService
         var listUserEmail=_mapper.Map<List<UserEmailDto>>(listStudent);
 
         var roomExam = _mapper.Map<RoomExam>(roomExamDto);
+        roomExam.Exams ??= new List<Exam>();
 
         roomExam.Exams.Add(exam);
 

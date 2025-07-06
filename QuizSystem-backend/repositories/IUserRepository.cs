@@ -1,4 +1,5 @@
-﻿using QuizSystem_backend.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.repositories
 {
@@ -6,5 +7,7 @@ namespace QuizSystem_backend.repositories
     {
         Task<User> GetByUsernameAsync(string username);
         Task<User> GetByIdAsync(Guid userId);
+        bool CheckPasswordAsync(User user, string password);
+        Task<bool> ChangePasswordAsync(User user, string newPassword);
     }
 }

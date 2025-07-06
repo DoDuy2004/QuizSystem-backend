@@ -15,7 +15,13 @@ namespace QuizSystem_backend.repositories
         {
             _context.RoomExams.Add(roomExam);
             await _context.SaveChangesAsync();
-            return roomExam;
+
+            return await _context.RoomExams
+                .Include(r => r.Subject)
+                .Include(r => r.Course)
+                .Include(r => r.Exams)
+                .FirstOrDefaultAsync(r => r.Id == roomExam.Id);
+
         }
         public async Task<IEnumerable<RoomExam>> GetAllAsync()
         {

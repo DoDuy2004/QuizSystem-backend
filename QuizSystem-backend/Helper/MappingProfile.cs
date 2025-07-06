@@ -4,6 +4,7 @@ using AutoMapper;
 using QuizSystem_backend.DTOs.CourseClassDtos;
 using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.DTOs.UserEmailDto;
+using QuizSystem_backend.DTOs.StudentExamDto;
 namespace QuizSystem_backend.Helper
 {
     public class MappingProfile:Profile
@@ -94,6 +95,8 @@ namespace QuizSystem_backend.Helper
             CreateMap<ChapterDto, Chapter>();
             CreateMap<CreateSubjectDto, Subject>()
             .ForMember(dest => dest.Chapters, opt => opt.MapFrom(src => src.Chapters));
+
+            CreateMap<StudentExam, StudentExamDto>().ReverseMap();
         }
 
     }

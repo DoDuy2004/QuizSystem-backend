@@ -12,7 +12,9 @@ namespace QuizSystem_backend.repositories
         }
         public async Task<IEnumerable<CourseClass>> GetCourseClassesAsync()
         {
-            var coures = await _context.CourseClasses.Include(cc => cc.User).ToListAsync();
+            var coures = await _context.CourseClasses.Include(cc => cc.User)
+                                                     .Include(cc=>cc.Students)
+                                                     .ToListAsync();
 
             return coures;
         }

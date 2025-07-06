@@ -51,6 +51,7 @@ public class RoomExamService: IRoomExamService
             ErrorMessages = "Exam not found"
         };
         var courseClass = await _courseClassRepository.GetByIdAsync(roomExamDto.CourseClassId);
+
         if (courseClass == null) return new AddRoomExamResult
         {
             Success = false,

@@ -81,7 +81,9 @@ namespace QuizSystem_backend.Helper
             CreateMap<StudentDto, Student>().ReverseMap();
             CreateMap<CourseClass, CourseClassSearchDto>().ReverseMap();
             CreateMap<Exam, SearchExam>().ReverseMap();
-            CreateMap<RoomExam, AddRoomExamDto>().ReverseMap();
+            CreateMap<RoomExam, AddRoomExamDto>().ReverseMap()
+                .ForMember(dest => dest.Subject, opt => opt.Ignore());
+
             CreateMap<UserEmailDto, Student>().ReverseMap();
 
             CreateMap<ChapterDto, Chapter>();

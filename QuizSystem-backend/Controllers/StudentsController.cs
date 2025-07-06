@@ -206,5 +206,21 @@ namespace QuizSystem_backend.Controllers
                 data = result
             });
         }
+
+        [HttpGet("{id}/roomexams")]
+        public async Task<ActionResult> GetRoomExamByStudent(Guid id)
+        {
+            var roomExams = await _context.RoomExams
+                .Where(re => _context.StudentCourseClasses
+                    .Any(scc => scc.StudentId == id && scc.CourseClassId == re.CourseClassId))
+                .ToListAsync();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = roomExams
+            });
+        }
     }
 }

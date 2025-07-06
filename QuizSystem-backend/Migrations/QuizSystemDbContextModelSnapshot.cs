@@ -506,6 +506,14 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("ma_mon_hoc");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Major")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)

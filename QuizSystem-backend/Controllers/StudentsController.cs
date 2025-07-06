@@ -229,24 +229,24 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
-        [HttpGet("{id}/GetExam")]
-        public async Task<ActionResult> GetExamByStudent(Guid studentId, Guid roomExamId)
-        {
-            var exam = await _roomExamService.GetRoomExamByIdAsync(roomExamId);
-            if (exam == null)
-            {
-                return NotFound(new { message = "No exam found for this student in the specified room exam." });
-            }
+        //[HttpGet("{roomExamId}/GetExam")]
+        //public async Task<ActionResult> GetExamByStudent(Guid roomExamId)
+        //{
+        //    var exam = await _roomExamService.GetRoomExamByIdAsync(roomExamId);
+        //    if (exam == null)
+        //    {
+        //        return NotFound(new { message = "No exam found for this student in the specified room exam." });
+        //    }
 
-            var examForStudent = await _studentService.GetExamForStudentAsync(exam.Id, studentId);
+        //    var examForStudent = await _studentService.GetExamForStudentAsync(exam.Id, studentId);
 
-            return Ok(new
-            {
-                code = 200,
-                message = "Success",
-                data = examForStudent
-            });
-        }
+        //    return Ok(new
+        //    {
+        //        code = 200,
+        //        message = "Success",
+        //        data = examForStudent
+        //    });
+        //}
 
         [HttpPost("submit-exam")]
         public async Task<IActionResult> SubmitExam([FromBody] SubmitStudentExamDto resultDto)

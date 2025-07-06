@@ -20,13 +20,18 @@ namespace QuizSystem_backend.repositories
         public async Task<IEnumerable<RoomExam>> GetAllAsync()
         {
             return await _context.RoomExams
-                .Include(re => re.Exams)
-                .Include(re => re.StudentExams)
+                .Include(r => r.Subject)
+                .Include(r => r.Course)
+                .Include(r => r.Exams)
                 .ToListAsync();
         }
         public async Task<RoomExam?> GetByIdAsync(Guid id)
         {
-            return await _context.RoomExams.FindAsync(id);
+            return await _context.RoomExams
+                .Include(r => r.Subject)
+                .Include(r => r.Course)
+                .Include(r => r.Exams)
+                .FirstOrDefaultAsync(r => r.Id == id);
         }
         public async Task SaveChangesAsync()
         {

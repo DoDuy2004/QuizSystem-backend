@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QuizSystem_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class initf : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,6 +18,8 @@ namespace QuizSystem_backend.Migrations
                     ma_mon_hoc = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ma_mon_hoc_code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ten_mon_hoc = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Major = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     trang_thai = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

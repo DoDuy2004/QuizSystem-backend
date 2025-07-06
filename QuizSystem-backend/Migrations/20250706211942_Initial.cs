@@ -340,6 +340,32 @@ namespace QuizSystem_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StudentRoomExams",
+                columns: table => new
+                {
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoomExamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubmitStatus = table.Column<int>(type: "int", nullable: false),
+                    SubmittedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentRoomExams", x => new { x.StudentId, x.RoomExamId });
+                    table.ForeignKey(
+                        name: "FK_StudentRoomExams_PhongThi_RoomExamId",
+                        column: x => x.RoomExamId,
+                        principalTable: "PhongThi",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentRoomExams_SinhVien_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "SinhVien",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CauTraLoi",
                 columns: table => new
                 {
@@ -576,6 +602,11 @@ namespace QuizSystem_backend.Migrations
                 column: "ma_lop_hoc_phan");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StudentRoomExams_RoomExamId",
+                table: "StudentRoomExams",
+                column: "RoomExamId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TaiKhoan_email",
                 table: "TaiKhoan",
                 column: "email",
@@ -602,6 +633,9 @@ namespace QuizSystem_backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "SinhVienLopHocPhan");
+
+            migrationBuilder.DropTable(
+                name: "StudentRoomExams");
 
             migrationBuilder.DropTable(
                 name: "CauTraLoi");

@@ -84,6 +84,9 @@ namespace QuizSystem_backend.Helper
             CreateMap<RoomExam, AddRoomExamDto>().ReverseMap();
             CreateMap<UserEmailDto, Student>().ReverseMap();
 
+            CreateMap<ChapterDto, Chapter>();
+            CreateMap<CreateSubjectDto, Subject>()
+            .ForMember(dest => dest.Chapters, opt => opt.MapFrom(src => src.Chapters));
         }
 
     }

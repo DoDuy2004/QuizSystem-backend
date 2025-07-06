@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.DependencyResolver;
+using QuizSystem_backend.DTOs;
 using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.Controllers
@@ -25,7 +27,14 @@ namespace QuizSystem_backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Teacher>>> GetTeachers()
         {
-            return await _context.Teachers.ToListAsync();
+            var teachers = await _context.Teachers.ToListAsync();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Cập nhật thông tin thành công",
+                data = teachers
+            });
         }
 
         // GET: api/Teachers/5
@@ -39,7 +48,12 @@ namespace QuizSystem_backend.Controllers
                 return NotFound();
             }
 
-            return teacher;
+            return Ok(new
+            {
+                code = 200,
+                message = "Cập nhật thông tin thành công",
+                data = teacher
+            });
         }
 
         [HttpGet("{id}/classes")]
@@ -59,32 +73,33 @@ namespace QuizSystem_backend.Controllers
         // PUT: api/Teachers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeacher(Guid id, Teacher teacher)
+        public async Task<IActionResult> PutTeacher(Guid id, [FromBody] UpdateUserDto dto)
         {
-            if (id != teacher.Id)
+            var user = await _context.Users.FindAsync(id);
+
+
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            if (id != user.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(teacher).State = EntityState.Modified;
+            user.FullName = dto.FullName;
+            user.Gender = dto.Gender;
+            user.DateOfBirth = dto.DateOfBirth;
+            user.Email = dto.Email;
+            user.PhoneNumber = dto.PhoneNumber;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TeacherExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new
+            {
+                code = 200,
+                message = "Cập nhật thông tin thành công",
+                data = user
+            });
         }
 
         // POST: api/Teachers

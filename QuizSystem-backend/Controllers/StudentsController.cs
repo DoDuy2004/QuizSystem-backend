@@ -82,33 +82,33 @@ namespace QuizSystem_backend.Controllers
         // PUT: api/Students/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-       
-        public async Task<IActionResult> PutStudent(Guid id, Student student)
+        public async Task<IActionResult> PutStudent(Guid id, [FromBody] UpdateUserDto dto)
         {
-            if (id != student.Id)
+            var user = await _context.Users.FindAsync(id);
+
+
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            if (id != user.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(student).State = EntityState.Modified;
+            user.FullName = dto.FullName;
+            user.Gender = dto.Gender;
+            user.DateOfBirth = dto.DateOfBirth;
+            user.Email = dto.Email;
+            user.PhoneNumber = dto.PhoneNumber;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new
+            {
+                code = 200,
+                message = "Cập nhật thông tin thành công",
+                data = user
+            });
         }
 
         // POST: api/Students

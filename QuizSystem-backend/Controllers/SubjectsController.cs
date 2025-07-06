@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.UserEmailDto;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.Controllers
@@ -18,10 +21,12 @@ namespace QuizSystem_backend.Controllers
     public class SubjectsController : ControllerBase
     {
         private readonly QuizSystemDbContext _context;
+        private readonly IMapper _mapper;
 
-        public SubjectsController(QuizSystemDbContext context)
+        public SubjectsController(QuizSystemDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Subjects
@@ -42,14 +47,21 @@ namespace QuizSystem_backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Subject>> GetSubject(Guid id)
         {
-            var subject = await _context.Subjects.FindAsync(id);
+            var subject = await _context.Subjects
+                                .Include(s => s.Chapters)
+                                .FirstOrDefaultAsync(s => s.Id == id);
 
             if (subject == null)
             {
                 return NotFound();
             }
 
-            return subject;
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = subject
+            }); ;
         }
 
         [HttpGet("{id}/chapters")]
@@ -68,43 +80,74 @@ namespace QuizSystem_backend.Controllers
         // PUT: api/Subjects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSubject(Guid id, Subject subject)
+        public async Task<ActionResult> PutSubject(Guid id, [FromBody] CreateSubjectDto dto)
         {
-            if (id != subject.Id)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            _context.Entry(subject).State = EntityState.Modified;
+            var existingSubject = await _context.Subjects
+                                              .Include(s => s.Chapters)
+                                              .FirstOrDefaultAsync(s => s.Id == id);
 
-            try
+            if (existingSubject == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SubjectExists(id))
+                return NotFound(new
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                    code = 404,
+                    message = "Subject not found"
+                });
             }
 
-            return NoContent();
+            // Cập nhật thông tin Subject
+            existingSubject.Name = dto.Name;
+            existingSubject.SubjectCode = dto.SubjectCode;
+            existingSubject.Status = dto.Status;
+
+            // Xóa các Chapter cũ
+            _context.Chapters.RemoveRange(existingSubject.Chapters);
+
+            // Thêm các Chapter mới từ DTO
+            var newChapters = dto.Chapters.Select(c => new Chapter
+            {
+                Id = Guid.NewGuid(),
+                Name = c.Name,
+                SubjectId = existingSubject.Id,
+                Status = Status.ACTIVE // Giả định trạng thái mặc định
+            }).ToList();
+            existingSubject.Chapters = newChapters;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Subject updated successfully",
+                data = existingSubject
+            });
         }
 
         // POST: api/Subjects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult> PostSubject(SubjectDto dto)
+        public async Task<ActionResult> PostSubject([FromBody] CreateSubjectDto dto)
         {
-            _context.Subjects.Add(new Subject(dto));
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // Map DTO sang entity
+            var subject = _mapper.Map<Subject>(dto);
+
+            _context.Subjects.Add(subject);
             await _context.SaveChangesAsync();
-            return NoContent();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = subject
+            });
         }
+
 
         // DELETE: api/Subjects/5
         [HttpDelete("{id}")]

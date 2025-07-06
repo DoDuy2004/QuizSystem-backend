@@ -18,11 +18,11 @@ namespace QuizSystem_backend.Models
         public DateTime CreatedAt { get; set; }
         public Role Role { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
-        public virtual ICollection<CourseClass> CourseClasses { get; set; } = null!;
-        public virtual ICollection<QuestionBank> QuestionBanks { get; set; } = null!;
+        public virtual ICollection<Question>? Questions { get; set; } = new List<Question>();
+        public virtual ICollection<CourseClass>? CourseClasses { get; set; } = null!;
+        public virtual ICollection<QuestionBank>? QuestionBanks { get; set; } = null!;
 
-        public virtual ICollection<Exam> Exams { get; set; } = null!;
+        public virtual ICollection<Exam>? Exams { get; set; } = null!;
 
 
     }

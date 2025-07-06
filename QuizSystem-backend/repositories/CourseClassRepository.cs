@@ -24,9 +24,19 @@ namespace QuizSystem_backend.repositories
 
             return coures!;
         }
+        public async Task<IEnumerable<CourseClass>> GetCourseClassesByStudentAsync(Guid userId)
+        {
+            return await _context.CourseClasses
+                .Where(cc => cc.Students.Any(s => s.StudentId == userId))
+                .ToListAsync();
+        }
         public async Task<CourseClass> GetByIdAsync(Guid id)
         {
-            var course = await _context.CourseClasses.Include(cc => cc.User).FirstOrDefaultAsync(cc => cc.Id == id);
+            var course = await _context.CourseClasses.Include(cc => cc.User)
+                .Include(cc => cc.Students)
+                    .ThenInclude(scc => scc.Student)
+                .Include(cc => cc.Subject)
+                .FirstOrDefaultAsync(cc => cc.Id == id);
 
             return course!;
         }

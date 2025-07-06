@@ -1,5 +1,6 @@
 ﻿using MailKit;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using QuizSystem_backend.DTOs;
@@ -16,13 +17,13 @@ namespace QuizSystem_backend.Controllers
     {
         private readonly QuizSystemDbContext _context;
         private readonly IRoomExamService _roomExamService;
-        private readonly IMailService _mailService;
+        private readonly IEmailSender _emailSender;
 
-        public RoomExamController(IRoomExamService roomExamService, QuizSystemDbContext context,IMailService mailService)
+        public RoomExamController(IRoomExamService roomExamService, QuizSystemDbContext context,IEmailSender emailSender)
         {
             _context = context;
             _roomExamService = roomExamService;
-            _mailService = mailService;
+            _emailSender = emailSender;
         }
 
         [HttpGet]

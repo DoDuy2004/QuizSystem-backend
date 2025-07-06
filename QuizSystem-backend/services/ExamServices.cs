@@ -40,8 +40,9 @@ namespace QuizSystem_backend.services
 
 
                 var addedQuestion=await _examRepository.AddQuestionToExamAsync(examId, question,questionScore.Score);
-                
             }
+            await _examRepository.SaveChangesAsync();
+
             return dto;
         }
         public async Task<IEnumerable<ExamDto>> GetExamsAsync()

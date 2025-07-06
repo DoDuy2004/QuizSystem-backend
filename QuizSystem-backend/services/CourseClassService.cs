@@ -30,9 +30,9 @@ namespace QuizSystem_backend.services
         {
             IEnumerable<CourseClass> courses = Enumerable.Empty<CourseClass>(); ;
 
-            if (role == "ADMIN")
+            if (role == "STUDENT")
             {
-                courses = await _courseClassRepository.GetCourseClassesAsync();
+                courses = await _courseClassRepository.GetCourseClassesByStudentAsync(userId);
             }
             else if (role == "TEACHER")
             {

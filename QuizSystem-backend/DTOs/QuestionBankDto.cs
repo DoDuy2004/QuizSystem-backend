@@ -16,8 +16,12 @@ namespace QuizSystem_backend.DTOs
             Name = qb.Name;
             Description = qb.Description;
             Status = qb.Status;
+
+            Subject = qb.Subject.Name;
+            SubjectId = qb.SubjectId;
             //TeacherId = qb.TeacherId;
-            //Questions = questions!;
+            UserId = qb.UserId;
+            Questions = questions!;
             //Course = course;
             //CourseClassId = qb.CourseClassId;
             NoOfQuestions = questions!.Count();
@@ -28,10 +32,11 @@ namespace QuizSystem_backend.DTOs
         public string? Description { get; set; } = null!;
         public Status Status { get; set; }
         public int NoOfQuestions { get; set; }
+        public string Subject { get; set; } = string.Empty;
+        public Guid SubjectId { get; set; }
         
-        public Guid TeacherId { get; set; }
+        public Guid UserId { get; set; }
 
-        //public List<QuestionDto>? Questions { get; set; } = null!;
-        public TeacherDto? Teacher { get; set; } = null!;
+        public List<QuestionDto>? Questions { get; set; } = null!;
     }
 }

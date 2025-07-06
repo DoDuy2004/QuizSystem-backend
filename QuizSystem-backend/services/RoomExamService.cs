@@ -61,11 +61,19 @@ public class RoomExamService : IRoomExamService
         //string> mails,string subject,string htmlMessage
         var listStudent = courseClass.Students.Select(s => s.Student).ToList();
 
-        var listUserEmail = _mapper.Map<List<UserEmailDto>>(listStudent);
+        foreach (var s in courseClass.Students)
+        {
+            Console.WriteLine($"StudentId: {s.Student?.Id}, FullName: {s.Student?.FullName}, Email: {s.Student?.Email}");
+        }
+
+        Console.WriteLine(listStudent);
+
+        var listUserEmail=_mapper.Map<List<UserEmailDto>>(listStudent);
 
         var listEmail = listUserEmail.Select(u => u.Email).ToList();
 
         var roomExam = _mapper.Map<RoomExam>(roomExamDto);
+        roomExam.Exams ??= new List<Exam>();
 
         roomExam.Exams.Add(exam);
 

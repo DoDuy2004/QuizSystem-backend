@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.DotNet.Scaffolding.Shared;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using OfficeOpenXml;
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.ExamDtos;
@@ -20,9 +23,9 @@ public class RoomExamService: IRoomExamService
     private readonly IStudentRepository _studentRepository;
     private readonly IExamRepository _examRepository;
     private readonly ICourseClassRepository _courseClassRepository;
-    private readonly IMailService _mailService;
+    private readonly IEmailSender _mailService;
 
-    public RoomExamService(IRoomExamRepository roomExamRepository,IMapper mapper,IStudentRepository studentRepository,IExamRepository examRepository,ICourseClassRepository courseClassRepository,IMailService mailService)
+    public RoomExamService(IRoomExamRepository roomExamRepository,IMapper mapper,IStudentRepository studentRepository,IExamRepository examRepository,ICourseClassRepository courseClassRepository,IEmailSender mailService)
     {
         _roomExamRepository = roomExamRepository;
         _mapper = mapper;
@@ -53,10 +56,13 @@ public class RoomExamService: IRoomExamService
             Success = false,
             ErrorMessages = "Course class not found"
         };
-        
+
+        //string> mails,string subject,string htmlMessage
         var listStudent=courseClass.Students.Select(s => s.Student).ToList();
 
         var listUserEmail=_mapper.Map<List<UserEmailDto>>(listStudent);
+
+        var listEmail=listUserEmail.Select(u => u.Email).ToList();
 
         var roomExam = _mapper.Map<RoomExam>(roomExamDto);
 
@@ -75,7 +81,10 @@ public class RoomExamService: IRoomExamService
         mailContent.Subject = "Yêu cầu reset mật khẩu";
         mailContent.Body = "Vui lòng nhập mã OTP 1234 để đặt lại mật khẩu.";
 
-        await _mailService.SendEmailAsync(mailContent, listUserEmail);
+        foreach(var mail in listEmail)
+        {
+            await _mailService.SendEmailAsync(mail, mailContent.Subject, mailContent.Body);
+        }
 
         return new AddRoomExamResult
        {

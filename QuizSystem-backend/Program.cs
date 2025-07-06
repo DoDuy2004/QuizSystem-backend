@@ -17,7 +17,8 @@ using System.Security.Claims;
 using QuizSystem_backend.Helper;
 using System.Text.Json.Serialization;
 using QuizSystem_backend.services.MailServices;
-//using QuizSystem_backend.Controllers;
+using Microsoft.AspNetCore.Identity.UI.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,9 @@ builder.Services.AddTransient<IRoomExamRepository, RoomExamRepository>();
 
 builder.Services.AddTransient<IRoomExamService, RoomExamService>();
 
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
+builder.Services.AddTransient<IEmailSender, SendMailService>(); 
 
 
 
@@ -81,9 +85,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-
-builder.Services.AddTransient<IMailService, SendMailService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

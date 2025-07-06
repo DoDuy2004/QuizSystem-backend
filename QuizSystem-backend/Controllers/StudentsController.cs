@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.DTOs.StudentExamDto;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
@@ -217,6 +219,9 @@ namespace QuizSystem_backend.Controllers
         public async Task<ActionResult> GetRoomExamByStudent(Guid id)
         {
             var roomExams = await _context.RoomExams
+                .Include(r => r.Subject)
+                .Include(r => r.Course)
+                .Include(r => r.Exams)
                 .Where(re => _context.StudentCourseClasses
                     .Any(scc => scc.StudentId == id && scc.CourseClassId == re.CourseClassId))
                 .ToListAsync();
@@ -229,28 +234,55 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
-        [HttpGet("{id}/GetExam")]
-        public async Task<ActionResult> GetExamByStudent(Guid studentId, Guid roomExamId)
-        {
-            var exam = await _roomExamService.GetRoomExamByIdAsync(roomExamId);
-            if (exam == null)
-            {
-                return NotFound(new { message = "No exam found for this student in the specified room exam." });
-            }
+        //[HttpGet("{roomExamId}/GetExam")]
+        //public async Task<ActionResult> GetExamByStudent(Guid roomExamId)
+        //{
+        //    var exam = await _roomExamService.GetRoomExamByIdAsync(roomExamId);
+        //    if (exam == null)
+        //    {
+        //        return NotFound(new { message = "No exam found for this student in the specified room exam." });
+        //    }
 
-            var examForStudent = await _studentService.GetExamForStudentAsync(exam.Id, studentId);
+        //    var examForStudent = await _studentService.GetExamForStudentAsync(exam.Id, studentId);
 
-            return Ok(new
-            {
-                code = 200,
-                message = "Success",
-                data = examForStudent
-            });
-        }
+        //    return Ok(new
+        //    {
+        //        code = 200,
+        //        message = "Success",
+        //        data = examForStudent
+        //    });
+        //}
 
         [HttpPost("submit-exam")]
         public async Task<IActionResult> SubmitExam([FromBody] SubmitStudentExamDto resultDto)
         {
+            var existingSubmission = await _context.StudentRoomExams
+            .FirstOrDefaultAsync(x => x.StudentId == resultDto.StudentId && x.RoomExamId == resultDto.RoomId);
+
+            if (existingSubmission != null && existingSubmission.SubmitStatus == SubmitStatus.Submitted)
+            {
+                // Trả về null hoặc throw tùy bạn
+                throw new Exception("Bài thi đã được nộp. Không thể nộp lại.");
+            }
+
+            if (existingSubmission == null)
+            {
+                _context.StudentRoomExams.Add(new StudentRoomExam
+                {
+                    StudentId = resultDto.StudentId,
+                    RoomExamId = resultDto.RoomId,
+                    SubmitStatus = SubmitStatus.Submitted,
+                    SubmittedAt = DateTime.UtcNow
+                });
+            }
+            else
+            {
+                existingSubmission.SubmitStatus = SubmitStatus.Submitted;
+                existingSubmission.SubmittedAt = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+
             if (resultDto == null)
             {
                 return BadRequest("Invalid exam submission data.");
@@ -267,6 +299,20 @@ namespace QuizSystem_backend.Controllers
                 message = "Success",
                 data = result
             });
+        }
+
+        [HttpGet("{roomId}/is-submitted")]
+        public async Task<IActionResult> CheckIfSubmitted(Guid roomId, [FromQuery] Guid studentId)
+        {
+            var record = await _context.StudentRoomExams
+                .FirstOrDefaultAsync(x => x.RoomExamId == roomId && x.StudentId == studentId);
+
+            if (record != null && record.SubmitStatus == SubmitStatus.Submitted)
+            {
+                return Ok(new { submitted = true });
+            }
+
+            return Ok(new { submitted = false });
         }
     }
 }

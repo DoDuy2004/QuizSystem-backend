@@ -14,7 +14,7 @@ namespace QuizSystem_backend.DTOs
         public Status Status { get; set; }
         public Guid? RoomExamId { get; set; }
 
-        public Guid TeacherId { get; set; }
+        public Guid UserId { get; set; }
         public Guid SubjectId { get; set; }
 
         public virtual RoomExamDto? RoomExam { get; set; }

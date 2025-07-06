@@ -5,7 +5,7 @@ namespace QuizSystem_backend.services
 {
     public interface IQuestionBankService
     {
-        Task<IEnumerable<QuestionBankDto>> GetQuestionBanksAsync();
+        Task<IEnumerable<QuestionBankDto>> GetQuestionBanksAsync(Guid userId);
         Task<QuestionBankDto> GetQuestionBankByIdAsync(Guid id);
 
         Task<QuestionBankDto> AddQuestionBankAsync(QuestionBankDto questionBank);
@@ -14,7 +14,7 @@ namespace QuizSystem_backend.services
         Task<bool> DeleteQuestionBankAsync(Guid id);
        
         Task<List<QuestionImportPreviewDto>> ImportQuestionsPreview(IFormFile file);
-        Task<List<Question>> ImPortQuestionConfirm(List<QuestionImportPreviewDto> listPreview);
+        Task<List<Question>> ImPortQuestionConfirm(Guid id, List<QuestionImportPreviewDto> listPreview);
 
     }
 }

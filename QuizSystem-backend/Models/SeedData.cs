@@ -675,11 +675,11 @@ namespace QuizSystem_backend.Models
                         {
                             Id = Guid.NewGuid(),
                             Name = "Ngân hàng câu hỏi Python",
-                            Description = "Bộ câu hỏi về công nghệ thông tin",
+                            Description = "Bộ câu hỏi về lập trình Python",
                             Status = Status.ACTIVE,
                              SubjectId = subjectsList.First(s => s.SubjectCode == "PYTHON").Id,
                             //CourseClassId = courseClassId
-                            TeacherId = teacherId
+                            UserId = teacherId
                         }
                     };
                     context.QuestionBanks.AddRange(questionBanks);
@@ -693,42 +693,38 @@ namespace QuizSystem_backend.Models
                 {
                     var chapters = context.Chapters.ToList();
 
-                    // Lấy ID của các chapter quan trọng
-                    var oopChapter1 = chapters.First(c => c.Name.Contains("Chương 01") && c.Subject.SubjectCode == "PPLTHDT").Id;
-                    var oopChapter2 = chapters.First(c => c.Name.Contains("Chương 02") && c.Subject.SubjectCode == "PPLTHDT").Id;
-                    var oopChapter3 = chapters.First(c => c.Name.Contains("Chương 03") && c.Subject.SubjectCode == "PPLTHDT").Id;
-                    var oopChapter4 = chapters.First(c => c.Name.Contains("Chương 04") && c.Subject.SubjectCode == "PPLTHDT").Id;
-                    var oopChapter5 = chapters.First(c => c.Name.Contains("Chương 05") && c.Subject.SubjectCode == "PPLTHDT").Id;
+                    // Lấy ID của các chapter quan trọng (giả định cập nhật thành Python)
+                    var pythonChapter1 = chapters.First(c => c.Name.Contains("Chương 01") && c.Subject.SubjectCode == "PYTHON").Id;
+                    var pythonChapter2 = chapters.First(c => c.Name.Contains("Chương 02") && c.Subject.SubjectCode == "PYTHON").Id;
+                    var pythonChapter3 = chapters.First(c => c.Name.Contains("Chương 03") && c.Subject.SubjectCode == "PYTHON").Id;
+                    var pythonChapter4 = chapters.First(c => c.Name.Contains("Chương 04") && c.Subject.SubjectCode == "PYTHON").Id;
+                    var pythonChapter5 = chapters.First(c => c.Name.Contains("Chương 05") && c.Subject.SubjectCode == "PYTHON").Id;
+                    var pythonChapter6 = chapters.First(c => c.Name.Contains("Chương 06") && c.Subject.SubjectCode == "PYTHON").Id;
 
-                    var javaChapter1 = chapters.First(c => c.Name.Contains("Chương 01") && c.Subject.SubjectCode == "JAVA").Id;
-                    var javaChapter2 = chapters.First(c => c.Name.Contains("Chương 02") && c.Subject.SubjectCode == "JAVA").Id;
-                    var javaChapter5 = chapters.First(c => c.Name.Contains("Chương 05") && c.Subject.SubjectCode == "JAVA").Id;
 
                     var questionsWithAnswers = new List<(Question Question, List<Answer> Answers)>();
 
-                    // OOP Chapter 1 Questions
+                    // Python Chapter 1 Questions
                     questionsWithAnswers.Add((
                         new Question
                         {
                             Id = Guid.NewGuid(),
-                            Content = "Khái niệm nào dưới đây là đặc trưng của Lập trình hướng đối tượng?",
+                            Content = "Khái niệm nào dưới đây là đặc trưng của ngôn ngữ Python?",
                             Image = "",
                             CreatedBy = teacherId,
-
                             Type = TypeOfQuestion.MultipleChoice,
-
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
-                            Topic = "OOP Basics",
-                            //QuestionBankId = questionBankId,
-                            ChapterId = oopChapter1
+                            Topic = "Python Basics",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter1
                         },
                         new List<Answer>
                         {
-                            new Answer { Id = Guid.NewGuid(), Content = "Kế thừa", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Đóng gói", IsCorrect = true, AnswerOrder = 2, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Vòng lặp", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Hàm toán học", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                            new Answer { Id = Guid.NewGuid(), Content = "Dễ đọc và cú pháp đơn giản", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Yêu cầu khai báo kiểu dữ liệu", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Chỉ hỗ trợ lập trình hướng đối tượng", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Phải biên dịch trước khi chạy", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
                         }
                     ));
 
@@ -736,73 +732,346 @@ namespace QuizSystem_backend.Models
                         new Question
                         {
                             Id = Guid.NewGuid(),
-                            Content = "Lập trình hướng đối tượng khác với lập trình thủ tục ở điểm nào?",
+                            Content = "Python khác với các ngôn ngữ khác ở điểm nào?",
                             Image = "",
                             CreatedBy = teacherId,
                             Type = TypeOfQuestion.TrueFalse,
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
-                            Topic = "OOP Basics",
-                            //QuestionBankId = questionBankId,
-                            ChapterId = oopChapter1
+                            Topic = "Python Basics",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter1
                         },
                         new List<Answer>
                         {
-                            new Answer { Id = Guid.NewGuid(), Content = "Tập trung vào đối tượng và dữ liệu", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Sử dụng các hàm độc lập", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Là ngôn ngữ thông dịch (interpreted)", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Yêu cầu biên dịch trước", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Không hỗ trợ đa nền tảng", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Chỉ dùng cho web", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    // Python Chapter 2 Questions
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Cú pháp để khai báo một biến trong Python là gì?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.MEDIUM,
+                            Status = Status.ACTIVE,
+                            Topic = "Variables",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter2
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Gán trực tiếp giá trị (x = 10)", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Khai báo kiểu dữ liệu trước (int x)", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Sử dụng từ khóa var", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Cần khai báo hàm trước", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Kiểu dữ liệu nào sau đây là không nguyên thủy trong Python?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.EASY,
+                            Status = Status.ACTIVE,
+                            Topic = "Data Types",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter2
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Danh sách (list)", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Số nguyên (int)", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Số thực (float)", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Chuỗi (str)", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Hàm in() trong Python có thể in nhiều giá trị không?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.TrueFalse,
+                            Difficulty = Difficulty.EASY,
+                            Status = Status.ACTIVE,
+                            Topic = "Functions",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter2
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Có", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Không", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    // Python Chapter 5 Questions (giả định về vòng lặp và điều kiện)
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Cú pháp đúng để tạo một vòng lặp for trong Python là gì?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.MEDIUM,
+                            Status = Status.ACTIVE,
+                            Topic = "Loops",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter5
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "for i in range(5):", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "for (i = 0; i < 5; i++)", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "loop i to 5", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "for i <= 5", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Câu lệnh if trong Python yêu cầu dấu hai chấm (:) không?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.TrueFalse,
+                            Difficulty = Difficulty.EASY,
+                            Status = Status.ACTIVE,
+                            Topic = "Conditionals",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter5
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Có", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Không", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Python là ngôn ngữ lập trình thuộc loại nào?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.EASY,
+                            Status = Status.ACTIVE,
+                            Topic = "Python Basics",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter1
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Ngôn ngữ thông dịch (interpreted)", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Ngôn ngữ biên dịch (compiled)", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Ngôn ngữ assembly", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Ngôn ngữ máy", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Câu lệnh nào sau đây in ra màn hình trong Python 3?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.EASY,
+                            Status = Status.ACTIVE,
+                            Topic = "Python Basics",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter1
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "print('Hello World')", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "console.log('Hello World')", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "System.out.println('Hello World')", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "printf('Hello World')", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    // Python Chapter 2 Questions (Data Types)
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Kiểu dữ liệu nào sau đây là immutable trong Python?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.MEDIUM,
+                            Status = Status.ACTIVE,
+                            Topic = "Data Types",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter2
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Tuple", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "List", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Dictionary", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Set", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Kết quả của biểu thức 3 * 'abc' trong Python là gì?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.MEDIUM,
+                            Status = Status.ACTIVE,
+                            Topic = "Data Types",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter2
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "'abcabcabc'", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "9", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Lỗi", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "'abc'", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    // Python Chapter 3 Questions (Control Flow)
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Câu lệnh nào sau đây KHÔNG phải là câu lệnh điều kiện trong Python?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.EASY,
+                            Status = Status.ACTIVE,
+                            Topic = "Control Flow",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter3
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "switch", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "if", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "elif", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "else", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Vòng lặp for trong Python khác với vòng lặp for trong C/C++ như thế nào?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.MEDIUM,
+                            Status = Status.ACTIVE,
+                            Topic = "Control Flow",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter3
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Lặp qua các phần tử của một iterable", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Dựa trên điều kiện boolean", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
                             new Answer { Id = Guid.NewGuid(), Content = "Không có sự khác biệt", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Chỉ khác về cú pháp", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                            new Answer { Id = Guid.NewGuid(), Content = "Không hỗ trợ break và continue", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
                         }
                     ));
 
-                    // OOP Chapter 2 Questions
+                    // Python Chapter 4 Questions (Functions)
                     questionsWithAnswers.Add((
                         new Question
                         {
                             Id = Guid.NewGuid(),
-                            Content = "Lớp trong Lập trình hướng đối tượng được định nghĩa như thế nào?",
+                            Content = "Từ khóa nào được sử dụng để định nghĩa hàm trong Python?",
                             Image = "",
                             CreatedBy = teacherId,
-
                             Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.EASY,
+                            Status = Status.ACTIVE,
+                            Topic = "Functions",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter4
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "def", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "function", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "func", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "define", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
 
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Tham số *args trong Python được sử dụng để làm gì?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
                             Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
-                            Topic = "Classes",
-                            //QuestionBankId = questionBankId,
-                            ChapterId = oopChapter2
+                            Topic = "Functions",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter4
                         },
                         new List<Answer>
                         {
-                            new Answer { Id = Guid.NewGuid(), Content = "Một bản thiết kế cho đối tượng", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Một biến số", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Một hàm", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Một vòng lặp", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                            new Answer { Id = Guid.NewGuid(), Content = "Nhận nhiều tham số vị trí dưới dạng tuple", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Nhận nhiều tham số keyword dưới dạng dictionary", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Chỉ định tham số bắt buộc", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Tạo biến toàn cục", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
                         }
                     ));
 
+                    // Python Chapter 5 Questions (OOP in Python)
                     questionsWithAnswers.Add((
                         new Question
                         {
                             Id = Guid.NewGuid(),
-                            Content = "Đối tượng là gì trong Lập trình hướng đối tượng?",
+                            Content = "Từ khóa nào được sử dụng để kế thừa lớp trong Python?",
                             Image = "",
                             CreatedBy = teacherId,
-
                             Type = TypeOfQuestion.MultipleChoice,
-
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
-                            Topic = "Objects",
-                            //QuestionBankId = questionBankId,
-                            ChapterId = oopChapter2
+                            Topic = "OOP in Python",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter5
                         },
                         new List<Answer>
                         {
-                            new Answer { Id = Guid.NewGuid(), Content = "Thực thể được tạo từ lớp", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Một biến toàn cục", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Một hàm tĩnh", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Một mảng", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                            new Answer { Id = Guid.NewGuid(), Content = "class ChildClass(ParentClass):", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "class ChildClass extends ParentClass:", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "class ChildClass : ParentClass", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "class ChildClass implements ParentClass", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
                         }
                     ));
 
@@ -810,46 +1079,68 @@ namespace QuizSystem_backend.Models
                         new Question
                         {
                             Id = Guid.NewGuid(),
-                            Content = "Phương thức khởi tạo (constructor) có thể trả về giá trị không?",
+                            Content = "Phương thức __init__ trong Python có vai trò gì?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = TypeOfQuestion.TrueFalse,
-                            Difficulty = Difficulty.EASY,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
-                            Topic = "Constructors",
-                            //QuestionBankId = questionBankId,
-                            ChapterId = oopChapter2
+                            Topic = "OOP in Python",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter5
                         },
                         new List<Answer>
                         {
-                            new Answer { Id = Guid.NewGuid(), Content = "Không", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Có", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE }
+                            new Answer { Id = Guid.NewGuid(), Content = "Phương thức khởi tạo của lớp", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Phương thức hủy của lớp", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Phương thức tĩnh", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Phương thức private", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
                         }
                     ));
-
-                    // Thêm các câu hỏi khác tương tự cho các chapter còn lại...
-
-                    // Java Chapter 1 Questions
                     questionsWithAnswers.Add((
                         new Question
                         {
                             Id = Guid.NewGuid(),
-                            Content = "Java là ngôn ngữ lập trình thuộc loại nào?",
+                            Content = "Python là ngôn ngữ lập trình thuộc loại nào?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = TypeOfQuestion.TrueFalse,
+                            Type = TypeOfQuestion.MultipleChoice,
                             Difficulty = Difficulty.EASY,
                             Status = Status.ACTIVE,
-                            Topic = "Java Basics",
-                            //QuestionBankId = questionBankId,
-                            ChapterId = javaChapter1
+                            Topic = "Python Basics",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter1
                         },
                         new List<Answer>
                         {
-                            new Answer { Id = Guid.NewGuid(), Content = "Hướng đối tượng", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Thủ tục", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Hàm", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Logic", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                            new Answer { Id = Guid.NewGuid(), Content = "Ngôn ngữ thông dịch (interpreted)", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Ngôn ngữ biên dịch (compiled)", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Ngôn ngữ assembly", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Ngôn ngữ máy", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    // Python Chapter 2 Questions (Data Types)
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Kiểu dữ liệu nào sau đây là immutable trong Python?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.MEDIUM,
+                            Status = Status.ACTIVE,
+                            Topic = "Data Types",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter2
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Tuple", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "List", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Dictionary", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Set", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
                         }
                     ));
 
@@ -857,26 +1148,141 @@ namespace QuizSystem_backend.Models
                         new Question
                         {
                             Id = Guid.NewGuid(),
-                            Content = "JVM là viết tắt của gì?",
+                            Content = "Kết quả của biểu thức 3 * 'abc' trong Python là gì?",
                             Image = "",
                             CreatedBy = teacherId,
-                            Type = TypeOfQuestion.TrueFalse,
-                            Difficulty = Difficulty.EASY,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.MEDIUM,
                             Status = Status.ACTIVE,
-                            Topic = "Java Basics",
-                            //QuestionBankId = questionBankId,
-                            ChapterId = javaChapter1
+                            Topic = "Data Types",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter2
                         },
                         new List<Answer>
                         {
-                            new Answer { Id = Guid.NewGuid(), Content = "Java Virtual Machine", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Java Variable Method", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Java Visual Machine", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
-                            new Answer { Id = Guid.NewGuid(), Content = "Java Virtual Method", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                            new Answer { Id = Guid.NewGuid(), Content = "'abcabcabc'", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "9", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Lỗi", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "'abc'", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
                         }
                     ));
 
-                    // Thêm các câu hỏi cho các chapter khác...
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Vòng lặp for trong Python khác với vòng lặp for trong C/C++ như thế nào?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.MEDIUM,
+                            Status = Status.ACTIVE,
+                            Topic = "Control Flow",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter3
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Lặp qua các phần tử của một iterable", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Dựa trên điều kiện boolean", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Không có sự khác biệt", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Không hỗ trợ break và continue", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    // Python Chapter 4 Questions (Functions)
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Từ khóa nào được sử dụng để định nghĩa hàm trong Python?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.EASY,
+                            Status = Status.ACTIVE,
+                            Topic = "Functions",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter4
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "def", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "function", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "func", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "define", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Tham số *args trong Python được sử dụng để làm gì?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.MEDIUM,
+                            Status = Status.ACTIVE,
+                            Topic = "Functions",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter4
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Nhận nhiều tham số vị trí dưới dạng tuple", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Nhận nhiều tham số keyword dưới dạng dictionary", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Chỉ định tham số bắt buộc", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Tạo biến toàn cục", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    // Python Chapter 5 Questions (OOP in Python)
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Từ khóa nào được sử dụng để kế thừa lớp trong Python?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.EASY,
+                            Status = Status.ACTIVE,
+                            Topic = "OOP in Python",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter5
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "class ChildClass(ParentClass):", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "class ChildClass extends ParentClass:", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "class ChildClass : ParentClass", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "class ChildClass implements ParentClass", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
+
+                    questionsWithAnswers.Add((
+                        new Question
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = "Phương thức __init__ trong Python có vai trò gì?",
+                            Image = "",
+                            CreatedBy = teacherId,
+                            Type = TypeOfQuestion.MultipleChoice,
+                            Difficulty = Difficulty.MEDIUM,
+                            Status = Status.ACTIVE,
+                            Topic = "OOP in Python",
+                            QuestionBankId = questionBankId,
+                            ChapterId = pythonChapter5
+                        },
+                        new List<Answer>
+                        {
+                            new Answer { Id = Guid.NewGuid(), Content = "Phương thức khởi tạo của lớp", IsCorrect = true, AnswerOrder = 1, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Phương thức hủy của lớp", IsCorrect = false, AnswerOrder = 2, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Phương thức tĩnh", IsCorrect = false, AnswerOrder = 3, Status = Status.ACTIVE },
+                            new Answer { Id = Guid.NewGuid(), Content = "Phương thức private", IsCorrect = false, AnswerOrder = 4, Status = Status.ACTIVE }
+                        }
+                    ));
 
                     // Lưu vào context
                     foreach (var (question, answers) in questionsWithAnswers)

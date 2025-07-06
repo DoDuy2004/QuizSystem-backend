@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Humanizer;
 using Microsoft.AspNetCore.Authorization;
@@ -31,9 +32,10 @@ namespace QuizSystem_backend.Controllers
         [HttpGet]
         public async Task<ActionResult> GetQuestionBanks()
         {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             try
             {
-                var questionBanks = await _questionBankService.GetQuestionBanksAsync();
+                var questionBanks = await _questionBankService.GetQuestionBanksAsync(Guid.Parse(userId!));
 
                 return Ok(new
                 {
@@ -205,16 +207,21 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
-        [HttpPost("Add-List-Questions")]
-        public async Task<ActionResult> AddListQuestionsToQuestionBank([FromBody]List<QuestionImportPreviewDto> listPreview )
+        [HttpPost("{id}/Add-List-Questions")]
+        public async Task<ActionResult> AddListQuestionsToQuestionBank(Guid id, [FromBody]List<QuestionImportPreviewDto> listPreview )
         {
+            if(Guid.Empty == id)
+            {
+                return BadRequest();
+            }
+
             if (listPreview == null || !listPreview.Any())
             {
                 return BadRequest(new { message = "Danh sách không hợp lệ" });
             }
             try
             {
-                var addedQuestions = await _questionBankService.ImPortQuestionConfirm(listPreview);
+                var addedQuestions = await _questionBankService.ImPortQuestionConfirm(id, listPreview);
                 return Ok(new
                 {
                     code = 200,

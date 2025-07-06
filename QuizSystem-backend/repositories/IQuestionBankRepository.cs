@@ -4,7 +4,7 @@ namespace QuizSystem_backend.repositories
 {
     public interface IQuestionBankRepository
     {
-        Task<IEnumerable<QuestionBank>> GetQuestionBanksAsync();
+        Task<IEnumerable<QuestionBank>> GetQuestionBanksAsync(Guid userId);
         Task<QuestionBank> GetQuestionBankByIdAsync(Guid id);
         Task<QuestionBank> AddAsync(QuestionBank questionBank);
         Task<IEnumerable<Question>> GetQuestionsByQuestionBankAsync(Guid id);

@@ -34,12 +34,13 @@ namespace QuizSystem_backend.repositories
             return listQuestion;
         }
         
-        public async Task<IEnumerable<QuestionBank>> GetQuestionBanksAsync()
+        public async Task<IEnumerable<QuestionBank>> GetQuestionBanksAsync(Guid userId)
         {
             var questionBanks = await _context.QuestionBanks
                 //.Include(qb => qb.Course)
                 .Include(qb => qb.Questions)
                 .Include(qb => qb.Subject)
+                .Where(qb => qb.UserId == userId)
                 .ToListAsync();
 
             return questionBanks;

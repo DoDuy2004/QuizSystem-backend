@@ -189,7 +189,7 @@ namespace QuizSystem_backend.services
                 {
                     Id = eq.Question.Id,
                     Content = eq.Question.Content,
-                    Answers = eq.Question.Answers.Select(a => new AnswerForStudentDto
+                    Answers = eq.Question.Answers.Select(a => new DTOs.AnswerDtos.AnswerForStudentDto
                     {
                         Id = a.Id,
                         Content = a.Content,

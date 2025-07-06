@@ -201,7 +201,7 @@ namespace QuizSystem_backend.services
                 };
                 foreach (var answer in question.Answers)
                 {
-                    var answerDto = new AnswerForStudentDto
+                    var answerDto = new DTOs.AnswerDtos.AnswerForStudentDto
                     {
                         Id = answer.Id,
                         Content = answer.Content,

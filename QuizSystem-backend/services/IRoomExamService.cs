@@ -16,7 +16,7 @@ namespace QuizSystem_backend.services
         
         Task<bool> UpdateRoomExamAsync(RoomExamDto roomExamDto);
         //Task<List<StudentImportDto>> ImportStudenInRoomExam(IFormFile file, Guid roomExamId);
-        Task<AddRoomExamResult> AddRoomExamAsync(AddRoomExamDto roomExamDto, Guid ExamId, Guid CourseClassId);
+        Task<AddRoomExamResult> AddRoomExamAsync(AddRoomExamDto roomExamDto);
 
 
     }

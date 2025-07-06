@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Models;
 using QuizSystem_backend.services;
 using System.Drawing;
 
@@ -12,9 +14,11 @@ namespace QuizSystem_backend.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService) 
+        private readonly QuizSystemDbContext _context;
+        public UserController(IUserService userService, QuizSystemDbContext context) 
         { 
             _userService = userService;
+            _context = context;
         }
 
         [HttpGet("current")]
@@ -42,5 +46,46 @@ namespace QuizSystem_backend.Controllers
                 data = userDto
             });
         }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromHeader] Guid userId, [FromBody] ChangePasswordDto dto)
+        {
+            if (userId == Guid.Empty)
+                return BadRequest("UserId is required");
+
+            var success = await _userService.ChangePasswordAsync(userId, dto.CurrentPassword, dto.NewPassword);
+            if (!success)
+                return BadRequest("Mật khẩu cũ sai ");
+
+            return Ok(new { message = "Đổi mật khẩu thành công" });
+        }
+
+        [HttpPut("update-profile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile([FromHeader] Guid userId, [FromBody] UpdateUserDto dto)
+        {
+            if (userId == Guid.Empty)
+                return BadRequest(new { message = "UserId is required" });
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            user.FullName = dto.FullName;
+            user.Gender = dto.Gender;
+            user.DateOfBirth = dto.DateOfBirth;
+            user.Email = dto.Email;
+            user.PhoneNumber = dto.PhoneNumber;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Cập nhật thông tin thành công",
+                data=user
+            });
+        }
+
     }
 }

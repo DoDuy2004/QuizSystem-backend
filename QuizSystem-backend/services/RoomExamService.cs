@@ -28,7 +28,7 @@ public class RoomExamService: IRoomExamService
         _courseClassRepository = courseClassRepository;
 
     }
-    public async Task<AddRoomExamResult> AddRoomExamAsync(AddRoomExamDto roomExamDto,Guid ExamId,Guid CourseClassId)
+    public async Task<AddRoomExamResult> AddRoomExamAsync(AddRoomExamDto roomExamDto)
     {
         if (roomExamDto == null) return new AddRoomExamResult
         {
@@ -36,21 +36,22 @@ public class RoomExamService: IRoomExamService
             ErrorMessages = "Room exam data is null"
         };
 
-        var exam = await _examRepository.GetExamByIdAsync(ExamId);
+        var exam = await _examRepository.GetExamByIdAsync(roomExamDto.ExamId);
         if (exam == null) return new AddRoomExamResult
         {
             Success = false,
             ErrorMessages = "Exam not found"
         };
-        var courseClass = await _courseClassRepository.GetByIdAsync(CourseClassId);
+        var courseClass = await _courseClassRepository.GetByIdAsync(roomExamDto.CourseClassId);
         if (courseClass == null) return new AddRoomExamResult
         {
             Success = false,
             ErrorMessages = "Course class not found"
         };
-        
+
 
         var roomExam = _mapper.Map<RoomExam>(roomExamDto);
+        roomExam.Exams ??= new List<Exam>();
 
         roomExam.Exams.Add(exam);
 

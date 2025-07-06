@@ -80,7 +80,7 @@ namespace QuizSystem_backend.Helper
             CreateMap<StudentDto, Student>().ReverseMap();
             CreateMap<CourseClass, CourseClassSearchDto>().ReverseMap();
             CreateMap<Exam, SearchExam>().ReverseMap();
-
+            CreateMap<RoomExam, AddRoomExamDto>().ReverseMap();
 
         }
 

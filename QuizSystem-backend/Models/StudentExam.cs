@@ -12,7 +12,7 @@ namespace QuizSystem_backend.Models
         public Status Status { get; set; }
         public float Grade { get; set; }
         public string Note { get; set; } = string.Empty;
-
+        public SubmitStatus SubmitStatus { get; set; } = SubmitStatus.NotSubmitted;
         public virtual Exam Exam { get; set; } = null!;
         public virtual RoomExam Room { get; set; } = null!;
 

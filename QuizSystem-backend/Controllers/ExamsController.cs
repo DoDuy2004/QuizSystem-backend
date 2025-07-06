@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.ExamDtos;
+using QuizSystem_backend.Models;
+using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
 
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -13,10 +15,12 @@ namespace QuizSystem_backend.Controllers
     public class ExamsController : ControllerBase
     {
         private readonly IExamServices _examService;
+        private readonly IExamRepository _examRepository;
 
-        public ExamsController(IExamServices examServices)
+        public ExamsController(IExamServices examServices,IExamRepository examRepository)
         {
             _examService = examServices;
+            _examRepository=examRepository;
         }
 
         [HttpGet("{id}/questions")]
@@ -115,7 +119,13 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
-
+        [HttpPost("AddQuestion")]
+        public async Task<IActionResult> AddQuestion(Question question, Guid examId)
+        {
+            if (question == null || examId == null!) return BadRequest(new { message = "Value null" });
+            await _examRepository.AddQuestionToExamAsync(question, examId);
+            return Ok();
+        }
         [HttpPut("{id}")]
 
         public async Task<ActionResult> UpdateExam(Guid id, [FromBody] ExamDto examDto)

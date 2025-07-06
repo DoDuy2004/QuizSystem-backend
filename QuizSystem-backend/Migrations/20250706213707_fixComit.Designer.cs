@@ -12,8 +12,8 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250706170357_initf")]
-    partial class initf
+    [Migration("20250706213707_fixComit")]
+    partial class fixComit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -395,9 +395,6 @@ namespace QuizSystem_backend.Migrations
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("SubmitStatus")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CourseClassId");
@@ -508,12 +505,41 @@ namespace QuizSystem_backend.Migrations
                     b.ToTable("ChiTietKetQuaBaiThi", (string)null);
                 });
 
+            modelBuilder.Entity("QuizSystem_backend.Models.StudentRoomExam", b =>
+                {
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoomExamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SubmitStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("SubmittedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("StudentId", "RoomExamId");
+
+                    b.HasIndex("RoomExamId");
+
+                    b.ToTable("StudentRoomExams");
+                });
+
             modelBuilder.Entity("QuizSystem_backend.Models.Subject", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("ma_mon_hoc");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Major")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -898,6 +924,25 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("StudentExam");
                 });
 
+            modelBuilder.Entity("QuizSystem_backend.Models.StudentRoomExam", b =>
+                {
+                    b.HasOne("QuizSystem_backend.Models.RoomExam", "RoomExam")
+                        .WithMany("StudentRoomExams")
+                        .HasForeignKey("RoomExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuizSystem_backend.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RoomExam");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("QuizSystem_backend.Models.Student", b =>
                 {
                     b.HasOne("QuizSystem_backend.Models.User", null)
@@ -956,6 +1001,8 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("Exams");
 
                     b.Navigation("StudentExams");
+
+                    b.Navigation("StudentRoomExams");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.StudentExam", b =>

@@ -74,7 +74,7 @@ namespace QuizSystem_backend.Controllers
                 code = 200,
                 message = "Success",
                 data = chapters
-            }); ;
+            }); 
         }
 
         // PUT: api/Subjects/5

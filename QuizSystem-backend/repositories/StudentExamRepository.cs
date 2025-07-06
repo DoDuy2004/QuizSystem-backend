@@ -16,7 +16,7 @@ namespace QuizSystem_backend.repositories
         public StudentExamRepository(QuizSystemDbContext context,IMapper mapper)
         {
             _context = context;
-            _mapper.Map(mapper);
+            _mapper= mapper;
         }
    
         public async Task<StudentExam?>AddStudentExamAsync(StudentExam studentExam)
@@ -106,7 +106,7 @@ namespace QuizSystem_backend.repositories
         }
         public async Task<List<StudentExamDto>>GetListStudentExamAsync(Guid studentId)
         {
-            var listStudentExam=await _context.StudentExams.ToListAsync();
+            var listStudentExam=await _context.StudentExams.Where(s=>s.StudentId==studentId).ToListAsync();
 
             return  _mapper.Map<List<StudentExamDto>>(listStudentExam);
             

@@ -35,7 +35,11 @@ namespace QuizSystem_backend.Helper
                 .ReverseMap();
             CreateMap<RoomExamDto, RoomExam>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.Subject))
+                .ForMember(dest => dest.Course, opt => opt.MapFrom(src => src.Course))
+                .ForMember(dest => dest.Exams, opt => opt.MapFrom(src => src.Exams))
                 .ReverseMap();
+
             CreateMap<ExamQuestionDto, ExamQuestion>().ReverseMap();
             CreateMap<QuestionDto, Question>()
                 .ForMember(dest=>dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
@@ -81,7 +85,10 @@ namespace QuizSystem_backend.Helper
             CreateMap<StudentDto, Student>().ReverseMap();
             CreateMap<CourseClass, CourseClassSearchDto>().ReverseMap();
             CreateMap<Exam, SearchExam>().ReverseMap();
-            CreateMap<RoomExam, AddRoomExamDto>().ReverseMap();
+            CreateMap<RoomExam, AddRoomExamDto>().ReverseMap()
+                .ForMember(dest => dest.Subject, opt => opt.Ignore());
+
+
             CreateMap<UserEmailDto, Student>().ReverseMap();
 
             CreateMap<ChapterDto, Chapter>();

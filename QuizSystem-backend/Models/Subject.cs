@@ -11,11 +11,15 @@ namespace QuizSystem_backend.Models
             Id = dto.Id;
             SubjectCode = dto.SubjectCode;
             Name = dto.Name;
+            Description = dto.Description;
+            Major = dto.Major;
         }
         public Guid Id { get; set; } = Guid.NewGuid();
         public string SubjectCode { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         //public Guid FacutlyId { get; set; }
+        public string Major { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public Status Status { get; set; }
 
         // Navigation

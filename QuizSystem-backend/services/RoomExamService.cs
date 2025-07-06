@@ -99,7 +99,8 @@ public class RoomExamService : IRoomExamService
 
         foreach (var mail in listEmail)
         {
-            await _mailService.SendEmailAsync(mail, mailContent.Subject, mailContent.Body);
+            Task.Run(() => _mailService.SendEmailAsync(mail, mailContent.Subject, mailContent.Body));
+
         }
 
         return new AddRoomExamResult()

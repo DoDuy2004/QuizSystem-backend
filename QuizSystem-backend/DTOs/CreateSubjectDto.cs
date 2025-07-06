@@ -10,6 +10,8 @@ namespace QuizSystem_backend.DTOs
         public string Name { get; set; } = string.Empty;
         //public Guid FacutlyId { get; set; }
         public Status Status { get; set; }
+        public string Major { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         // Navigation
         //public virtual Facutly Facutly { get; set; } = null!;

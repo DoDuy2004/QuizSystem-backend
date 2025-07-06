@@ -29,6 +29,7 @@ namespace QuizSystem_backend.Models
         public DbSet<StudentExam> StudentExams { get; set; }
         public DbSet<StudentExamDetail> StudentExamDetails { get; set; }
         public DbSet<Subject> Subjects { get; set; }
+        public DbSet<StudentRoomExam> StudentRoomExams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -777,6 +778,19 @@ namespace QuizSystem_backend.Models
                       .OnDelete(DeleteBehavior.Restrict); // tuỳ bạn
 
             });
+
+            modelBuilder.Entity<StudentRoomExam>()
+                .HasKey(sr => new { sr.StudentId, sr.RoomExamId });
+
+            modelBuilder.Entity<StudentRoomExam>()
+                .HasOne(sr => sr.Student)
+                .WithMany()
+                .HasForeignKey(sr => sr.StudentId);
+
+            modelBuilder.Entity<StudentRoomExam>()
+                .HasOne(sr => sr.RoomExam)
+                .WithMany(r => r.StudentRoomExams)
+                .HasForeignKey(sr => sr.RoomExamId);
         }
     }
 }

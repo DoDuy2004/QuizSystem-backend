@@ -1,8 +1,14 @@
 ﻿using Humanizer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.AnswerDtos;
+using QuizSystem_backend.DTOs.ExamDtos;
+using QuizSystem_backend.DTOs.QuestionDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
+using QuizSystem_backend.DTOs.StudentExamDto;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
@@ -12,9 +18,20 @@ namespace QuizSystem_backend.services
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
-        public StudentService(IStudentRepository studentRepository)
+        private readonly IExamRepository _examRepository;
+        private readonly object _courseClassRepository;
+        private readonly IStudentExamRepository _studentExamRepository;
+        private readonly QuizSystemDbContext _context;
+        private readonly IRoomExamRepository _roomExamRepository;
+
+        public StudentService(IStudentRepository studentRepository, IExamRepository examReposotory, ICourseClassRepository courseClassRepository,IStudentExamRepository studentExamRepository,QuizSystemDbContext context,IRoomExamRepository romExamRepository)
         {
             _studentRepository = studentRepository;
+            _examRepository = examReposotory;
+            _courseClassRepository = courseClassRepository;
+            _studentExamRepository = studentExamRepository;
+            _context=context;
+            _roomExamRepository = romExamRepository;
         }
         public async Task<IEnumerable<Student>> GetStudentsAsync()
         {
@@ -53,7 +70,7 @@ namespace QuizSystem_backend.services
                     FullName = studentDto.FullName!,
                     Status = studentDto.status ?? Status.ACTIVE,
                     Username = studentDto.Email!,
-                    Role=Role.STUDENT,
+                    Role = Role.STUDENT,
                 };
                 students.Add(student);
             }
@@ -86,7 +103,7 @@ namespace QuizSystem_backend.services
                         };
 
                         var existingStudent = await _studentRepository.GetStudentsAsync();
-                        
+
 
                         student.ErrorMessages = new List<string>();
 
@@ -98,7 +115,7 @@ namespace QuizSystem_backend.services
                         {
                             student.ErrorMessages.Add("Mã sinh viên đã tồn tại.");
                         }
-                        
+
                         if (string.IsNullOrEmpty(student.Password))
                             student.ErrorMessages.Add("Mật khẩu không được để trống.");
 
@@ -152,5 +169,89 @@ namespace QuizSystem_backend.services
             }
 
         }
+
+        
+        public async Task<ExamForStudentDto> GetExamForStudentAsync(Guid examId, Guid studentId)
+        {
+
+            
+            var exam = await _examRepository.GetExamByIdAsync(examId);
+
+            if (exam == null)
+            {
+                return null!;
+            }
+            var examDto = new ExamForStudentDto
+            {
+                Id = exam.Id,
+                Name = exam.Name,
+                DurationMinutes = exam.DurationMinutes,
+                NoOfQuestions = exam.NoOfQuestions,
+            };
+
+            var listQuestion = await _examRepository.GetQuestionsByExamAsync(examId);
+
+            foreach (var question in listQuestion)
+            {
+                var questionDto = new QuestionForStudentDto
+                {
+                    Id = question.Id,
+                    Content = question.Content,
+                    Type = question.Type,
+                };
+                foreach (var answer in question.Answers)
+                {
+                    var answerDto = new AnswerForStudentDto
+                    {
+                        Id = answer.Id,
+                        Content = answer.Content,
+                    };
+                    questionDto.Answers.Add(answerDto);
+                }
+                examDto.Questions.Add(questionDto);
+            }
+            return examDto;
+        }
+
+        public async Task<StudentExamResultDto?> SubmitStudentExamAsync(SubmitStudentExamDto dto)
+        {
+            // 1. Tạo mới bài làm sinh viên (StudentExam)
+            var studentExam = new StudentExam
+            {
+                Id = Guid.NewGuid(),
+                ExamId = dto.ExamId,
+                StudentId = dto.StudentId,
+                RoomId = dto.RoomId,
+                SubmitStatus = SubmitStatus.Submitted,
+                Note = "",
+                Grade = 0 // sẽ cập nhật sau khi chấm điểm
+            };
+            await _studentExamRepository.AddStudentExamAsync(studentExam);
+
+
+            // 2. Lưu từng câu trả lời (StudentExamDetail)
+            foreach (var answerDto in dto.Answers)
+            {
+                foreach (var answerId in answerDto.AnswerIds)
+                {
+                    var detail = new StudentExamDetail
+                    {
+                        StudentExamId = studentExam.Id,
+                        QuestionId = answerDto.QuestionId,
+                        AnswerId = answerId
+                    };
+                    _context.StudentExamDetails.Add(detail);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            // 3. Chấm điểm và trả về kết quả (dùng lại hàm GetStudentExamResultAsync đã viết)
+            var result = await _studentExamRepository.GradeStudentExamAsync(studentExam.Id);
+
+            return result;
+        }
+
+
     }
 }

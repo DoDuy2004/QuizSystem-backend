@@ -2,7 +2,9 @@
 using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.AnswerDtos;
 using QuizSystem_backend.DTOs.ExamDtos;
+using QuizSystem_backend.DTOs.QuestionDtos;
 using QuizSystem_backend.DTOs.ResultInfoDto;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
@@ -162,8 +164,41 @@ namespace QuizSystem_backend.services
         public async Task<List<SearchExam>>SearchExam(string key, int limit)
         {
             var exams = await _examRepository.GetListExamAsync(limit,key);
+
             var searchExam = _mapper.Map<List<SearchExam>>(exams);
+
             return searchExam;
         }
+
+        public async Task<ExamForStudentDto> GetExamForStudentAsync(Guid examId)
+        {
+            if (examId == Guid.Empty) return null!;
+            
+            var exam=await _examRepository.GetExamByIdAsync(examId);
+
+            if (exam == null) return null!;
+
+            var examDto=new ExamForStudentDto()
+            {
+                Id = exam.Id,
+                Name = exam.Name,
+                DurationMinutes = exam.DurationMinutes,
+                ExamCode = exam.ExamCode,
+                NoOfQuestions = exam.ExamQuestions.Count,
+                Questions = exam.ExamQuestions.Select(eq => new QuestionForStudentDto
+                {
+                    Id = eq.Question.Id,
+                    Content = eq.Question.Content,
+                    Answers = eq.Question.Answers.Select(a => new AnswerForStudentDto
+                    {
+                        Id = a.Id,
+                        Content = a.Content,
+                    }).ToList()
+                }).ToList()
+            };
+
+            return examDto;
+        }
+
     }
 }

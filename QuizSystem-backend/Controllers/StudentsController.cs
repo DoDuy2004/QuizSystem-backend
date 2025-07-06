@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.StudentDtos;
+using QuizSystem_backend.DTOs.StudentExamDto;
 using QuizSystem_backend.Models;
+using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
 
 namespace QuizSystem_backend.Controllers
@@ -21,19 +23,23 @@ namespace QuizSystem_backend.Controllers
     {
         private readonly QuizSystemDbContext _context;
         private readonly IStudentService _studentService;
+        private readonly IRoomExamService _roomExamService;
+        private readonly IStudentExamRepository _studentExamRepository;
 
-        public StudentsController(QuizSystemDbContext context,IStudentService studentService)
+        public StudentsController(QuizSystemDbContext context, IStudentService studentService, IRoomExamService roomExamService,IStudentExamRepository studentExamRepository)
         {
             _context = context;
             _studentService = studentService;
+            _roomExamService = roomExamService;
+            _studentExamRepository = studentExamRepository;
         }
 
         // GET: api/Students
         [HttpGet]
-    
+
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
-            var students =  await _context.Students.ToListAsync();
+            var students = await _context.Students.ToListAsync();
 
             return Ok(new
             {
@@ -60,7 +66,7 @@ namespace QuizSystem_backend.Controllers
 
         // GET: api/Students/5
         [HttpGet("{id}")]
-     
+
         public async Task<ActionResult<Student>> GetStudent(Guid id)
         {
             var student = await _context.Students.FindAsync(id);
@@ -150,14 +156,14 @@ namespace QuizSystem_backend.Controllers
             {
                 return BadRequest("No file uploaded.");
             }
-            var listStudent=await _studentService.ImportFileStudentPreview(file);
+            var listStudent = await _studentService.ImportFileStudentPreview(file);
 
             if (listStudent == null || !listStudent.Any())
             {
                 return BadRequest("No valid students found in the file.");
-            }                 
+            }
             return Ok(listStudent);
-            
+
         }
 
 
@@ -195,13 +201,69 @@ namespace QuizSystem_backend.Controllers
                 return BadRequest("No students to import.");
             }
             var result = await _studentService.ImportStudentConfirm(studentsPreview);
-            if (result.Count==0)
+            if (result.Count == 0)
             {
                 return BadRequest("Failed to import students.");
             }
             return Ok(new
             {
-                code = 200, 
+                code = 200,
+                message = "Success",
+                data = result
+            });
+        }
+
+        [HttpGet("{id}/roomexams")]
+        public async Task<ActionResult> GetRoomExamByStudent(Guid id)
+        {
+            var roomExams = await _context.RoomExams
+                .Where(re => _context.StudentCourseClasses
+                    .Any(scc => scc.StudentId == id && scc.CourseClassId == re.CourseClassId))
+                .ToListAsync();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = roomExams
+            });
+        }
+
+        [HttpGet("{id}/GetExam")]
+        public async Task<ActionResult> GetExamByStudent(Guid studentId, Guid roomExamId)
+        {
+            var exam = await _roomExamService.GetRoomExamByIdAsync(roomExamId);
+            if (exam == null)
+            {
+                return NotFound(new { message = "No exam found for this student in the specified room exam." });
+            }
+
+            var examForStudent = await _studentService.GetExamForStudentAsync(exam.Id, studentId);
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = examForStudent
+            });
+        }
+
+        [HttpPost("submit-exam")]
+        public async Task<IActionResult> SubmitExam([FromBody] SubmitStudentExamDto resultDto)
+        {
+            if (resultDto == null)
+            {
+                return BadRequest("Invalid exam submission data.");
+            }
+            var result=await _studentService.SubmitStudentExamAsync(resultDto);
+           
+            if (result == null)
+            {
+                return BadRequest("Failed to submit exam.");
+            }
+            return Ok(new
+            {
+                code = 200,
                 message = "Success",
                 data = result
             });

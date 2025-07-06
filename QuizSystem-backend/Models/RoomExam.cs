@@ -8,7 +8,7 @@ namespace QuizSystem_backend.Models
         public string Name { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-
+        public SubmitStatus SubmitStatus { get; set; } = SubmitStatus.NotSubmitted;
         public Status Status { get; set; }
         public Guid CourseClassId { get; set; }
         public Guid SubjectId { get; set; } // Assuming SubjectId is a Guid, adjust as necessary

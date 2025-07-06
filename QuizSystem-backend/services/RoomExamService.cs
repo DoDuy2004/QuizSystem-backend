@@ -87,12 +87,20 @@ public class RoomExamService : IRoomExamService
         result.CourseClassName = courseClass.Name;
 
         var mailContent = new MailContent();
-        mailContent.Subject = "Yêu cầu reset mật khẩu";
-        mailContent.Body = "Vui lòng nhập mã OTP 1234 để đặt lại mật khẩu.";
+        mailContent.Subject = "Thông báo tham gia kỳ thi mới trên EduQuiz";
+        mailContent.Body = $@"Xin chào,
+
+                            Bạn vừa được thêm vào kỳ thi ""{roomExam.Name}"" trên hệ thống EduQuiz.
+                            Vui lòng đăng nhập vào hệ thống để kiểm tra thông tin kỳ thi và hoàn thành bài thi đúng thời gian quy định.
+
+                            Chúc bạn làm bài thật tốt!
+                            Trân trọng,
+                            Đội ngũ EduQuiz";
 
         foreach (var mail in listEmail)
         {
-            await _mailService.SendEmailAsync(mail, mailContent.Subject, mailContent.Body);
+            Task.Run(() => _mailService.SendEmailAsync(mail, mailContent.Subject, mailContent.Body));
+
         }
 
         return new AddRoomExamResult()

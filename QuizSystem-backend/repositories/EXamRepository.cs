@@ -81,9 +81,8 @@ namespace QuizSystem_backend.repositories
             return exam;
         }
 
-        public async Task<Question> AddQuestionToExamAsync(Guid examId, Question question, float score)
+        public async Task<Question> AddQuestionToExamAsync(Question question,Guid examId)
         {
-            // Kiểm tra exam có tồn tại không
             var exam = await _context.Exams
                 .Include(e => e.ExamQuestions)
                 .FirstOrDefaultAsync(e => e.Id == examId);
@@ -112,7 +111,6 @@ namespace QuizSystem_backend.repositories
             {
                 ExamId = examId,
                 QuestionId = existingQuestion.Id,
-                Score = score,
             };
 
             _context.ExamQuestions.Add(examQuestion);

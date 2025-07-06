@@ -17,10 +17,12 @@ namespace QuizSystem_backend.Controllers
     public class TeachersController : ControllerBase
     {
         private readonly QuizSystemDbContext _context;
+        private readonly QuizSystemDbContext _dbContext;
 
-        public TeachersController(QuizSystemDbContext context)
+        public TeachersController(QuizSystemDbContext context, QuizSystemDbContext dbContext)
         {
             _context = context;
+            _dbContext= dbContext;
         }
 
         // GET: api/Teachers
@@ -128,6 +130,7 @@ namespace QuizSystem_backend.Controllers
 
             return NoContent();
         }
+
 
         private bool TeacherExists(Guid id)
         {

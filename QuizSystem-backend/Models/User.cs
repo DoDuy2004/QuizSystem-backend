@@ -17,6 +17,8 @@ namespace QuizSystem_backend.Models
         public string PasswordHash { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public Role Role { get; set; }
+        public string ResetPasswordToken= string.Empty;
+        public DateTime? ResetPasswordTokenExpire= DateTime.MinValue;
 
         public virtual ICollection<Question>? Questions { get; set; } = new List<Question>();
         public virtual ICollection<CourseClass>? CourseClasses { get; set; } = null!;

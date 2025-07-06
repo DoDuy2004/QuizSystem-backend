@@ -12,7 +12,9 @@ namespace QuizSystem_backend.services
         Task<List<Student>> ImportStudentConfirm(List<StudentImportDto> studentsPreview);
 
         Task<List<StudentImportDto>> ImportFileStudentPreview(IFormFile file);
-        Task<ExamForStudentDto> GetExamForStudentAsync(Guid examId, Guid studentId);
+        Task<ExamForStudentDto> GetExamForStudentAsync(Guid examId);
         Task<StudentExamResultDto?> SubmitStudentExamAsync(SubmitStudentExamDto dto);
+        
     }
+    
 }

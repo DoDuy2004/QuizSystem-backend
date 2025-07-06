@@ -171,7 +171,7 @@ namespace QuizSystem_backend.services
         }
 
         
-        public async Task<ExamForStudentDto> GetExamForStudentAsync(Guid examId, Guid studentId)
+        public async Task<ExamForStudentDto> GetExamForStudentAsync(Guid examId)
         {
 
             
@@ -215,7 +215,6 @@ namespace QuizSystem_backend.services
 
         public async Task<StudentExamResultDto?> SubmitStudentExamAsync(SubmitStudentExamDto dto)
         {
-            // 1. Tạo mới bài làm sinh viên (StudentExam)
             var studentExam = new StudentExam
             {
                 Id = Guid.NewGuid(),
@@ -224,7 +223,7 @@ namespace QuizSystem_backend.services
                 RoomId = dto.RoomId,
                 SubmitStatus = SubmitStatus.Submitted,
                 Note = "",
-                Grade = 0 // sẽ cập nhật sau khi chấm điểm
+                Grade = 0
             };
             await _studentExamRepository.AddStudentExamAsync(studentExam);
 
@@ -251,6 +250,8 @@ namespace QuizSystem_backend.services
 
             return result;
         }
+
+        
 
 
     }

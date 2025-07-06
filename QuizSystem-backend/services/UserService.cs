@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
 
@@ -10,6 +11,12 @@ namespace QuizSystem_backend.services
         public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
+           
+        }
+
+        public async Task SaveChangeAsync()
+        {
+
         }
         public async Task<User> GetUserByUsernameAsync(string username)
         {
@@ -37,5 +44,7 @@ namespace QuizSystem_backend.services
 
             return true;
         }
+        
+
     }
 }

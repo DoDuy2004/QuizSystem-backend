@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Humanizer;
 using Microsoft.AspNetCore.Authorization;
@@ -23,17 +24,21 @@ namespace QuizSystem_backend.Controllers
     //[Authorize(Roles = "TEACHER")]
     public class StudentsController : ControllerBase
     {
+        private readonly IRoomExamRepository _roomExamRepository;
         private readonly QuizSystemDbContext _context;
         private readonly IStudentService _studentService;
         private readonly IRoomExamService _roomExamService;
         private readonly IStudentExamRepository _studentExamRepository;
+        private readonly IStudentRepository _studentRepository;
 
-        public StudentsController(QuizSystemDbContext context, IStudentService studentService, IRoomExamService roomExamService,IStudentExamRepository studentExamRepository)
+        public StudentsController(QuizSystemDbContext context, IStudentService studentService, IRoomExamService roomExamService,IStudentExamRepository studentExamRepository,IRoomExamRepository roomExamRepository,IStudentRepository studentRepository)
         {
+            _roomExamRepository = roomExamRepository;
             _context = context;
             _studentService = studentService;
             _roomExamService = roomExamService;
             _studentExamRepository = studentExamRepository;
+            _studentRepository=studentRepository;
         }
 
         // GET: api/Students
@@ -215,43 +220,88 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
-        [HttpGet("{id}/roomexams")]
-        public async Task<ActionResult> GetRoomExamByStudent(Guid id)
+        [HttpGet("GetRoomExams")]
+        
+        public async Task<ActionResult> GetRoomExam()
         {
-            var roomExams = await _context.RoomExams
-                .Include(r => r.Subject)
-                .Include(r => r.Course)
-                .Include(r => r.Exams)
-                .Where(re => _context.StudentCourseClasses
-                    .Any(scc => scc.StudentId == id && scc.CourseClassId == re.CourseClassId))
-                .ToListAsync();
+            var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-            return Ok(new
+            if (string.IsNullOrEmpty(userIdStr) || string.IsNullOrEmpty(role))
+                return Unauthorized(new { message = "User not authenticated or role missing" });
+
+            var userId = Guid.Parse(userIdStr);
+
+            // Nếu là STUDENT
+            if (role == "STUDENT")
             {
-                code = 200,
-                message = "Success",
-                data = roomExams
-            });
+                var roomExams = await _context.RoomExams
+                    .Include(r => r.Subject)
+                    .Include(r => r.Course)
+                    .Include(r => r.Exams)
+                    .Where(re => _context.StudentCourseClasses
+                        .Any(scc => scc.StudentId == userId && scc.CourseClassId == re.CourseClassId))
+                    .ToListAsync();
+
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = roomExams
+                });
+            }
+
+            // Nếu là TEACHER
+            if (role == "TEACHER")
+            {
+                var now = DateTime.Now;
+
+                var roomExams = await _context.RoomExams
+                    .Include(r => r.Exams)
+                    .Where(r => r.Exams.Any(e => e.UserId == userId) // Phòng thi này có exam của giáo viên đang đăng nhập
+                        && r.Exams.Any(e => r.StartDate.AddMinutes(e.DurationMinutes) > now)) // Phòng thi này còn hạn
+                    .Select(r => new
+                    {
+                        RoomExamId = r.Id,
+                        RoomExamName = r.Name,
+                        StartDate = r.StartDate,
+                        // Lấy exam đầu tiên (theo giáo viên) để tính EndDate
+                        EndDate = r.Exams
+                            .Where(e => e.UserId == userId)
+                            .OrderBy(e => e.Id)
+                            .Select(e => r.StartDate.AddMinutes(e.DurationMinutes))
+                            .FirstOrDefault(),
+                        Exams = r.Exams.Where(e => e.UserId == userId).ToList()
+                    })
+                    .ToListAsync();
+
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = roomExams
+                });
+            }
+
+            // Không phải 2 role trên thì từ chối truy cập
+            return Forbid();
         }
+
 
         //[HttpGet("{roomExamId}/GetExam")]
         //public async Task<ActionResult> GetExamByStudent(Guid roomExamId)
         //{
-        //    var exam = await _roomExamService.GetRoomExamByIdAsync(roomExamId);
-        //    if (exam == null)
+        //    var roomExam = await _roomExamRepository.GetByIdAsync(roomExamId);
+        //    if (roomExam == null)
         //    {
         //        return NotFound(new { message = "No exam found for this student in the specified room exam." });
         //    }
+        //    var exam = roomExam.Exams.First();
+        //    var examId = exam.Id;
 
-        //    var examForStudent = await _studentService.GetExamForStudentAsync(exam.Id, studentId);
-
-        //    return Ok(new
-        //    {
-        //        code = 200,
-        //        message = "Success",
-        //        data = examForStudent
-        //    });
+        //    var examForStudent = await _studentService.GetExamForStudentAsync(exam.Id);
         //}
+
 
         [HttpPost("submit-exam")]
         public async Task<IActionResult> SubmitExam([FromBody] SubmitStudentExamDto resultDto)
@@ -301,6 +351,14 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
+        [HttpGet("GetStudenExam")]
+        public async Task<IActionResult> GetStudentExam(Guid studentId)
+        {
+            var listStudentExam= await _studentExamRepository.GetListStudentExamAsync(studentId);
+
+            return Ok(listStudentExam);
+        }
+        
         [HttpGet("{roomId}/is-submitted")]
         public async Task<IActionResult> CheckIfSubmitted(Guid roomId, [FromQuery] Guid studentId)
         {

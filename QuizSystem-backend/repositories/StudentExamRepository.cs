@@ -9,12 +9,13 @@ namespace QuizSystem_backend.repositories
 {
     public class StudentExamRepository:IStudentExamRepository
     {
+        private readonly QuizSystemDbContext _context;
+
         public StudentExamRepository(QuizSystemDbContext context)
         {
             _context = context;
         }
    
-private readonly QuizSystemDbContext _context;
 
 
         public async Task<StudentExam?>AddStudentExamAsync(StudentExam studentExam)

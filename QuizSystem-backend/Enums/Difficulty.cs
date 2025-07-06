@@ -5,6 +5,6 @@
         EASY,
         MEDIUM,
         HARD,
-        INSANE,
+        INSANE, 
     }
 }

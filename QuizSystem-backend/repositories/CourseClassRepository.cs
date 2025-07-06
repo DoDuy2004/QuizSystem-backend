@@ -30,7 +30,11 @@ namespace QuizSystem_backend.repositories
         }
         public async Task<CourseClass> GetByIdAsync(Guid id)
         {
-            var course = await _context.CourseClasses.Include(cc => cc.User).FirstOrDefaultAsync(cc => cc.Id == id);
+            var course = await _context.CourseClasses.Include(cc => cc.User)
+                .Include(cc => cc.Students)
+                    .ThenInclude(scc => scc.Student)
+                .Include(cc => cc.Subject)
+                .FirstOrDefaultAsync(cc => cc.Id == id);
 
             return course!;
         }

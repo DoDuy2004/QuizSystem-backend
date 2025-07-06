@@ -15,19 +15,20 @@ namespace QuizSystem_backend.Models
             Description = dto.Description!;
             Status = dto.Status;
             Questions = this.Questions;
+            SubjectId = dto.SubjectId;
             //Course = this.Course;
             //CourseClassId = dto.CourseClassId;
-            TeacherId = dto.TeacherId;
+            UserId = dto.UserId;
         }
 
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = string.Empty;
         public string Description {  get; set; } = string.Empty;
         public Status Status { get; set; }
-        public Guid TeacherId { get; set; }
+        public Guid UserId { get; set; }
         public Guid SubjectId { get; set; } 
         public virtual ICollection<Question>? Questions { get; set; } = null!;
-        public virtual Teacher Teacher { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
         public virtual Subject Subject { get; set; } = null!;
         //public virtual CourseClass Course { get; set; } = null!;
     }

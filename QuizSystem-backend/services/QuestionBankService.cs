@@ -23,9 +23,9 @@ namespace QuizSystem_backend.services
 
             _chapterRepository = chapterRepository;
         }
-        public async Task<IEnumerable<QuestionBankDto>> GetQuestionBanksAsync()
+        public async Task<IEnumerable<QuestionBankDto>> GetQuestionBanksAsync(Guid userId)
         {
-            var questionBanks = await _questionBankRepository.GetQuestionBanksAsync();
+            var questionBanks = await _questionBankRepository.GetQuestionBanksAsync(userId);
 
             return questionBanks.Select(qb => new QuestionBankDto(qb));
         }
@@ -264,7 +264,7 @@ namespace QuizSystem_backend.services
         }
 
 
-        public async Task<List<Question>> ImPortQuestionConfirm(List<QuestionImportPreviewDto> listPreview)
+        public async Task<List<Question>> ImPortQuestionConfirm(Guid id, List<QuestionImportPreviewDto> listPreview)
         {
             var listQuestion = new List<Question>();
 
@@ -279,6 +279,7 @@ namespace QuizSystem_backend.services
                     Content = questionPreview.Content,
                     Difficulty = questionPreview.Difficulty,
                     Status = Status.ACTIVE,
+                    QuestionBankId = id
                 };
                 question.Chapter = await _chapterRepository.GetChapterByNameAsync(questionPreview.Chapter!);
                

@@ -103,6 +103,11 @@ namespace QuizSystem_backend.Models
                     .WithOne(cc => cc.User)
                     .HasForeignKey(cc => cc.UserId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(t => t.QuestionBanks)
+                     .WithOne(q => q.User)
+                     .HasForeignKey(qb => qb.UserId)
+                     .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Student (TPT inheritance from User)
@@ -162,11 +167,6 @@ namespace QuizSystem_backend.Models
                 //    .WithMany(f => f.Teachers)
                 //    .HasForeignKey(t => t.FacutlyId)
                 //    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasMany(t => t.QuestionBanks)
-                    .WithOne(q => q.Teacher)
-                    .HasForeignKey(qb => qb.TeacherId)
-                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Answer

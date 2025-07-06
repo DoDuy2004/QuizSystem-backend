@@ -131,40 +131,6 @@ namespace QuizSystem_backend.Controllers
             return NoContent();
         }
 
-        [HttpGet("GetRoomExam")]
-        public async Task<IActionResult> GetRoomExam(Guid roomExamId,Guid teacherId)
-        {
-            var now = DateTime.Now;
-
-            var roomExam = await _context.RoomExams
-                .Include(r => r.Exams)
-                .Where(r => r.Id == roomExamId) // điều kiện RoomExamId
-                .Select(r => new
-                {
-                    RoomExam = r,
-                    // Exam đầu tiên của giáo viên này
-                    Exam = r.Exams.Where(e => e.UserId == teacherId).OrderBy(e => e.Id).FirstOrDefault()
-                })
-                .Where(x => x.Exam != null) // phải có Exam của teacher
-                .Where(x => x.RoomExam.StartDate.AddMinutes(x.Exam.DurationMinutes) > now) // chưa hết hạn
-                .FirstOrDefaultAsync();
-
-            if (roomExam == null)
-                return NotFound();
-
-            var result = new
-            {
-                RoomExamId = roomExam.RoomExam.Id,
-                RoomExamName = roomExam.RoomExam.Name,
-                StartDate = roomExam.RoomExam.StartDate,
-                EndDate = roomExam.RoomExam.StartDate.AddMinutes(roomExam.Exam.DurationMinutes),
-                ExamId = roomExam.Exam.Id,
-                ExamName = roomExam.Exam.Name,
-                DurationMinutes = roomExam.Exam.DurationMinutes
-            };
-
-            return Ok(result);
-        }
 
         private bool TeacherExists(Guid id)
         {

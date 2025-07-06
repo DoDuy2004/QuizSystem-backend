@@ -9,7 +9,8 @@ namespace QuizSystem_backend.DTOs.ExamDtos
         public string Name { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-
+        public string SubjectName { get; set; } = string.Empty; // Assuming SubjectName is a string, adjust as necessary
+        public string CourseClassName { get; set; } = string.Empty; // Assuming CourseClassName is a string, adjust as necessary
         public Status Status { get; set; }
         
         public Guid SubjectId { get; set; } // Assuming SubjectId is a Guid, adjust as necessary

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MailKit;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using QuizSystem_backend.DTOs;
@@ -15,11 +16,13 @@ namespace QuizSystem_backend.Controllers
     {
         private readonly QuizSystemDbContext _context;
         private readonly IRoomExamService _roomExamService;
+        private readonly IMailService _mailService;
 
-        public RoomExamController(IRoomExamService roomExamService, QuizSystemDbContext context)
+        public RoomExamController(IRoomExamService roomExamService, QuizSystemDbContext context,IMailService mailService)
         {
             _context = context;
             _roomExamService = roomExamService;
+            _mailService = mailService;
         }
 
         [HttpGet]
@@ -110,9 +113,9 @@ namespace QuizSystem_backend.Controllers
         [HttpPost]
         public async Task<ActionResult> AddRoomExam([FromBody] AddRoomExamDto roomExamDto)
         {
-            if(roomExamDto == null)
+            if (roomExamDto == null)
             {
-                return BadRequest(new { message = "Invalid room exam data or IDs." });
+                return BadRequest(new { message = "Room exam data is required." });
             }
 
             try

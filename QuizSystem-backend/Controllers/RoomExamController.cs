@@ -152,43 +152,72 @@ namespace QuizSystem_backend.Controllers
             // Nếu là STUDENT
             if (role == "STUDENT")
             {
-                var roomExams = await _context.RoomExams
-                    .Include(r => r.Subject)
-                    .Include(r => r.Course)
-                    .Include(r => r.Exams)
-                    .Where(re => _context.StudentCourseClasses
-                        .Any(scc => scc.StudentId == userId && scc.CourseClassId == re.CourseClassId))
-                    .ToListAsync();
+                var result = await _context.StudentExams
+                .Where(se => se.StudentId == userId)
+                .Select(se => new
+                {
+                    se.Id,
+                    se.Grade,
+                    se.Note,
+                    se.Status,
+                    se.SubmitStatus,
+                    Exam = new
+                    {
+                        se.Exam.Id,
+                        se.Exam.Name,
+                        se.Exam.DurationMinutes
+                    },
+                    RoomExam = new
+                    {
+                        se.Room.Id,
+                        se.Room.Name,
+                        se.Room.StartDate,
+                        se.Room.EndDate,
+                        subject = se.Room.Subject.Name
+                    }
+                })
+                .ToListAsync();
 
                 return Ok(new
                 {
                     code = 200,
                     message = "Success",
-                    data = roomExams
+                    data = result
                 });
             }
 
-            // Nếu là TEACHER
             if (role == "TEACHER")
             {
                 var now = DateTime.Now;
 
-                var roomExams = await _context.RoomExams
+                var endedRoomExams = await _context.RoomExams
                     .Include(r => r.Exams)
-                    .Where(r => r.Exams.Any(e => e.UserId == userId) // Phòng thi này có exam của giáo viên đang đăng nhập
-                        && r.Exams.Any(e => r.StartDate.AddMinutes(e.DurationMinutes) > now)) // Phòng thi này còn hạn
+                    .Where(r =>
+                        r.Exams.Any(e => e.UserId == userId) &&
+                        r.Exams.Any(e => r.StartDate.AddMinutes(e.DurationMinutes) <= now)
+                    )
                     .Select(r => new
                     {
                         RoomExamId = r.Id,
                         RoomExamName = r.Name,
+                        Subject = r.Subject.Name,
+
                         StartDate = r.StartDate,
-                        // Lấy exam đầu tiên (theo giáo viên) để tính EndDate
                         EndDate = r.Exams
                             .Where(e => e.UserId == userId)
                             .OrderBy(e => e.Id)
                             .Select(e => r.StartDate.AddMinutes(e.DurationMinutes))
                             .FirstOrDefault(),
-                        Exams = r.Exams.Where(e => e.UserId == userId).ToList()
+                        Exams = r.Exams
+                            .Where(e => e.UserId == userId)
+                            .Select(e => new
+                            {
+                                e.Id,
+                                e.Name
+                            }).ToList(),
+
+                        // ✅ Thêm số lượng bài thi của sinh viên
+                        TotalStudentExams = _context.StudentExams.Count(se => se.RoomId == r.Id)
                     })
                     .ToListAsync();
 
@@ -196,12 +225,63 @@ namespace QuizSystem_backend.Controllers
                 {
                     code = 200,
                     message = "Success",
-                    data = roomExams
+                    data = endedRoomExams
                 });
             }
 
             // Không phải 2 role trên thì từ chối truy cập
             return Forbid();
+        }
+
+        [HttpGet("{roomExamId}/student-exams")]
+        public async Task<IActionResult> GetStudentExamsByRoom(Guid roomExamId)
+        {
+            var result = await _context.StudentExams
+                .Select(se => new
+                {
+                    se.Id,
+                    se.Grade,
+                    se.Note,
+                    se.Status,
+                    se.SubmitStatus,
+
+                    // ✅ Thông tin sinh viên
+                    Student = new
+                    {
+                        se.Student.Id,
+                        se.Student.FullName,
+                        se.Student.Email,
+                        se.Student.PhoneNumber,
+                        se.Student.StudentCode
+                    },
+
+                    // ✅ Thông tin bài thi
+                    Exam = new
+                    {
+                        se.Exam.Id,
+                        se.Exam.Name,
+                        se.Exam.DurationMinutes
+                    },
+
+                    // ✅ Thông tin phòng thi
+                    RoomExam = new
+                    {
+                        se.Room.Id,
+                        se.Room.Name,
+                        se.Room.StartDate,
+                        se.Room.EndDate,
+                        SubjectName = se.Room.Subject.Name
+                    }
+                })
+                .ToListAsync();
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = result
+            });
+
         }
 
     }

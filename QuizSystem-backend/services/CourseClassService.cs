@@ -106,6 +106,12 @@ namespace QuizSystem_backend.services
 
             return students.Select(s => new StudentDto(s));
         }
+        public async Task<User> GetTeacherByCourseClassAsync(Guid id)
+        {
+            var teacher = await _courseClassRepository.GetTeacherByCourseClassAsync(id);
+
+            return teacher;
+        }
         public async Task<bool> DeleteCourseClassAsync(Guid id)
         {
             var courseClass = await _courseClassRepository.GetByIdAsync(id);

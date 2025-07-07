@@ -292,6 +292,9 @@ namespace QuizSystem_backend.Controllers
         public async Task<ActionResult> GetRoomExamByStudent(Guid id)
         {
             var roomExams = await _context.RoomExams
+                .Include(re => re.Subject)
+                .Include(re => re.Course)
+                .Include(re => re.Exams)
                 .Where(re => _context.StudentCourseClasses
                     .Any(scc => scc.StudentId == id && scc.CourseClassId == re.CourseClassId))
                 .ToListAsync();

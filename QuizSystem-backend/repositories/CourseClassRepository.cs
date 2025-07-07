@@ -27,6 +27,7 @@ namespace QuizSystem_backend.repositories
         public async Task<IEnumerable<CourseClass>> GetCourseClassesByStudentAsync(Guid userId)
         {
             return await _context.CourseClasses
+                .Include(cc => cc.User)
                 .Where(cc => cc.Students.Any(s => s.StudentId == userId))
                 .ToListAsync();
         }
@@ -64,6 +65,17 @@ namespace QuizSystem_backend.repositories
 
             return students;
         }
+
+        public async Task<User> GetTeacherByCourseClassAsync(Guid id)
+        {
+            var teacher = await _context.CourseClasses
+                 .Where(c => c.Id == id)
+                 .Select(c => c.User)
+                 .FirstOrDefaultAsync();
+
+            return teacher;
+        }
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();

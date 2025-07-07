@@ -16,5 +16,6 @@ namespace QuizSystem_backend.Models
         public virtual Exam Exam { get; set; } = null!;
         public virtual RoomExam Room { get; set; } = null!;
         public virtual ICollection<StudentExamDetail> StudentExamDetails { get; set; } = null!;
+        public virtual Student? Student { get; set; }
     }
 }

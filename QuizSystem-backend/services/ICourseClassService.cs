@@ -11,6 +11,7 @@ namespace QuizSystem_backend.services
         Task<CourseClassDto> GetCourseClassByIdAsync(Guid id);
         Task<(bool success, string? message, object? data)> AddStudentToCourseAsync(StudentCourseClassDto scc);
         Task<IEnumerable<StudentDto>> GetStudentByCourseClassAsync(Guid id);
+        Task<User> GetTeacherByCourseClassAsync(Guid id);
         Task<CourseClassDto> AddCourseClassAsync(CourseClassDto dto);
         Task<CourseClassDto> UpdateCourseClassAsync(Guid id, CourseClassDto dto);
         Task<bool> DeleteCourseClassAsync(Guid id);

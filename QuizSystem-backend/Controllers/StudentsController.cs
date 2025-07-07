@@ -223,19 +223,24 @@ namespace QuizSystem_backend.Controllers
         
 
 
-        //[HttpGet("{roomExamId}/GetExam")]
-        //public async Task<ActionResult> GetExamByStudent(Guid roomExamId)
-        //{
-        //    var roomExam = await _roomExamRepository.GetByIdAsync(roomExamId);
-        //    if (roomExam == null)
-        //    {
-        //        return NotFound(new { message = "No exam found for this student in the specified room exam." });
-        //    }
-        //    var exam = roomExam.Exams.First();
-        //    var examId = exam.Id;
+        [HttpGet("{id}/roomexams")]
+        public async Task<ActionResult> GetRoomExamByStudent(Guid id)
+        {
+            var roomExams = await _context.RoomExams
+                .Include(re => re.Subject)
+                .Include(re => re.Course)
+                .Include(re => re.Exams)
+                .Where(re => _context.StudentCourseClasses
+                    .Any(scc => scc.StudentId == id && scc.CourseClassId == re.CourseClassId))
+                .ToListAsync();
 
-        //    var examForStudent = await _studentService.GetExamForStudentAsync(exam.Id);
-        //}
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = roomExams
+            });
+        }
 
 
         [HttpPost("submit-exam")]

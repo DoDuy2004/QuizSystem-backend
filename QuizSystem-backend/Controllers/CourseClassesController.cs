@@ -285,6 +285,38 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
+        [HttpGet("{id}/teacher")]
+        public async Task<ActionResult> GetTeacherByClass(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var courseClass = await _courseClassService.GetCourseClassByIdAsync(id);
+
+                if (courseClass == null)
+                {
+                    return NotFound(new { message = $"Course class with {id} not found" });
+                }
+
+                var teacher = await _courseClassService.GetTeacherByCourseClassAsync(id);
+
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Success",
+                    data = teacher
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
 
         [HttpPost("{id}/AddListStudent")]
         public async Task<ActionResult> AddListStudentToCourse(List<StudentCourseClassDto> dtos)

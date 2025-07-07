@@ -119,12 +119,17 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
-        [HttpPost("AddQuestion")]
-        public async Task<IActionResult> AddQuestion(Question question, Guid examId)
+        [HttpPost("{examId}/AddQuestion")]
+        public async Task<IActionResult> AddQuestion([FromBody] Question question, Guid examId)
         {
             if (question == null || examId == null!) return BadRequest(new { message = "Value null" });
-            await _examRepository.AddQuestionToExamAsync(question, examId);
-            return Ok();
+            var newQuestion =  await _examRepository.AddQuestionToExamAsync(question, examId);
+            return Ok(new
+            {
+                code = 200,
+                message = "Add question successfully",
+                data = newQuestion
+            });
         }
         [HttpPut("{id}")]
 

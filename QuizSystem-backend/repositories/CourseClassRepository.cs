@@ -20,7 +20,7 @@ namespace QuizSystem_backend.repositories
         }
         public async Task<IEnumerable<CourseClass>> GetCourseClassesByTeacherAsync(Guid userId)
         {
-            var coures = await _context.CourseClasses.Where(cc => cc.UserId == userId).ToListAsync();
+            var coures = await _context.CourseClasses.Include(cc => cc.User).Where(cc => cc.UserId == userId).ToListAsync();
 
             return coures!;
         }

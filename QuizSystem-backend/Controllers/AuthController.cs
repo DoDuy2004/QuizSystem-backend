@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using NuGet.Common;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using QuizSystem_backend.DTOs;
@@ -13,6 +14,7 @@ using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
 using QuizSystem_backend.services.MailServices;
 using System.Security.Claims;
+using static System.Net.WebRequestMethods;
 
 namespace QuizSystem_backend.Controllers
 {
@@ -120,11 +122,28 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
-        [HttpPost("ForgotPassword")]
-        //[Authorize]
-        public async Task<ActionResult> ForgotPassword([FromBody] string email)
+        public class ForgotPasswordRequest
         {
-            var user = await _userService.GetUserByUsernameAsync(email);
+            public string Email { get; set; } = string.Empty;
+        }
+
+        public class ValidateOtpRequest
+        {
+            public string Email { get; set; } = string.Empty;
+            public string Otp { get; set; } = string.Empty;
+        }
+
+        public class ResetPasswordRequest
+        {
+            public string Email { get; set; } = string.Empty;
+            public string Password { get; set; } = string.Empty;
+        }
+
+        [HttpPost("forgot-password/request-pin")]
+        //[Authorize]
+        public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            var user = await _userService.GetUserByUsernameAsync(request.Email);
             if (user == null)
             {
                 return NotFound(new
@@ -134,55 +153,70 @@ namespace QuizSystem_backend.Controllers
                 });
             }
 
-
-            var newToken = _tokenService.CreateToken(user,5);
-            
-            string resetLink = $"https://localhost:7225/reset-password?token={newToken}&email={Uri.EscapeDataString(user.Email)}";
-
+            var random = new Random();
+            string otp = "";
+            for (int i = 0; i < 6; i++)
+            {
+                otp += random.Next(0, 10).ToString();
+            }
+            user.Otp = otp;
+            user.OtpExpireTime = DateTime.UtcNow.AddMinutes(5);
+            await _dbContext.SaveChangesAsync();
             var mailContent = new MailContent();
-            mailContent.To = email;
+            mailContent.To = request.Email;
             mailContent.Subject = "Đặt lại mật khẩu cho tài khoản EduQuiz";
             mailContent.Body = $@"
-                                <p>Xin chào {user.FullName},</p>
-                                <p>Bạn vừa yêu cầu đặt lại mật khẩu.</p>
-                                <p>Để đặt lại mật khẩu, bấm vào đây: <a href=""{resetLink}"">{resetLink}</a></p>
-                                <p>Nếu bạn không yêu cầu, vui lòng bỏ qua email này.</p>
-                                <p>Trân trọng,<br/>EduQuiz Team</p>
-                                ";
+                        <p>Xin chào {user.FullName},</p>
+                        <p>Bạn vừa yêu cầu đặt lại mật khẩu.</p>
+                        <p>OTP của bạn là: <b style='color: #e74c3c; font-size: 20px'>{otp}</b></p>
+                        <p>Otp có hiệu lực trong 5 phút</p>
+                        <p>Trân trọng,<br/>EduQuiz Team</p>
+                    ";
 
             Task.Run(() => _emailService.SendEmailAsync(mailContent.To, mailContent.Subject, mailContent.Body));
 
             return Ok(new
             {
                 code = 200,
-                message = "Đã gửi email hướng dẫn đặt lại mật khẩu"
+                message = "Emai sended"
             });
         }
 
-        
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto model)
+        [HttpPost("ValidatePin")]
+        public async Task<IActionResult> ValidateOtp([FromBody] ValidateOtpRequest request)
         {
-            var principal = _tokenService.ValidateJwtToken(model.Token);
-            if (principal == null)
-                return BadRequest("Token không hợp lệ hoặc đã hết hạn.");
-           
-
-            var email = principal.FindFirst(ClaimTypes.Email)?.Value;
-            
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _userService.GetUserByUsernameAsync(request.Email);
             if (user == null)
-                return BadRequest("Email không hợp lệ!");
+                return BadRequest("User Not Found");
+
+            if (user.Otp == request.Otp && user.OtpExpireTime > DateTime.UtcNow)
+            {
+                user.Otp = null!;
+                
+                await _dbContext.SaveChangesAsync();
+
+                return Ok(new { code = 200, message = "OTP hợp lệ!" });
+            }
+
+            return BadRequest(new { code = 400, message = "OTP không hợp lệ hoặc đã hết hạn!" });
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+
+            var user = await _userService.GetUserByUsernameAsync(request.Email);
+            if (user == null) return BadRequest("User Not Found");
+            if (user.OtpExpireTime > DateTime.Now) return BadRequest("Time Out");
 
             var hasher = new PasswordHasher<User>();
-            user.PasswordHash = hasher.HashPassword(user, model.NewPassword);
+            user.PasswordHash = hasher.HashPassword(user, request.Password);
+
+            user.OtpExpireTime = DateTime.MinValue;
 
             await _dbContext.SaveChangesAsync();
             return Ok("Đổi mật khẩu thành công!");
         }
-
-
-
 
     }
 }

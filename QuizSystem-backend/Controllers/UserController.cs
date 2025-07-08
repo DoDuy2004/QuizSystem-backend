@@ -114,7 +114,7 @@ namespace QuizSystem_backend.Controllers
             }
 
             user.Status = Status.DELETED;
-            //_context.Users.Update(user); // Không bắt buộc nhưng tốt khi bạn set thủ công
+            _context.Users.Update(user); // Không bắt buộc nhưng tốt khi bạn set thủ công
             await _context.SaveChangesAsync();
 
             return Ok(new {message = "Delete successfully", Status = user.Status});

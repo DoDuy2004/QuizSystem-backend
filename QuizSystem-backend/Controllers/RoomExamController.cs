@@ -31,6 +31,8 @@ namespace QuizSystem_backend.Controllers
         [HttpGet]
         public async Task<ActionResult> GetRoomExams()
         {
+            //string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var role = User.FindFirst(ClaimTypes.Role)?.Value;
             try
             {
                 // Simulate fetching room exams from a service or repository

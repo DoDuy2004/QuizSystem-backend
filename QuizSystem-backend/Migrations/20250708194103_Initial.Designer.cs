@@ -12,7 +12,7 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250708152612_Initial")]
+    [Migration("20250708194103_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -601,6 +601,14 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("gioi_tinh");
 
+                    b.Property<string>("Otp")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Otp");
+
+                    b.Property<DateTime?>("OtpExpireTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("OtpExpireTime");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -612,15 +620,6 @@ namespace QuizSystem_backend.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
                         .HasColumnName("so_dien_thoai");
-
-                    b.Property<string>("ResetPasswordToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ResetPasswordToken");
-
-                    b.Property<DateTime?>("ResetPasswordTokenExpire")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ResetPasswordTokenExpire");
 
                     b.Property<int>("Role")
                         .HasColumnType("int")
@@ -639,9 +638,6 @@ namespace QuizSystem_backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("TaiKhoan", (string)null);

@@ -49,9 +49,6 @@ namespace QuizSystem_backend.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.HasIndex(e => e.Username)
-                    .IsUnique();
-
                 entity.Property(e => e.FullName)
                     .HasColumnName("ho_ten")
                     .IsRequired()
@@ -95,11 +92,11 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("vai_tro")
                     .IsRequired();
 
-                entity.Property(e => e.ResetPasswordToken)
-                    .HasColumnName("ResetPasswordToken");
+                entity.Property(e => e.Otp)
+                    .HasColumnName("Otp");
 
-                entity.Property(e => e.ResetPasswordTokenExpire)
-                    .HasColumnName("ResetPasswordTokenExpire");
+                entity.Property(e => e.OtpExpireTime)
+                    .HasColumnName("OtpExpireTime");
 
 
                 entity.HasMany(t => t.Questions)

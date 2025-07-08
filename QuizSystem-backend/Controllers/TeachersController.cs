@@ -10,8 +10,10 @@ using NuGet.DependencyResolver;
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.DTOs.TeacherDtos;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.services;
+using QuizSystem_backend.services.SearcheServices;
 
 namespace QuizSystem_backend.Controllers
 {
@@ -19,16 +21,18 @@ namespace QuizSystem_backend.Controllers
     [ApiController]
     public class TeachersController : ControllerBase
     {
+        private readonly SearchUserService _searchUserService;
         private readonly QuizSystemDbContext _context;
         private readonly QuizSystemDbContext _dbContext;
         private readonly ITeacherService _teacherService;
 
 
-        public TeachersController(QuizSystemDbContext context, QuizSystemDbContext dbContext,ITeacherService teacherService)
+        public TeachersController(QuizSystemDbContext context, QuizSystemDbContext dbContext,ITeacherService teacherService, SearchUserService searchUserService)
         {
             _context = context;
             _dbContext= dbContext;
             _teacherService= teacherService;
+            _searchUserService= searchUserService;
         }
 
         // GET: api/Teachers
@@ -172,6 +176,13 @@ namespace QuizSystem_backend.Controllers
                 data = result
             });
         }
+        [HttpGet("SearchTeachers")]
+        public async Task<IActionResult> SearchTeachers([FromQuery] string? keyword)
+        {
+            var teachers = await _searchUserService.SearchUsersAsync(Role.TEACHER, keyword);
+            return Ok(teachers);
+        }
+
         private bool TeacherExists(Guid id)
         {
             return _context.Teachers.Any(e => e.Id == id);

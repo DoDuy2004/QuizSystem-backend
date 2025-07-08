@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
-using QuizSystem_backend.DTOs.UserEmailDto;
+using QuizSystem_backend.DTOs.SubjectDtos;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 
@@ -17,7 +17,7 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "ADMIN, TEACHER")]
+    //[Authorize(Roles = "ADMIN, TEACHER")]
     public class SubjectsController : ControllerBase
     {
         private readonly QuizSystemDbContext _context;
@@ -80,13 +80,12 @@ namespace QuizSystem_backend.Controllers
         // PUT: api/Subjects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutSubject(Guid id, [FromBody] CreateSubjectDto dto)
+        public async Task<ActionResult> PutSubject(Guid id, [FromBody] SubjectInfoDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var existingSubject = await _context.Subjects
-                                              .Include(s => s.Chapters)
                                               .FirstOrDefaultAsync(s => s.Id == id);
 
             if (existingSubject == null)
@@ -103,18 +102,6 @@ namespace QuizSystem_backend.Controllers
             existingSubject.SubjectCode = dto.SubjectCode;
             existingSubject.Status = dto.Status;
 
-            // Xóa các Chapter cũ
-            _context.Chapters.RemoveRange(existingSubject.Chapters);
-
-            // Thêm các Chapter mới từ DTO
-            var newChapters = dto.Chapters.Select(c => new Chapter
-            {
-                Id = Guid.NewGuid(),
-                Name = c.Name,
-                SubjectId = existingSubject.Id,
-                Status = Status.ACTIVE // Giả định trạng thái mặc định
-            }).ToList();
-            existingSubject.Chapters = newChapters;
 
             await _context.SaveChangesAsync();
 

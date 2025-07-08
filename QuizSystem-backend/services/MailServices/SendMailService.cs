@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using MimeKit;
 using NuGet.Protocol.Plugins;
-using QuizSystem_backend.DTOs.UserEmailDto;
 
 
 namespace QuizSystem_backend.services.MailServices

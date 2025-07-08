@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.UserDtos;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
 
@@ -8,10 +11,13 @@ namespace QuizSystem_backend.services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        private readonly IMapper _mapper;
+
+        public UserService(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
-           
+            _mapper = mapper;
+
         }
 
         public async Task SaveChangeAsync()
@@ -31,6 +37,7 @@ namespace QuizSystem_backend.services
             return user;
         }
 
+
         public async Task<bool> ChangePasswordAsync(Guid userId, string oldPassword, string newPassword)
         {
             var user = await _userRepository.GetByIdAsync(userId);
@@ -44,7 +51,32 @@ namespace QuizSystem_backend.services
 
             return true;
         }
-        
+
+        public async Task<(bool Succeed, string Message)> AddUser(AddUserDtos userDto)
+        {
+            var userExist = await _userRepository.GetByUsernameAsync(userDto.Email);
+
+            if (userExist != null) return (false, "Student đã tồn tại");
+
+            if (userDto.Role == Enums.Role.STUDENT)
+            {
+                var student = _mapper.Map<Student>(userDto);
+                student.StudentCode = userDto.Code;
+                var studentHasher = new PasswordHasher<Student>();
+                student.PasswordHash = studentHasher.HashPassword(student, userDto.Password);
+                await _userRepository.AddSingle(student);
+                return (true, "Tạo tài khoản thành công");
+            }
+
+
+            var teacher = _mapper.Map<Teacher>(userDto);
+            teacher.TeacherCode = userDto.Code;
+            var teacherHasher = new PasswordHasher<Teacher>();
+            teacher.PasswordHash = teacherHasher.HashPassword(teacher, userDto.Password);
+            await _userRepository.AddSingle(teacher);
+            return (true, "Tạo tài khoản thành công");
+
+        }
 
     }
 }

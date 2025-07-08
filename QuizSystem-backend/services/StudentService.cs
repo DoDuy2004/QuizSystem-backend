@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using QuizSystem_backend.DTOs;
-using QuizSystem_backend.DTOs.AnswerDtos;
 using QuizSystem_backend.DTOs.ExamDtos;
-using QuizSystem_backend.DTOs.QuestionDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.DTOs.StudentExamDto;
 using QuizSystem_backend.Enums;
@@ -169,50 +167,7 @@ namespace QuizSystem_backend.services
             }
 
         }
-
         
-        public async Task<ExamForStudentDto> GetExamForStudentAsync(Guid examId)
-        {
-
-            
-            var exam = await _examRepository.GetExamByIdAsync(examId);
-
-            if (exam == null)
-            {
-                return null!;
-            }
-            var examDto = new ExamForStudentDto
-            {
-                Id = exam.Id,
-                Name = exam.Name,
-                DurationMinutes = exam.DurationMinutes,
-                NoOfQuestions = exam.NoOfQuestions,
-            };
-
-            var listQuestion = await _examRepository.GetQuestionsByExamAsync(examId);
-
-            foreach (var question in listQuestion)
-            {
-                var questionDto = new QuestionForStudentDto
-                {
-                    Id = question.Id,
-                    Content = question.Content,
-                    Type = question.Type,
-                };
-                foreach (var answer in question.Answers)
-                {
-                    var answerDto = new DTOs.AnswerDtos.AnswerForStudentDto
-                    {
-                        Id = answer.Id,
-                        Content = answer.Content,
-                    };
-                    questionDto.Answers.Add(answerDto);
-                }
-                examDto.Questions.Add(questionDto);
-            }
-            return examDto;
-        }
-
         public async Task<StudentExamResultDto?> SubmitStudentExamAsync(SubmitStudentExamDto dto)
         {
             var studentExam = new StudentExam

@@ -19,7 +19,6 @@ namespace QuizSystem_backend.services
         Task<CreateMatrixResult> CreateExamByMatrixAsync(ExamMatrixRequest request);
         Task<List<QuestionDto>> AddListQuestionToExamAsync(List<QuestionDto> questions,Guid examId);
         Task<bool> DeleteQuestionFromExamAsync(Guid examId, Guid questionId);
-        Task<ExamForStudentDto>GetExamForStudentAsync(Guid examId);
         Task<List<SearchExam>> SearchExam(string key, int limit);
 
 

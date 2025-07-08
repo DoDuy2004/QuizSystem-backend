@@ -90,9 +90,9 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpPost("AddSingle")]
-        public async Task<IActionResult> AddSingle(AddUserDtos user,Role role)
+        public async Task<IActionResult> AddSingle(AddUserDtos user)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid Input");
             }
@@ -100,7 +100,7 @@ namespace QuizSystem_backend.Controllers
             if(!result.Succeed)
                 return BadRequest(result.Message);
             await _userService.AddUser(user);
-            return Ok(result);
+            return Ok(user);
 
         }
 

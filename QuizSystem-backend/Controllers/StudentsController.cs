@@ -25,7 +25,7 @@ namespace QuizSystem_backend.Controllers
     //[Authorize(Roles = "TEACHER")]
     public class StudentsController : ControllerBase
     {
-        private readonly SearchUserService _searchUserService;
+        //private readonly SearchUserService _searchUserService;
         private readonly IRoomExamRepository _roomExamRepository;
         private readonly QuizSystemDbContext _context;
         private readonly IStudentService _studentService;
@@ -33,7 +33,7 @@ namespace QuizSystem_backend.Controllers
         private readonly IStudentExamRepository _studentExamRepository;
         private readonly IStudentRepository _studentRepository;
 
-        public StudentsController(QuizSystemDbContext context, IStudentService studentService, IRoomExamService roomExamService,IStudentExamRepository studentExamRepository,IRoomExamRepository roomExamRepository,IStudentRepository studentRepository,SearchUserService searchUserService)
+        public StudentsController(QuizSystemDbContext context, IStudentService studentService, IRoomExamService roomExamService,IStudentExamRepository studentExamRepository,IRoomExamRepository roomExamRepository,IStudentRepository studentRepository)
         {
             _roomExamRepository = roomExamRepository;
             _context = context;
@@ -41,20 +41,32 @@ namespace QuizSystem_backend.Controllers
             _roomExamService = roomExamService;
             _studentExamRepository = studentExamRepository;
             _studentRepository=studentRepository;
-            _searchUserService = searchUserService;
+            //_searchUserService = searchUserService;
         }
 
         // GET: api/Students
         [HttpGet]
 
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Student>>> GetStudents(string searchText = null)
         {
-            var students = await _context.Students.ToListAsync();
+            var query = _context.Students.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchText) && searchText.Length >= 3)
+            {
+                query = query.Where(s =>
+                    s.FullName.Contains(searchText) ||
+                    s.Email.Contains(searchText) ||
+                    s.StudentCode.Contains(searchText) ||
+                    s.Facutly.Contains(searchText));
+            }
+
+            var students = await query.ToListAsync();
 
             return Ok(new
             {
                 code = 200,
-                message = "Success",
+                message = "Lấy danh sách sinh viên thành công",
                 data = students
             });
         }
@@ -315,12 +327,12 @@ namespace QuizSystem_backend.Controllers
             return Ok(new { submitted = false });
         }
 
-        [HttpGet("SearchStudents")]
-        public async Task<IActionResult> SearchStudents([FromQuery] string? keyword)
-        {
-            var students = await _searchUserService.SearchUsersAsync(Role.STUDENT, keyword);
-            return Ok(students);
-        }
+        //[HttpGet("SearchStudents")]
+        //public async Task<IActionResult> SearchStudents([FromQuery] string? keyword)
+        //{
+        //    var students = await _searchUserService.SearchUsersAsync(Role.STUDENT, keyword);
+        //    return Ok(students);
+        //}
 
     }
 }

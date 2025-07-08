@@ -30,11 +30,18 @@ namespace QuizSystem_backend.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Subjects
         [HttpGet]
-        public async Task<ActionResult> GetSubjects()
+        public async Task<ActionResult> GetSubjects(string searchText = null)
         {
-           var subjects = await _context.Subjects.ToListAsync();
+            var query = _context.Subjects.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                query = query.Where(s =>
+                    s.Name.Contains(searchText));
+            }
+
+            var subjects = await query.ToListAsync();
 
             return Ok(new
             {

@@ -45,13 +45,22 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
-        [HttpGet]
 
-        public async Task<ActionResult> GetExams()
+        [HttpGet]
+        public async Task<ActionResult> GetExams(string searchText = null)
         {
             try
             {
                 var result = await _examService.GetExamsAsync();
+
+                // Filter ngay tại controller nếu cần
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    result = result.Where(e =>
+                        e.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                        (e.Subject?.Name?.Contains(searchText, StringComparison.OrdinalIgnoreCase) ?? false));
+                }
+
                 return Ok(new
                 {
                     code = 200,
@@ -120,10 +129,10 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpPost("{examId}/AddQuestion")]
-        public async Task<IActionResult> AddQuestion([FromBody] Question question, Guid examId)
+        public async Task<IActionResult> AddQuestion([FromBody] QuestionDto question, Guid examId)
         {
             if (question == null || examId == null!) return BadRequest(new { message = "Value null" });
-            var newQuestion =  await _examRepository.AddQuestionToExamAsync(question, examId);
+            var newQuestion =  await _examRepository.AddQuestionToExamAsync(new Question(question), examId);
             return Ok(new
             {
                 code = 200,

@@ -6,6 +6,7 @@ using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.DTOs.StudentExamDto;
 using QuizSystem_backend.DTOs.UserDtos;
 using Microsoft.AspNetCore.Identity;
+using QuizSystem_backend.DTOs.ChapterDtos;
 namespace QuizSystem_backend.Helper
 {
     public class MappingProfile : Profile
@@ -104,6 +105,8 @@ namespace QuizSystem_backend.Helper
             CreateMap<AddUserDtos, Teacher>()
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
+
+            CreateMap<ChapterInfoDto, Chapter>().ReverseMap();
 
 
         }

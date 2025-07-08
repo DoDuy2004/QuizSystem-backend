@@ -51,7 +51,9 @@ builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
-builder.Services.AddTransient<IEmailSender, SendMailService>(); 
+builder.Services.AddTransient<IEmailSender, SendMailService>();
+builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
+builder.Services.AddTransient<TeacherService>();
 
 
 

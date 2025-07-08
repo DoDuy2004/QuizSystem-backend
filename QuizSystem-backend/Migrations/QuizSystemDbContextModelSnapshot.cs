@@ -610,6 +610,15 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("nvarchar(15)")
                         .HasColumnName("so_dien_thoai");
 
+                    b.Property<string>("ResetPasswordToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ResetPasswordToken");
+
+                    b.Property<DateTime?>("ResetPasswordTokenExpire")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ResetPasswordTokenExpire");
+
                     b.Property<int>("Role")
                         .HasColumnType("int")
                         .HasColumnName("vai_tro");

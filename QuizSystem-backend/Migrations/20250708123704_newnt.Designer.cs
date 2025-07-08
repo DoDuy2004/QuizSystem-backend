@@ -12,8 +12,8 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    [Migration("20250706213707_fixComit")]
-    partial class fixComit
+    [Migration("20250708123704_newnt")]
+    partial class newnt
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -479,6 +479,8 @@ namespace QuizSystem_backend.Migrations
 
                     b.HasIndex("RoomId");
 
+                    b.HasIndex("StudentId");
+
                     b.ToTable("KetQuaBaiThi", (string)null);
                 });
 
@@ -610,6 +612,15 @@ namespace QuizSystem_backend.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
                         .HasColumnName("so_dien_thoai");
+
+                    b.Property<string>("ResetPasswordToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ResetPasswordToken");
+
+                    b.Property<DateTime?>("ResetPasswordTokenExpire")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ResetPasswordTokenExpire");
 
                     b.Property<int>("Role")
                         .HasColumnType("int")
@@ -892,9 +903,17 @@ namespace QuizSystem_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("QuizSystem_backend.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Exam");
 
                     b.Navigation("Room");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.StudentExamDetail", b =>

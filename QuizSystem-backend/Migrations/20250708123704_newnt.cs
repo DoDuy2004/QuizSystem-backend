@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QuizSystem_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class newnt : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,7 +42,9 @@ namespace QuizSystem_backend.Migrations
                     trang_thai = table.Column<int>(type: "int", nullable: false),
                     mat_khau = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     ngay_tao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    vai_tro = table.Column<int>(type: "int", nullable: false)
+                    vai_tro = table.Column<int>(type: "int", nullable: false),
+                    ResetPasswordToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResetPasswordTokenExpire = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -215,7 +217,6 @@ namespace QuizSystem_backend.Migrations
                     ten_phong = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ngay_bat_dau = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ngay_ket_thuc = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SubmitStatus = table.Column<int>(type: "int", nullable: false),
                     trang_thai = table.Column<int>(type: "int", nullable: false),
                     CourseClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -442,6 +443,12 @@ namespace QuizSystem_backend.Migrations
                         principalTable: "PhongThi",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_KetQuaBaiThi_SinhVien_ma_sinh_vien",
+                        column: x => x.ma_sinh_vien,
+                        principalTable: "SinhVien",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -546,6 +553,11 @@ namespace QuizSystem_backend.Migrations
                 column: "ma_phong_thi");
 
             migrationBuilder.CreateIndex(
+                name: "IX_KetQuaBaiThi_ma_sinh_vien",
+                table: "KetQuaBaiThi",
+                column: "ma_sinh_vien");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LopHocPhan_ma_giao_vien",
                 table: "LopHocPhan",
                 column: "ma_giao_vien");
@@ -647,13 +659,13 @@ namespace QuizSystem_backend.Migrations
                 name: "GiangVien");
 
             migrationBuilder.DropTable(
-                name: "SinhVien");
-
-            migrationBuilder.DropTable(
                 name: "CauHoi");
 
             migrationBuilder.DropTable(
                 name: "DeThi");
+
+            migrationBuilder.DropTable(
+                name: "SinhVien");
 
             migrationBuilder.DropTable(
                 name: "Chuong");

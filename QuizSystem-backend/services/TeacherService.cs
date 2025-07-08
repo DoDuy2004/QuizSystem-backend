@@ -8,7 +8,7 @@ using QuizSystem_backend.repositories;
 
 namespace QuizSystem_backend.services
 {
-    public class TeacherService
+    public class TeacherService:ITeacherService
     {
         private readonly IUserRepository _userRepository;
         private readonly ITeacherRepository _teacherRepository;
@@ -29,7 +29,7 @@ namespace QuizSystem_backend.services
 
             var teachers = new List<Teacher>();
             var hasher = new PasswordHasher<User>();
-            // Kiểm tra xem danh sách có rỗng không
+
             if (teachersPreview == null || !teachersPreview.Any())
             {
                 return teachers;

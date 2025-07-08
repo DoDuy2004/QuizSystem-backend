@@ -28,7 +28,6 @@ namespace QuizSystem_backend.repositories
             }
             catch (Exception)
             {
-                // Log the exception if needed
                 return await Task.FromResult(false);
 
             }

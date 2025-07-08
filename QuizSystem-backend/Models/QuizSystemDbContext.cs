@@ -49,9 +49,6 @@ namespace QuizSystem_backend.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.HasIndex(e => e.Username)
-                    .IsUnique();
-
                 entity.Property(e => e.FullName)
                     .HasColumnName("ho_ten")
                     .IsRequired()

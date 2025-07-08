@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QuizSystem_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class newInit : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -622,12 +622,6 @@ namespace QuizSystem_backend.Migrations
                 name: "IX_TaiKhoan_email",
                 table: "TaiKhoan",
                 column: "email",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TaiKhoan_ten_dang_nhap",
-                table: "TaiKhoan",
-                column: "ten_dang_nhap",
                 unique: true);
         }
 

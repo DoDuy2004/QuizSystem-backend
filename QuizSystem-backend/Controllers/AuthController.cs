@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using NuGet.Common;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using QuizSystem_backend.DTOs;
@@ -13,6 +14,7 @@ using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
 using QuizSystem_backend.services.MailServices;
 using System.Security.Claims;
+using static System.Net.WebRequestMethods;
 
 namespace QuizSystem_backend.Controllers
 {
@@ -120,11 +122,28 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
-        [HttpPost("ForgotPassword")]
-        //[Authorize]
-        public async Task<ActionResult> ForgotPassword([FromBody] string email)
+        public class ForgotPasswordRequest
         {
-            var user = await _userService.GetUserByUsernameAsync(email);
+            public string Email { get; set; } = string.Empty;
+        }
+
+        public class ValidateOtpRequest
+        {
+            public string Email { get; set; } = string.Empty;
+            public string Otp { get; set; } = string.Empty;
+        }
+
+        public class ResetPasswordRequest
+        {
+            public string Email { get; set; } = string.Empty;
+            public string Password { get; set; } = string.Empty;
+        }
+
+        [HttpPost("forgot-password/request-pin")]
+        //[Authorize]
+        public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            var user = await _userService.GetUserByUsernameAsync(request.Email);
             if (user == null)
             {
                 return NotFound(new
@@ -142,8 +161,9 @@ namespace QuizSystem_backend.Controllers
             }
             user.Otp = otp;
             user.OtpExpireTime = DateTime.UtcNow.AddMinutes(5);
+            await _dbContext.SaveChangesAsync();
             var mailContent = new MailContent();
-            mailContent.To = email;
+            mailContent.To = request.Email;
             mailContent.Subject = "Đặt lại mật khẩu cho tài khoản EduQuiz";
             mailContent.Body = $@"
                         <p>Xin chào {user.FullName},</p>
@@ -162,14 +182,14 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
-        [HttpPost("ValidateOtp")]
-        public async Task<IActionResult> ValidateOtp(string otp, Guid userId)
+        [HttpPost("ValidatePin")]
+        public async Task<IActionResult> ValidateOtp([FromBody] ValidateOtpRequest request)
         {
-            var user = await _dbContext.Users.FindAsync(userId);
+            var user = await _userService.GetUserByUsernameAsync(request.Email);
             if (user == null)
                 return BadRequest("User Not Found");
 
-            if (user.Otp == otp && user.OtpExpireTime > DateTime.Now)
+            if (user.Otp == request.Otp && user.OtpExpireTime > DateTime.UtcNow)
             {
                 user.Otp = null!;
                 
@@ -182,24 +202,21 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword(Guid userId,string password)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
         {
 
-            var user = await _dbContext.Users.FindAsync(userId);
+            var user = await _userService.GetUserByUsernameAsync(request.Email);
             if (user == null) return BadRequest("User Not Found");
             if (user.OtpExpireTime > DateTime.Now) return BadRequest("Time Out");
 
             var hasher = new PasswordHasher<User>();
-            user.PasswordHash = hasher.HashPassword(user, password);
+            user.PasswordHash = hasher.HashPassword(user, request.Password);
 
             user.OtpExpireTime = DateTime.MinValue;
 
             await _dbContext.SaveChangesAsync();
             return Ok("Đổi mật khẩu thành công!");
         }
-
-
-
 
     }
 }

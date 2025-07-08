@@ -637,9 +637,6 @@ namespace QuizSystem_backend.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("Username")
-                        .IsUnique();
-
                     b.ToTable("TaiKhoan", (string)null);
 
                     b.UseTptMappingStrategy();

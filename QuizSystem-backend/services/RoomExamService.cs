@@ -8,7 +8,7 @@ using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.DTOs.RoomExamDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
-using QuizSystem_backend.DTOs.UserEmailDto;
+using QuizSystem_backend.DTOs.UserDtos;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;

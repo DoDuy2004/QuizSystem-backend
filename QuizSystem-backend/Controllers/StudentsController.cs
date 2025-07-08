@@ -251,7 +251,6 @@ namespace QuizSystem_backend.Controllers
 
             if (existingSubmission != null && existingSubmission.SubmitStatus == SubmitStatus.Submitted)
             {
-                // Trả về null hoặc throw tùy bạn
                 throw new Exception("Bài thi đã được nộp. Không thể nộp lại.");
             }
 

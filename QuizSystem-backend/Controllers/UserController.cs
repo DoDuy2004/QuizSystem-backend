@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.UserDtos;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.services;
 using System.Drawing;
@@ -85,6 +87,21 @@ namespace QuizSystem_backend.Controllers
                 message = "Cập nhật thông tin thành công",
                 data=user
             });
+        }
+
+        [HttpPost("AddSingle")]
+        public async Task<IActionResult> AddSingle(AddUserDtos user,Role role)
+        {
+            if (ModelState.IsValid)
+            {
+                return BadRequest("Invalid Input");
+            }
+            var result=await _userService.AddUser(user);
+            if(!result.Succeed)
+                return BadRequest(result.Message);
+            await _userService.AddUser(user);
+            return Ok(result);
+
         }
 
     }

@@ -32,7 +32,7 @@ namespace QuizSystem_backend.repositories
             var result = hasher.VerifyHashedPassword(user, user.PasswordHash, password);
             return result == PasswordVerificationResult.Success;
         }
-
+        
         public async Task<bool> ChangePasswordAsync(User user, string newPassword)
         {
             var hasher = new PasswordHasher<User>();
@@ -54,6 +54,23 @@ namespace QuizSystem_backend.repositories
 
             return true;
         }
+
+        public async Task AddSingle<T>(T user) where T : User
+        {
+           
+            if(user is Student student)
+            {
+                await _context.Students.AddAsync(student);
+            }
+            else if (user is Teacher teacher)
+            {
+                await _context.Teachers.AddAsync(teacher);
+            }
+            _context.SaveChanges();
+        }
+
+        
+
 
     }
 }

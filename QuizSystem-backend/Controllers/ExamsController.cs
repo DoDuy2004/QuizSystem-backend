@@ -246,24 +246,6 @@ namespace QuizSystem_backend.Controllers
           
         }
 
-        [HttpGet("{examId}/for-student")]
-        public async Task<IActionResult> GetExamForStudent(Guid examId)
-        {
-            var exam = await _examService.GetExamForStudentAsync(examId);
-            if (exam == null)
-                return NotFound();
-
-            return Ok(new
-            {
-                code = 200,
-                message = "Success",
-                data = exam
-            });
-        }
-
-
-
-
 
     }
 }

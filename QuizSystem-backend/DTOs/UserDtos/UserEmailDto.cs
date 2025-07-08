@@ -1,4 +1,4 @@
-﻿namespace QuizSystem_backend.DTOs.UserEmailDto
+﻿namespace QuizSystem_backend.DTOs.UserDtos
 {
     public class UserEmailDto
     {
@@ -7,4 +7,5 @@
         public string FullName { get; set; } = string.Empty;
 
     }
+    
 }

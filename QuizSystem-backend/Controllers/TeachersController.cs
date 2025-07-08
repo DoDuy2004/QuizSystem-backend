@@ -8,7 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.DependencyResolver;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.StudentDtos;
+using QuizSystem_backend.DTOs.TeacherDtos;
 using QuizSystem_backend.Models;
+using QuizSystem_backend.services;
 
 namespace QuizSystem_backend.Controllers
 {
@@ -18,11 +21,14 @@ namespace QuizSystem_backend.Controllers
     {
         private readonly QuizSystemDbContext _context;
         private readonly QuizSystemDbContext _dbContext;
+        private readonly TeacherService _teacherService;
 
-        public TeachersController(QuizSystemDbContext context, QuizSystemDbContext dbContext)
+
+        public TeachersController(QuizSystemDbContext context, QuizSystemDbContext dbContext,TeacherService teacherService)
         {
             _context = context;
             _dbContext= dbContext;
+            _teacherService= teacherService;
         }
 
         // GET: api/Teachers
@@ -131,7 +137,41 @@ namespace QuizSystem_backend.Controllers
             return NoContent();
         }
 
+        [HttpPost("Import-Preview")]
+        public async Task<IActionResult> ImportTeachers(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+            var listTeacher = await _teacherService.ImportFileTeacherPreview(file);
 
+            if (listTeacher == null || !listTeacher.Any())
+            {
+                return BadRequest("No valid teachers found in the file.");
+            }
+            return Ok(listTeacher);
+
+        }
+        [HttpPost("Import-Confirm")]
+        public async Task<IActionResult> ImportTeacherConfirm(List<TeacherImportDto> teachersPreview)
+        {
+            if (teachersPreview == null || !teachersPreview.Any())
+            {
+                return BadRequest("No teachers to import.");
+            }
+            var result = await _teacherService.ImportTeacherConfirm(teachersPreview);
+            if (result.Count == 0)
+            {
+                return BadRequest("Failed to import teachers.");
+            }
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = result
+            });
+        }
         private bool TeacherExists(Guid id)
         {
             return _context.Teachers.Any(e => e.Id == id);

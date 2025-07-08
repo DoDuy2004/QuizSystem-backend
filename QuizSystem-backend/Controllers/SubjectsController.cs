@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
-using QuizSystem_backend.DTOs.UserEmailDto;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 

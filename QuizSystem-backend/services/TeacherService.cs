@@ -12,7 +12,7 @@ namespace QuizSystem_backend.services
     {
         private readonly IUserRepository _userRepository;
         private readonly ITeacherRepository _teacherRepository;
-        TeacherService(IUserRepository userRepository,ITeacherRepository teacherRepository)
+        public TeacherService(IUserRepository userRepository,ITeacherRepository teacherRepository)
         {
             _userRepository= userRepository;
             _teacherRepository= teacherRepository;

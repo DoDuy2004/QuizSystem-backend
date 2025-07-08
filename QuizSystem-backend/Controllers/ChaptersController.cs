@@ -57,24 +57,6 @@ namespace QuizSystem_backend.Controllers
 
         // POST: api/Chapters
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("AddChapter/{subjectId}")]
-        public async Task<ActionResult<Chapter>> PostChapter(Guid subjectId, [FromBody] ChapterInfoDto chapterDto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var subject = await _context.Subjects.FindAsync(subjectId);
-            if (subject == null)
-                return NotFound("Subject Not Found");
-
-            var chapter = _mapper.Map<Chapter>(chapterDto);
-            chapter.SubjectId = subjectId;
-            _context.Chapters.Add(chapter);
-            await _context.SaveChangesAsync();
-
-            return Ok(chapter); 
-        }
-
 
         // DELETE: api/Chapters/5
         [HttpDelete("{id}")]

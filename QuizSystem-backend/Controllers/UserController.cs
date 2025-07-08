@@ -104,5 +104,21 @@ namespace QuizSystem_backend.Controllers
 
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.Status = Status.DELETED;
+            //_context.Users.Update(user); // Không bắt buộc nhưng tốt khi bạn set thủ công
+            await _context.SaveChangesAsync();
+
+            return Ok(new {message = "Delete successfully", Status = user.Status});
+        }
+
     }
 }

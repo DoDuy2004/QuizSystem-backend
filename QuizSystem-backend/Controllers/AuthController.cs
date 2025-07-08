@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Common;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
@@ -42,9 +43,15 @@ namespace QuizSystem_backend.Controllers
                 return Unauthorized("User not found");
             }
 
+            if (user.Status == Status.DELETED)
+            {
+                return Unauthorized("Tài khoản của bạn đã bị khóa.");
+            }
+
             var hasher = new PasswordHasher<User>();
             var result = hasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
-            if (result == PasswordVerificationResult.Failed) return Unauthorized("Wrong password");
+            if (result == PasswordVerificationResult.Failed)
+                return Unauthorized("Sai mật khẩu");
 
             var token = _tokenService.CreateToken(user);
 
@@ -59,6 +66,7 @@ namespace QuizSystem_backend.Controllers
                 }
             });
         }
+
         [HttpPost("token")]
         [Authorize]
         public async Task<ActionResult> AuthenticateByToken()

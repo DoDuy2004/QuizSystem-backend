@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.DTOs.ChapterDtos;
 using QuizSystem_backend.DTOs.SubjectDtos;
 using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
@@ -100,6 +101,8 @@ namespace QuizSystem_backend.Controllers
             // Cập nhật thông tin Subject
             existingSubject.Name = dto.Name;
             existingSubject.SubjectCode = dto.SubjectCode;
+            existingSubject.Major = dto.Major;
+            existingSubject.Description = dto.Description;
             existingSubject.Status = dto.Status;
 
 
@@ -164,6 +167,26 @@ namespace QuizSystem_backend.Controllers
 
             return Ok(result);
         }
+        
+        [HttpPost("{subjectId}/add-chapter")]
+        public async Task<ActionResult<Chapter>> PostChapter(Guid subjectId, [FromBody] ChapterInfoDto chapterDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var subject = await _context.Subjects.FindAsync(subjectId);
+            if (subject == null)
+                return NotFound("Subject Not Found");
+
+            var chapter = _mapper.Map<Chapter>(chapterDto);
+            chapter.SubjectId = subjectId;
+            _context.Chapters.Add(chapter);
+            await _context.SaveChangesAsync();
+
+            return Ok(chapter);
+        }
+
+
         private bool SubjectExists(Guid id)
         {
             return _context.Subjects.Any(e => e.Id == id);

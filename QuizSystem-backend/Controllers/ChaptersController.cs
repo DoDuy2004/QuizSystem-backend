@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs.ChapterDtos;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.Controllers
@@ -72,6 +73,18 @@ namespace QuizSystem_backend.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+        [HttpGet("Search")]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+                return Ok(new List<Chapter>());
+
+            var result = await _context.Chapters
+                .Where(c => c.Name.Contains(keyword))
+                .ToListAsync();
+
+            return Ok(result);
         }
 
         private bool ChapterExists(Guid id)

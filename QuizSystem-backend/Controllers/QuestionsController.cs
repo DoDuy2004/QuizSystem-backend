@@ -17,12 +17,13 @@ namespace QuizSystem_backend.Controllers
     //[Authorize(Roles = "TEACHER")]
     public class QuestionsController : ControllerBase
     {
-        //private readonly QuizSystemDbContext _context;
+        private readonly QuizSystemDbContext _context;
         private readonly IQuestionService _questionService;
 
-        public QuestionsController(IQuestionService questionService)
+        public QuestionsController(IQuestionService questionService, QuizSystemDbContext context)
         {
             _questionService = questionService;
+            _context= context;
         }
 
         // GET: api/Questions
@@ -182,6 +183,19 @@ namespace QuizSystem_backend.Controllers
             {
                 return StatusCode(500, new { message = "Internal server error.", error = ex.Message });
             }
+        }
+
+        [HttpGet("SearchByKeyword")]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+                return Ok(new List<Question>());
+
+            var result = await _context.Questions
+                .Where(c => c.Content.Contains(keyword))
+                .ToListAsync();
+
+            return Ok(result);
         }
     }
 }

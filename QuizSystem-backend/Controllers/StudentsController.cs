@@ -220,72 +220,7 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
-        [HttpGet("GetRoomExams")]
         
-        public async Task<ActionResult> GetRoomExam()
-        {
-            var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var role = User.FindFirst(ClaimTypes.Role)?.Value;
-
-            if (string.IsNullOrEmpty(userIdStr) || string.IsNullOrEmpty(role))
-                return Unauthorized(new { message = "User not authenticated or role missing" });
-
-            var userId = Guid.Parse(userIdStr);
-
-            // Nếu là STUDENT
-            if (role == "STUDENT")
-            {
-                var roomExams = await _context.RoomExams
-                    .Include(r => r.Subject)
-                    .Include(r => r.Course)
-                    .Include(r => r.Exams)
-                    .Where(re => _context.StudentCourseClasses
-                        .Any(scc => scc.StudentId == userId && scc.CourseClassId == re.CourseClassId))
-                    .ToListAsync();
-
-                return Ok(new
-                {
-                    code = 200,
-                    message = "Success",
-                    data = roomExams
-                });
-            }
-
-            // Nếu là TEACHER
-            if (role == "TEACHER")
-            {
-                var now = DateTime.Now;
-
-                var roomExams = await _context.RoomExams
-                    .Include(r => r.Exams)
-                    .Where(r => r.Exams.Any(e => e.UserId == userId) // Phòng thi này có exam của giáo viên đang đăng nhập
-                        && r.Exams.Any(e => r.StartDate.AddMinutes(e.DurationMinutes) > now)) // Phòng thi này còn hạn
-                    .Select(r => new
-                    {
-                        RoomExamId = r.Id,
-                        RoomExamName = r.Name,
-                        StartDate = r.StartDate,
-                        // Lấy exam đầu tiên (theo giáo viên) để tính EndDate
-                        EndDate = r.Exams
-                            .Where(e => e.UserId == userId)
-                            .OrderBy(e => e.Id)
-                            .Select(e => r.StartDate.AddMinutes(e.DurationMinutes))
-                            .FirstOrDefault(),
-                        Exams = r.Exams.Where(e => e.UserId == userId).ToList()
-                    })
-                    .ToListAsync();
-
-                return Ok(new
-                {
-                    code = 200,
-                    message = "Success",
-                    data = roomExams
-                });
-            }
-
-            // Không phải 2 role trên thì từ chối truy cập
-            return Forbid();
-        }
 
 
         [HttpGet("{id}/roomexams")]
@@ -316,7 +251,6 @@ namespace QuizSystem_backend.Controllers
 
             if (existingSubmission != null && existingSubmission.SubmitStatus == SubmitStatus.Submitted)
             {
-                // Trả về null hoặc throw tùy bạn
                 throw new Exception("Bài thi đã được nộp. Không thể nộp lại.");
             }
 

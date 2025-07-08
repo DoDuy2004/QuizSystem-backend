@@ -3,11 +3,13 @@ using QuizSystem_backend.Models;
 using AutoMapper;
 using QuizSystem_backend.DTOs.CourseClassDtos;
 using QuizSystem_backend.DTOs.ExamDtos;
-using QuizSystem_backend.DTOs.UserEmailDto;
 using QuizSystem_backend.DTOs.StudentExamDto;
+using QuizSystem_backend.DTOs.UserDtos;
+using Microsoft.AspNetCore.Identity;
+using QuizSystem_backend.DTOs.ChapterDtos;
 namespace QuizSystem_backend.Helper
 {
-    public class MappingProfile:Profile
+    public class MappingProfile : Profile
     {
         public MappingProfile()
         {
@@ -43,7 +45,7 @@ namespace QuizSystem_backend.Helper
 
             CreateMap<ExamQuestionDto, ExamQuestion>().ReverseMap();
             CreateMap<QuestionDto, Question>()
-                .ForMember(dest=>dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ForMember(dest => dest.Chapter, opt => opt.Ignore())
                 .ForMember(dest => dest.QuestionBank, opt => opt.Ignore())
                 .ReverseMap();
@@ -64,7 +66,7 @@ namespace QuizSystem_backend.Helper
                 .ReverseMap();
             //CreateMap<QuestionsAddedToExamDto,Question>().ReverseMap();
 
-          
+
 
             CreateMap<QuestionImportPreviewDto, Question>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
@@ -97,6 +99,16 @@ namespace QuizSystem_backend.Helper
             .ForMember(dest => dest.Chapters, opt => opt.MapFrom(src => src.Chapters));
 
             CreateMap<StudentExam, StudentExamDto>().ReverseMap();
+            CreateMap<AddUserDtos, Student>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
+            CreateMap<AddUserDtos, Teacher>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
+
+            CreateMap<ChapterInfoDto, Chapter>().ReverseMap();
+
+
         }
 
     }

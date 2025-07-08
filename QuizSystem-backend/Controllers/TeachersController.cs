@@ -21,10 +21,10 @@ namespace QuizSystem_backend.Controllers
     {
         private readonly QuizSystemDbContext _context;
         private readonly QuizSystemDbContext _dbContext;
-        private readonly TeacherService _teacherService;
+        private readonly ITeacherService _teacherService;
 
 
-        public TeachersController(QuizSystemDbContext context, QuizSystemDbContext dbContext,TeacherService teacherService)
+        public TeachersController(QuizSystemDbContext context, QuizSystemDbContext dbContext,ITeacherService teacherService)
         {
             _context = context;
             _dbContext= dbContext;

@@ -11,6 +11,7 @@ using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
 using QuizSystem_backend.services.MailServices;
+using System.Security.Claims;
 
 namespace QuizSystem_backend.Controllers
 {
@@ -126,11 +127,8 @@ namespace QuizSystem_backend.Controllers
             }
 
 
-            var newToken = _tokenService.CreateToken(user);
-            user.ResetPasswordToken = newToken;
-            user.ResetPasswordTokenExpire = DateTime.Now.AddMinutes(5);
-            await _dbContext.SaveChangesAsync();
-
+            var newToken = _tokenService.CreateToken(user,5);
+            
             string resetLink = $"https://localhost:7225/reset-password?token={newToken}&email={Uri.EscapeDataString(user.Email)}";
 
             var mailContent = new MailContent();
@@ -153,28 +151,30 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
-
+        
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto model)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-            if (user == null)
-                return BadRequest("Email không hợp lệ.");
-
-            if (user.ResetPasswordToken != model.Token || user.ResetPasswordTokenExpire < DateTime.UtcNow)
-
+            var principal = _tokenService.ValidateJwtToken(model.Token);
+            if (principal == null)
                 return BadRequest("Token không hợp lệ hoặc đã hết hạn.");
+           
+
+            var email = principal.FindFirst(ClaimTypes.Email)?.Value;
+            
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+                return BadRequest("Email không hợp lệ!");
 
             var hasher = new PasswordHasher<User>();
+            user.PasswordHash = hasher.HashPassword(user, model.NewPassword);
 
-            user.PasswordHash = hasher.HashPassword(user, user.PasswordHash);
-
-            user.ResetPasswordToken = null!;
-            user.ResetPasswordTokenExpire = null;
             await _dbContext.SaveChangesAsync();
-
             return Ok("Đổi mật khẩu thành công!");
         }
+
+
+
 
     }
 }

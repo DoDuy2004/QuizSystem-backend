@@ -95,6 +95,13 @@ namespace QuizSystem_backend.Models
                     .HasColumnName("vai_tro")
                     .IsRequired();
 
+                entity.Property(e => e.ResetPasswordToken)
+                    .HasColumnName("ResetPasswordToken");
+
+                entity.Property(e => e.ResetPasswordTokenExpire)
+                    .HasColumnName("ResetPasswordTokenExpire");
+
+
                 entity.HasMany(t => t.Questions)
                     .WithOne(q => q.User)
                     .HasForeignKey(q => q.CreatedBy)

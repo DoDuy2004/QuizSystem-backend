@@ -41,7 +41,13 @@ builder.Services.AddTransient<IChapterRepository, ChapterRepository>();
 builder.Services.AddTransient<IRoomExamRepository, RoomExamRepository>();
 builder.Services.AddTransient<IStudentExamRepository, StudentExamRepository>();
 
+
 builder.Services.AddTransient<IRoomExamService, RoomExamService>();
+
+builder.Services.AddTransient<ITeacherService, TeacherService>();
+builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
+
+
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 

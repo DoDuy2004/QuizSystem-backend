@@ -21,13 +21,16 @@ namespace QuizSystem_backend.Controllers
 
     public class CourseClassesController : ControllerBase
     {
+        private readonly QuizSystemDbContext _context;
+
         private readonly ICourseClassService _courseClassService;
         private readonly IStudentService _studentService;
 
-        public CourseClassesController(ICourseClassService courseClassService, IStudentService studentService)
+        public CourseClassesController(ICourseClassService courseClassService, IStudentService studentService, QuizSystemDbContext context)
         {
             _courseClassService = courseClassService;
             _studentService = studentService;
+            _context=context;
         }
 
         // GET: api/CourseClasses
@@ -374,6 +377,19 @@ namespace QuizSystem_backend.Controllers
             {
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
+        }
+
+        [HttpGet("SearchByKeyword")]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+                return Ok(new List<CourseClass>());
+
+            var result = await _context.CourseClasses
+                .Where(c => c.Name.Contains(keyword))
+                .ToListAsync();
+
+            return Ok(result);
         }
 
     }

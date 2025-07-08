@@ -155,6 +155,19 @@ namespace QuizSystem_backend.Controllers
             return NoContent();
         }
 
+        [HttpGet("SearchByKeyword")]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+                return Ok(new List<Subject>());
+
+            var result = await _context.Subjects
+                .Where(c => c.Name.Contains(keyword))
+                .ToListAsync();
+
+            return Ok(result);
+        }
+        
         [HttpPost("{subjectId}/add-chapter")]
         public async Task<ActionResult<Chapter>> PostChapter(Guid subjectId, [FromBody] ChapterInfoDto chapterDto)
         {

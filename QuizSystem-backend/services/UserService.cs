@@ -58,7 +58,7 @@ namespace QuizSystem_backend.services
 
             if (userExist != null) return (false, "Student đã tồn tại");
 
-            if (userDto.Role == Enums.Role.STUDENT)
+            if (Enum.TryParse(userDto.Role, out Enums.Role role) && role == Enums.Role.STUDENT)
             {
                 var student = _mapper.Map<Student>(userDto);
                 student.StudentCode = userDto.Code;

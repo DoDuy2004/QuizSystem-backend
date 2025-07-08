@@ -21,30 +21,40 @@ namespace QuizSystem_backend.Controllers
     [ApiController]
     public class TeachersController : ControllerBase
     {
-        private readonly SearchUserService _searchUserService;
+        //private readonly SearchUserService _searchUserService;
         private readonly QuizSystemDbContext _context;
         private readonly QuizSystemDbContext _dbContext;
         private readonly ITeacherService _teacherService;
 
 
-        public TeachersController(QuizSystemDbContext context, QuizSystemDbContext dbContext,ITeacherService teacherService, SearchUserService searchUserService)
+        public TeachersController(QuizSystemDbContext context, QuizSystemDbContext dbContext,ITeacherService teacherService)
         {
             _context = context;
             _dbContext= dbContext;
             _teacherService= teacherService;
-            _searchUserService= searchUserService;
+            //_searchUserService= searchUserService;
         }
 
         // GET: api/Teachers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Teacher>>> GetTeachers()
+        public async Task<ActionResult<IEnumerable<Teacher>>> GetTeachers(string searchText = null)
         {
-            var teachers = await _context.Teachers.ToListAsync();
+            var query = _context.Teachers.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchText) && searchText.Length >= 3)
+            {
+                query = query.Where(t =>
+                    t.FullName.Contains(searchText) ||
+                    t.Email.Contains(searchText) ||
+                    t.Facutly.Contains(searchText));
+            }
+
+            var teachers = await query.ToListAsync();
 
             return Ok(new
             {
                 code = 200,
-                message = "Cập nhật thông tin thành công",
+                message = "Lấy danh sách giảng viên thành công",
                 data = teachers
             });
         }
@@ -176,12 +186,12 @@ namespace QuizSystem_backend.Controllers
                 data = result
             });
         }
-        [HttpGet("SearchTeachers")]
-        public async Task<IActionResult> SearchTeachers([FromQuery] string? keyword)
-        {
-            var teachers = await _searchUserService.SearchUsersAsync(Role.TEACHER, keyword);
-            return Ok(teachers);
-        }
+        //[HttpGet("SearchTeachers")]
+        //public async Task<IActionResult> SearchTeachers([FromQuery] string? keyword)
+        //{
+        //    var teachers = await _searchUserService.SearchUsersAsync(Role.TEACHER, keyword);
+        //    return Ok(teachers);
+        //}
 
         private bool TeacherExists(Guid id)
         {

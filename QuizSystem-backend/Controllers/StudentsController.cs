@@ -235,19 +235,65 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
-        
 
+
+
+        //[HttpGet("{id}/roomexams")]
+        //public async Task<ActionResult> GetRoomExamByStudent(Guid id)
+        //{
+        //    var roomExams = await _context.RoomExams
+        //        .Include(re => re.Subject)
+        //        .Include(re => re.Course)
+        //        .Include(re => re.Exams)
+        //        .Where(re => _context.StudentCourseClasses
+        //            .Any(scc => scc.StudentId == id && scc.CourseClassId == re.CourseClassId))
+        //        .ToListAsync();
+
+        //    return Ok(new
+        //    {
+        //        code = 200,
+        //        message = "Success",
+        //        data = roomExams
+        //    });
+        //}
+
+        private int CalculateTimeRemaining(DateTime startDate, int durationMinutes)
+        {
+            var now = DateTime.UtcNow;
+            var endDate = startDate.AddMinutes(durationMinutes);
+            var timeSpan = endDate - now;
+
+            if (now >= startDate && timeSpan.TotalSeconds > 0)
+            {
+                return (int)timeSpan.TotalSeconds;
+            }
+            else if (now < startDate)
+            {
+                return (int)(startDate - now).TotalSeconds;
+            }
+            // Nếu đã hết giờ, trả về 0
+            return 0;
+        }
 
         [HttpGet("{id}/roomexams")]
-        public async Task<ActionResult> GetRoomExamByStudent(Guid id)
+        public async Task<ActionResult> GetRoomExamByStudent(Guid id, string searchText = null)
         {
-            var roomExams = await _context.RoomExams
+            var query = _context.RoomExams
                 .Include(re => re.Subject)
                 .Include(re => re.Course)
                 .Include(re => re.Exams)
                 .Where(re => _context.StudentCourseClasses
-                    .Any(scc => scc.StudentId == id && scc.CourseClassId == re.CourseClassId))
-                .ToListAsync();
+                    .Any(scc => scc.StudentId == id && scc.CourseClassId == re.CourseClassId));
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                query = query.Where(re =>
+                    re.Name.Contains(searchText) ||
+                    (re.Subject != null && re.Subject.Name.Contains(searchText)) ||
+                    (re.Course != null && re.Course.Name.Contains(searchText)));
+            }
+
+            var roomExams = await query.ToListAsync();
 
             return Ok(new
             {

@@ -159,9 +159,12 @@ namespace QuizSystem_backend.Controllers
             {
                 otp += random.Next(0, 10).ToString();
             }
+
             user.Otp = otp;
             user.OtpExpireTime = DateTime.UtcNow.AddMinutes(5);
+
             await _dbContext.SaveChangesAsync();
+
             var mailContent = new MailContent();
             mailContent.To = request.Email;
             mailContent.Subject = "Đặt lại mật khẩu cho tài khoản EduQuiz";
@@ -186,6 +189,7 @@ namespace QuizSystem_backend.Controllers
         public async Task<IActionResult> ValidateOtp([FromBody] ValidateOtpRequest request)
         {
             var user = await _userService.GetUserByUsernameAsync(request.Email);
+
             if (user == null)
                 return BadRequest("User Not Found");
 
@@ -206,7 +210,9 @@ namespace QuizSystem_backend.Controllers
         {
 
             var user = await _userService.GetUserByUsernameAsync(request.Email);
+
             if (user == null) return BadRequest("User Not Found");
+
             if (user.OtpExpireTime > DateTime.Now) return BadRequest("Time Out");
 
             var hasher = new PasswordHasher<User>();

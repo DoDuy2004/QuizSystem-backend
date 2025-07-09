@@ -10,5 +10,6 @@ namespace QuizSystem_backend.repositories
         Task<Question> AddAsync(Question question);
         Task SaveChangesAsync();
         Task<Question> GetByIdAsync(Guid id);
+        Task<List<Question>> GetQuestionsBySubject(Guid subjectId);
     }
 }

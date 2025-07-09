@@ -30,12 +30,21 @@ namespace QuizSystem_backend.Controllers
 
         // GET: api/QuestionBanks
         [HttpGet]
-        public async Task<ActionResult> GetQuestionBanks()
+        public async Task<ActionResult> GetQuestionBanks(string searchText = null)
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             try
             {
                 var questionBanks = await _questionBankService.GetQuestionBanksAsync(Guid.Parse(userId!));
+
+                // Thêm logic filter tại server nếu cần
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    questionBanks = questionBanks.Where(q =>
+                        q.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                        (q.Description?.Contains(searchText, StringComparison.OrdinalIgnoreCase) ?? false))
+                        .ToList();
+                }
 
                 return Ok(new
                 {
@@ -43,7 +52,7 @@ namespace QuizSystem_backend.Controllers
                     message = "Success",
                     data = questionBanks
                 });
-            } 
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });

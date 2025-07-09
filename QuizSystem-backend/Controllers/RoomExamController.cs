@@ -28,15 +28,44 @@ namespace QuizSystem_backend.Controllers
             _emailSender = emailSender;
         }
 
+        //[HttpGet]
+        //public async Task<ActionResult> GetRoomExams()
+        //{
+        //    //string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //    //var role = User.FindFirst(ClaimTypes.Role)?.Value;
+        //    try
+        //    {
+        //        // Simulate fetching room exams from a service or repository
+        //        var roomExams = await _roomExamService.GetAllRoomExamsAsync(); // Replace with actual data fetching logic
+        //        return Ok(new
+        //        {
+        //            code = 200,
+        //            message = "Success",
+        //            data = roomExams
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+        //    }
+        //}
+
         [HttpGet]
-        public async Task<ActionResult> GetRoomExams()
+        public async Task<ActionResult> GetRoomExams(string searchText = null)
         {
-            //string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            //var role = User.FindFirst(ClaimTypes.Role)?.Value;
             try
             {
-                // Simulate fetching room exams from a service or repository
-                var roomExams = await _roomExamService.GetAllRoomExamsAsync(); // Replace with actual data fetching logic
+                var roomExams = await _roomExamService.GetAllRoomExamsAsync();
+
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    roomExams = roomExams.Where(re =>
+                        re.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                        (re.Subject?.Name?.Contains(searchText, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                        (re.Course?.Name?.Contains(searchText, StringComparison.OrdinalIgnoreCase) ?? false))
+                        .ToList();
+                }
+
                 return Ok(new
                 {
                     code = 200,
@@ -49,6 +78,24 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
+
+        private int CalculateTimeRemaining(DateTime startDate, int durationMinutes)
+        {
+            var now = DateTime.Now;
+            var endDate = startDate.AddMinutes(durationMinutes);
+            var timeSpan = endDate - now;
+
+            if (now >= startDate && timeSpan.TotalSeconds > 0)
+            {
+                return (int)timeSpan.TotalSeconds;
+            }
+            else if (now < startDate)
+            {
+                return (int)(startDate - now).TotalSeconds;
+            }
+            return 0;
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult> GetRoomExamById(Guid id)
         {
@@ -58,17 +105,30 @@ namespace QuizSystem_backend.Controllers
             }
             try
             {
-                // Simulate fetching a room exam by ID from a service or repository
                 var roomExam = await _roomExamService.GetRoomExamByIdAsync(id);
                 if (roomExam == null)
                 {
                     return NotFound(new { message = $"Room exam with ID {id} not found." });
                 }
+
+                // Tính timeRemaining
+                var timeRemaining = CalculateTimeRemaining(roomExam.StartDate, roomExam.Exams[0]?.DurationMinutes ?? 0);
+
                 return Ok(new
                 {
                     code = 200,
                     message = "Success",
-                    data = roomExam
+                    data = new
+                    {
+                        roomExam.Id,
+                        roomExam.Name,
+                        Subject = roomExam.Subject,
+                        Course = roomExam.Course,
+                        StartDate = roomExam.StartDate,
+                        DurationMinutes = roomExam.Exams[0]?.DurationMinutes ?? 0,
+                        TimeRemaining = timeRemaining,
+                        Exams = roomExam.Exams
+                    }
                 });
             }
             catch (Exception ex)
@@ -76,7 +136,7 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
-        
+
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateRoomExam(Guid id, [FromBody] string roomExam)
         {
@@ -140,8 +200,7 @@ namespace QuizSystem_backend.Controllers
 
 
         [HttpGet("GetRoomExams")]
-
-        public async Task<ActionResult> GetRoomExam()
+        public async Task<ActionResult> GetRoomExamResult(string searchText = null)
         {
             var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
@@ -150,42 +209,47 @@ namespace QuizSystem_backend.Controllers
                 return Unauthorized(new { message = "User not authenticated or role missing" });
 
             var userId = Guid.Parse(userIdStr);
+            searchText = searchText?.Trim()?.ToLower();
 
-            // Nếu là STUDENT
             if (role == "STUDENT")
             {
                 var result = await _context.StudentExams
-                .Where(se => se.StudentId == userId)
-                .Select(se => new
-                {
-                    se.Id,
-                    se.Grade,
-                    se.Note,
-                    se.Status,
-                    se.SubmitStatus,
-                    Exam = new
+                    .Where(se => se.StudentId == userId)
+                    .Select(se => new
                     {
-                        se.Exam.Id,
-                        se.Exam.Name,
-                        se.Exam.DurationMinutes
-                    },
-                    RoomExam = new
-                    {
-                        se.Room.Id,
-                        se.Room.Name,
-                        se.Room.StartDate,
-                        se.Room.EndDate,
-                        subject = se.Room.Subject.Name
-                    }
-                })
-                .ToListAsync();
+                        se.Id,
+                        se.Grade,
+                        se.Note,
+                        se.Status,
+                        se.SubmitStatus,
+                        Exam = new
+                        {
+                            se.Exam.Id,
+                            se.Exam.Name,
+                            se.Exam.DurationMinutes
+                        },
+                        RoomExam = new
+                        {
+                            se.Room.Id,
+                            se.Room.Name,
+                            se.Room.StartDate,
+                            se.Room.EndDate,
+                            subject = se.Room.Subject.Name
+                        }
+                    })
+                    .ToListAsync();
 
-                return Ok(new
+                // 👉 Lọc kết quả theo searchText
+                if (!string.IsNullOrEmpty(searchText))
                 {
-                    code = 200,
-                    message = "Success",
-                    data = result
-                });
+                    result = result.Where(x =>
+                        x.Exam.Name.ToLower().Contains(searchText) ||
+                        x.RoomExam.Name.ToLower().Contains(searchText) ||
+                        x.RoomExam.subject.ToLower().Contains(searchText))
+                        .ToList();
+                }
+
+                return Ok(new { code = 200, message = "Success", data = result });
             }
 
             if (role == "TEACHER")
@@ -203,7 +267,6 @@ namespace QuizSystem_backend.Controllers
                         RoomExamId = r.Id,
                         RoomExamName = r.Name,
                         Subject = r.Subject.Name,
-
                         StartDate = r.StartDate,
                         EndDate = r.Exams
                             .Where(e => e.UserId == userId)
@@ -217,23 +280,25 @@ namespace QuizSystem_backend.Controllers
                                 e.Id,
                                 e.Name
                             }).ToList(),
-
-                        // ✅ Thêm số lượng bài thi của sinh viên
                         TotalStudentExams = _context.StudentExams.Count(se => se.RoomId == r.Id)
                     })
                     .ToListAsync();
 
-                return Ok(new
+                // 👉 Lọc theo searchText
+                if (!string.IsNullOrEmpty(searchText))
                 {
-                    code = 200,
-                    message = "Success",
-                    data = endedRoomExams
-                });
+                    endedRoomExams = endedRoomExams.Where(x =>
+                        x.RoomExamName.ToLower().Contains(searchText) ||
+                        x.Subject.ToLower().Contains(searchText))
+                        .ToList();
+                }
+
+                return Ok(new { code = 200, message = "Success", data = endedRoomExams });
             }
 
-            // Không phải 2 role trên thì từ chối truy cập
             return Forbid();
         }
+
 
         [HttpGet("{roomExamId}/student-exams")]
         public async Task<IActionResult> GetStudentExamsByRoom(Guid roomExamId)

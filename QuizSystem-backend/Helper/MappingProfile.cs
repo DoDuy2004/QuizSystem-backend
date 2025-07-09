@@ -100,11 +100,11 @@ namespace QuizSystem_backend.Helper
 
             CreateMap<StudentExam, StudentExamDto>().ReverseMap();
             CreateMap<AddUserDtos, Student>()
-                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now));
+               
             CreateMap<AddUserDtos, Teacher>()
-                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now));
+               
 
             CreateMap<ChapterInfoDto, Chapter>().ReverseMap();
 

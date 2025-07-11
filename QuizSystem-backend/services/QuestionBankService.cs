@@ -15,12 +15,13 @@ namespace QuizSystem_backend.services
         private readonly IQuestionBankRepository _questionBankRepository;
         private readonly IMapper _mapper;
         private readonly IChapterRepository _chapterRepository;
+        private readonly QuizSystemDbContext _context;
 
-        public QuestionBankService(IQuestionBankRepository questionBankRepository,IMapper mapper,IChapterRepository chapterRepository)
+        public QuestionBankService(IQuestionBankRepository questionBankRepository,IMapper mapper,IChapterRepository chapterRepository,QuizSystemDbContext context)
         {
             _questionBankRepository = questionBankRepository;
             _mapper = mapper;
-
+            _context=context;
             _chapterRepository = chapterRepository;
         }
         public async Task<IEnumerable<QuestionBankDto>> GetQuestionBanksAsync(Guid userId)
@@ -124,7 +125,6 @@ namespace QuizSystem_backend.services
                 {
                     var worksheet = package.Workbook.Worksheets[0];
 
-
                     var arrayCode = new string[] { "A", "B", "C", "D", "E", "F" };
 
 
@@ -135,7 +135,6 @@ namespace QuizSystem_backend.services
                         if (colMax == 13) break;
                         rowMax++; colMax = 1;
                     }
-
 
                     for (int row = 2; row < rowMax; row++)
                     {
@@ -191,6 +190,12 @@ namespace QuizSystem_backend.services
                         }
                         //Validate question
 
+                        var normalized = preview.Content.Trim().ToLower();
+                        bool exists = _context.Questions
+                            .Any(q => q.Content.ToLower() == normalized);
+
+                        if (exists)
+                            preview.ErrorMessages.Add("Nội dung câu hỏi đã tồn tại");
 
                         if (string.IsNullOrEmpty(preview.Content))
                             preview.ErrorMessages.Add("Nội dung câu hỏi không được để trống");
@@ -288,7 +293,7 @@ namespace QuizSystem_backend.services
                     Id = Guid.NewGuid(),
                     Content = a.Content,
                     IsCorrect = a.IsCorrect,
-                    QuestionId = question.Id // Sửa ở đây!
+                    QuestionId = question.Id 
                 }).ToList();
 
                 listQuestion.Add(question);

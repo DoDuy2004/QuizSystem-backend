@@ -97,8 +97,10 @@ namespace QuizSystem_backend.Controllers
                 return BadRequest("Invalid Input");
             }
             var result=await _userService.AddUser(user);
+
             if(!result.Succeed)
                 return BadRequest(result.Message);
+
             await _userService.AddUser(user);
             return Ok(user);
 

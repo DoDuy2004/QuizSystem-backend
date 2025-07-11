@@ -10,14 +10,22 @@ namespace QuizSystem_backend.services
     public class QuestionService : IQuestionService
     {
         private readonly IQuestionRepository _questionRepository;
+        private readonly IMapper _mapper;
         
 
-        public QuestionService(IQuestionRepository questionRepository)
+        public QuestionService(IQuestionRepository questionRepository, IMapper mapper)
         {
             _questionRepository = questionRepository;
+            _mapper=mapper;
       
         }
+        public async Task<List<QuestionDto>>GetQuestionsBySubject(Guid subjectId)
+        {
+            var questions=await _questionRepository.GetQuestionsBySubject(subjectId);
+            var questionDto=_mapper.Map<List<QuestionDto>>(questions);
+            return questionDto;
 
+        }
         public async Task<IEnumerable<QuestionDto>> GetQuestionsAsync()
         {
             var questions = await _questionRepository.GetQuestionsAsync();

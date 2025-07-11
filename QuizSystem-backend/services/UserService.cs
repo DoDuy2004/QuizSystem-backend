@@ -56,24 +56,28 @@ namespace QuizSystem_backend.services
         {
             var userExist = await _userRepository.GetByUsernameAsync(userDto.Email);
 
-            if (userExist != null) return (false, "Student đã tồn tại");
+            if (userExist != null) return (false, "User đã tồn tại");
 
             if (Enum.TryParse(userDto.Role, out Enums.Role role) && role == Enums.Role.STUDENT)
             {
                 var student = _mapper.Map<Student>(userDto);
-                student.StudentCode = userDto.Code;
+                student.StudentCode = userDto.Code!;
                 var studentHasher = new PasswordHasher<Student>();
-                student.PasswordHash = studentHasher.HashPassword(student, userDto.Password);
+                student.PasswordHash = studentHasher.HashPassword(student,"123456789");
+
                 await _userRepository.AddSingle(student);
+
                 return (true, "Tạo tài khoản thành công");
             }
 
 
             var teacher = _mapper.Map<Teacher>(userDto);
-            teacher.TeacherCode = userDto.Code;
+            teacher.TeacherCode = userDto.Code!;
             var teacherHasher = new PasswordHasher<Teacher>();
-            teacher.PasswordHash = teacherHasher.HashPassword(teacher, userDto.Password);
+            teacher.PasswordHash = teacherHasher.HashPassword(teacher,"123456789");
+
             await _userRepository.AddSingle(teacher);
+
             return (true, "Tạo tài khoản thành công");
 
         }

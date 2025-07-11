@@ -54,6 +54,11 @@ namespace QuizSystem_backend.repositories
 
             return question!;
         }
+        public async Task<List<Question>>GetQuestionsBySubject(Guid subjectId)
+        {
+            var questions=await _context.Questions.Where(q=>q.Chapter!.SubjectId == subjectId).ToListAsync();
+            return questions;
+        }
 
         
     }

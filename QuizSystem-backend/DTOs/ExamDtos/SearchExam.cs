@@ -5,5 +5,6 @@
         public Guid Id { get; set; }
         public string ExamCode { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
+        public Guid? RoomExamId { get; set; }
     }
 }

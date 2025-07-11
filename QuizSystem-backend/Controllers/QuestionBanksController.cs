@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
@@ -37,12 +38,17 @@ namespace QuizSystem_backend.Controllers
             {
                 var questionBanks = await _questionBankService.GetQuestionBanksAsync(Guid.Parse(userId!));
 
-                // Thêm logic filter tại server nếu cần
+                // Lọc trạng thái khác DELETED (nếu enum)
+                questionBanks = questionBanks
+                    .Where(q => q.Status != Status.DELETED)
+                    .ToList();
+
                 if (!string.IsNullOrEmpty(searchText))
                 {
-                    questionBanks = questionBanks.Where(q =>
-                        q.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                        (q.Description?.Contains(searchText, StringComparison.OrdinalIgnoreCase) ?? false))
+                    questionBanks = questionBanks
+                        .Where(q =>
+                            q.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                            (q.Description?.Contains(searchText, StringComparison.OrdinalIgnoreCase) ?? false))
                         .ToList();
                 }
 
@@ -58,6 +64,7 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
+
 
         //GET: api/QuestionBanks/5
         [HttpGet("{id}")]
@@ -92,10 +99,11 @@ namespace QuizSystem_backend.Controllers
         [HttpGet("{id}/questions")]
         public async Task<ActionResult> GetQuestionsByQuestionBank(Guid id)
         {
-            if(Guid.Empty == id)
+            if (id == Guid.Empty)
             {
                 return BadRequest();
             }
+
             try
             {
                 var questionBank = await _questionBankService.GetQuestionBankByIdAsync(id);
@@ -107,11 +115,16 @@ namespace QuizSystem_backend.Controllers
 
                 var questions = await _questionBankService.GetQuestionsByQuestionBankAsync(id);
 
+                var filteredQuestions = questions
+                    .Where(q => q.Status != Enums.Status.DELETED) // Nếu là enum
+                                                                    // .Where(q => q.Status != 2) // Nếu là int
+                    .ToList();
+
                 return Ok(new
                 {
                     code = 200,
                     message = "Success",
-                    data = questions
+                    data = filteredQuestions
                 });
             }
             catch (Exception ex)
@@ -119,6 +132,7 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
+
 
         // PUT: api/QuestionBanks/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

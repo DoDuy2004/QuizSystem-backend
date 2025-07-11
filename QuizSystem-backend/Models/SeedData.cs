@@ -1300,24 +1300,24 @@ namespace QuizSystem_backend.Models
                 var questionIds = context.Questions.Select(q => q.Id).ToList();
 
                 // Seed RoomExams
-                if (!context.RoomExams.Any())
-                {
-                    var roomExam = new RoomExam
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "CDTH22WEBC - Thi giữa kỳ Lập trình Python ",
-                        StartDate = new DateTime(2025, 7, 4, 10, 30, 0),
-                        EndDate = new DateTime(2025, 7, 4, 13, 0, 0),
-                        Status = Status.ACTIVE,
-                        SubjectId = subjectsList.First(s => s.SubjectCode == "PYTHON").Id,
-                        CourseClassId  = courseClassId,
+                //if (!context.RoomExams.Any())
+                //{
+                //    var roomExam = new RoomExam
+                //    {
+                //        Id = Guid.NewGuid(),
+                //        Name = "CDTH22WEBC - Thi giữa kỳ Lập trình Python ",
+                //        StartDate = new DateTime(2025, 7, 4, 10, 30, 0),
+                //        EndDate = new DateTime(2025, 7, 4, 13, 0, 0),
+                //        Status = Status.ACTIVE,
+                //        SubjectId = subjectsList.First(s => s.SubjectCode == "PYTHON").Id,
+                //        CourseClassId  = courseClassId,
 
-                    };
-                    context.RoomExams.Add(roomExam);
-                    context.SaveChanges();
-                }
+                //    };
+                //    context.RoomExams.Add(roomExam);
+                //    context.SaveChanges();
+                //}
 
-                var roomExamId = context.RoomExams.First().Id;
+                //var roomExamId = context.RoomExams.First().Id;
 
                 // Seed Exams
                 if (!context.Exams.Any())
@@ -1329,7 +1329,7 @@ namespace QuizSystem_backend.Models
                         Name = "Giữa kỳ Lập trình Python",
                         DurationMinutes = 90,
                         NoOfQuestions = 40,
-                        RoomExamId = roomExamId,
+                        //RoomExamId = roomExamId,
                         SubjectId = subjectsList.First(s => s.SubjectCode == "PYTHON").Id,
                         UserId = teacherId,
                         Status = Status.ACTIVE
@@ -1369,8 +1369,8 @@ namespace QuizSystem_backend.Models
                 }
 
                 // Seed StudentExams
-                if (!context.StudentExams.Any())
-                {
+                //if (!context.StudentExams.Any())
+                //{
                     //var studentExams = studentIds.Select(s => new StudentExam
                     //{
                     //    Id = Guid.NewGuid(),
@@ -1382,14 +1382,14 @@ namespace QuizSystem_backend.Models
                     //}).ToArray();
                     //context.StudentExams.AddRange(studentExams);
                     //context.SaveChanges();
-                }
+                //}
 
-                var studentExamIds = context.StudentExams.Select(se => se.Id).ToList();
-                var answerIds = context.Answers.Select(a => a.Id).ToList();
+                //var studentExamIds = context.StudentExams.Select(se => se.Id).ToList();
+                //var answerIds = context.Answers.Select(a => a.Id).ToList();
 
                 // Seed StudentExamDetails (Bài làm của học sinh)
-                if (!context.StudentExamDetails.Any())
-                {
+                //if (!context.StudentExamDetails.Any())
+                //{
                     //var studentExamDetails = new List<StudentExamDetail>();
                     //for (int i = 0; i < studentIds.Count; i++)
                     //{
@@ -1415,7 +1415,7 @@ namespace QuizSystem_backend.Models
                     //}
                     //context.StudentExamDetails.AddRange(studentExamDetails);
                     //context.SaveChanges();
-                }
+                //}
             }
         }
     }

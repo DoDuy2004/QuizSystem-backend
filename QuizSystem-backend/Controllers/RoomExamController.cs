@@ -340,6 +340,7 @@ namespace QuizSystem_backend.Controllers
                         SubjectName = se.Room.Subject.Name
                     }
                 })
+                .Where(se => se.RoomExam.Id == roomExamId)
                 .ToListAsync();
 
             return Ok(new

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.ExamDtos;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
@@ -29,15 +30,20 @@ namespace QuizSystem_backend.Controllers
             try
             {
                 var result = await _examService.GetAllQuestionOfExam(id);
+
                 if (result == null)
                 {
                     return NotFound(new { message = "No questions found for this exam" });
                 }
+
+                // Lọc status khác DELETED
+                var filtered = result.Where(q => q.Status != Status.DELETED);
+
                 return Ok(new
                 {
                     code = 200,
                     message = "Success",
-                    data = result
+                    data = filtered
                 });
             }
             catch (Exception ex)
@@ -46,6 +52,7 @@ namespace QuizSystem_backend.Controllers
             }
         }
 
+
         [HttpGet]
         public async Task<ActionResult> GetExams(string searchText = null)
         {
@@ -53,7 +60,9 @@ namespace QuizSystem_backend.Controllers
             {
                 var result = await _examService.GetExamsAsync();
 
-                // Filter ngay tại controller nếu cần
+                // Lọc status khác DELETED (ví dụ DELETED = 2)
+                result = result.Where(e => e.Status != Status.DELETED);
+
                 if (!string.IsNullOrEmpty(searchText))
                 {
                     result = result.Where(e =>
@@ -73,6 +82,7 @@ namespace QuizSystem_backend.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
+
 
         [HttpGet("{id}")]
 
@@ -254,7 +264,5 @@ namespace QuizSystem_backend.Controllers
                 });
           
         }
-
-
     }
 }

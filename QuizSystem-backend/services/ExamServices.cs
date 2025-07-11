@@ -117,7 +117,7 @@ namespace QuizSystem_backend.services
 
                     if (questions.Count < count)
                     {
-                        result.ErrorMessages += $"Không đủ câu hỏi ở chương {row.ChapterId} độ khó {difficulty}. ";
+                        result.ErrorMessages += $"Không đủ câu hỏi ở chương {row.Name} độ khó {difficulty}. ";
                         return result;
                     }
 

@@ -307,6 +307,13 @@ namespace QuizSystem_backend.Controllers
         [HttpPost("submit-exam")]
         public async Task<IActionResult> SubmitExam([FromBody] SubmitStudentExamDto resultDto)
         {
+
+            var studentExists = await _context.Students.AnyAsync(s => s.Id == resultDto.StudentId);
+            if (!studentExists)
+            {
+                return BadRequest("Sinh viên không tồn tại.");
+            }
+
             var existingSubmission = await _context.StudentRoomExams
             .FirstOrDefaultAsync(x => x.StudentId == resultDto.StudentId && x.RoomExamId == resultDto.RoomId);
 
@@ -322,13 +329,13 @@ namespace QuizSystem_backend.Controllers
                     StudentId = resultDto.StudentId,
                     RoomExamId = resultDto.RoomId,
                     SubmitStatus = SubmitStatus.Submitted,
-                    SubmittedAt = DateTime.UtcNow
+                    SubmittedAt = DateTime.Now
                 });
             }
             else
             {
                 existingSubmission.SubmitStatus = SubmitStatus.Submitted;
-                existingSubmission.SubmittedAt = DateTime.UtcNow;
+                existingSubmission.SubmittedAt = DateTime.Now;
             }
 
             await _context.SaveChangesAsync();
@@ -379,6 +386,92 @@ namespace QuizSystem_backend.Controllers
         //    var students = await _searchUserService.SearchUsersAsync(Role.STUDENT, keyword);
         //    return Ok(students);
         //}
+
+
+        [HttpGet("{studentId}/studentExamDetail/{id}")]
+        public IActionResult GetStudentExamDetail(Guid id, Guid studentId)
+        {
+            try
+            {
+                var studentExam = _context.StudentExams
+                    .Include(se => se.Exam)
+                        .ThenInclude(e => e.Subject)
+                    .Include(se => se.StudentExamDetails)
+                        .ThenInclude(sed => sed.Question)
+                            .ThenInclude(q => q.Answers)
+                    .Include(se => se.Student)
+                    .Include(se => se.Room)
+                        .ThenInclude(re => re.StudentRoomExams)
+                    .FirstOrDefault(se => se.Id == id);
+
+                if (studentExam == null || studentExam.StudentId != studentId)
+                {
+                    return NotFound("Bài thi không tồn tại hoặc không thuộc về sinh viên.");
+                }
+
+                var studentRoomExam = studentExam.Room?.StudentRoomExams
+                    ?.FirstOrDefault(sre => sre.StudentId == studentId);
+
+                DateTime? submittedDateTime = studentRoomExam?.SubmittedAt;
+                string submittedAt = submittedDateTime?.ToString("yyyy-MM-dd HH:mm:ss");
+
+                DateTime? startDate = studentExam.Room?.StartDate;
+                double durationTaken = (submittedDateTime.HasValue && startDate.HasValue)
+                    ? (submittedDateTime.Value - startDate.Value).TotalMinutes
+                    : 0;
+
+                var examSubjectName = studentExam.Exam?.Subject?.Name ?? "Không rõ";
+
+                var response = new
+                {
+                    exam = new
+                    {
+                        id = studentExam.Exam?.Id,
+                        name = studentExam.Exam?.Name,
+                        subject = new { name = examSubjectName },
+                        durationMinutes = studentExam.Exam.DurationMinutes
+                    },
+                    student = new
+                    {
+                        id = studentExam.Student?.Id,
+                        fullName = studentExam.Student?.FullName ?? "Không rõ",
+                        email = studentExam.Student?.Email ?? "Không rõ"
+                    },
+                    submittedAt = submittedAt,
+                    durationTaken = durationTaken,
+                    grade = studentExam.Grade, // Thêm điểm số từ CSDL
+                    questions = studentExam.StudentExamDetails
+                        .Where(sed => sed.Question != null)
+                        .Select(sed => sed.Question)
+                        .DistinctBy(q => q.Id)
+                        .Select(q => new
+                        {
+                            id = q.Id,
+                            content = q.Content,
+                            type = q.Type,
+                            answers = q.Answers.Select(a => new
+                            {
+                                id = a.Id,
+                                content = a.Content,
+                                isCorrect = a.IsCorrect
+                            }).ToList(),
+                            correctAnswerIds = q.Answers.Where(a => a.IsCorrect).Select(a => a.Id).ToList()
+                        }).ToList(),
+                    studentAnswers = studentExam.StudentExamDetails
+                        .GroupBy(d => d.QuestionId)
+                        .ToDictionary(
+                            g => g.Key.ToString(),
+                            g => g.Select(d => d.AnswerId.ToString()).ToList()
+                        )
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Lỗi server: {ex.Message}");
+            }
+        }
 
     }
 }

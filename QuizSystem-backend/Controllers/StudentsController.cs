@@ -232,7 +232,7 @@ namespace QuizSystem_backend.Controllers
             var roomExams = await _context.RoomExams
                 .Include(re => re.Subject)
                 .Include(re => re.Course)
-                .Include(re => re.Exams)
+                .Include(re => re.Exam)
                 .Where(re => _context.StudentCourseClasses
                     .Any(scc => scc.StudentId == id && scc.CourseClassId == re.CourseClassId))
                 .ToListAsync();

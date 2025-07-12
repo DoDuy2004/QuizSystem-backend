@@ -343,17 +343,17 @@ namespace QuizSystem_backend.Models
                 //entity.Property(e => e.TotalScore)
                 //    .HasColumnName("tong_diem");
 
-                entity.Property(e => e.RoomExamId)
-                    .HasColumnName("ma_phong_thi");
+                //entity.Property(e => e.RoomExamId)
+                //    .HasColumnName("ma_phong_thi");
                    
 
                 entity.Property(e => e.Status)
                     .HasColumnName("trang_thai");
 
-                entity.HasOne(e => e.RoomExam)
-                    .WithMany(re => re.Exams)
-                    .HasForeignKey(e => e.RoomExamId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                //entity.HasOne(e => e.RoomExam)
+                //    .WithMany(re => re.Exams)
+                //    .HasForeignKey(e => e.RoomExamId)
+                //    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasMany(e => e.ExamQuestions)
                     .WithOne(eq => eq.Exam)
@@ -594,9 +594,12 @@ namespace QuizSystem_backend.Models
                 entity.Property(re => re.Status)
                     .HasColumnName("trang_thai");
 
-                entity.HasMany(re => re.Exams)
-                    .WithOne(e => e.RoomExam)
-                    .HasForeignKey(e => e.RoomExamId)
+                entity.Property(re => re.ExamId)
+                .HasColumnName("ma_de_thi");
+
+                entity.HasOne(re => re.Exam)
+                    .WithMany(e => e.RoomExams)
+                    .HasForeignKey(r => r.ExamId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(re => re.Course)

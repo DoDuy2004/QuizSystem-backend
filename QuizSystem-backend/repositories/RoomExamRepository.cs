@@ -19,7 +19,7 @@ namespace QuizSystem_backend.repositories
             return await _context.RoomExams
                 .Include(r => r.Subject)
                 .Include(r => r.Course)
-                .Include(r => r.Exams)
+                .Include(r => r.Exam)
                 .FirstOrDefaultAsync(r => r.Id == roomExam.Id);
 
         }
@@ -28,7 +28,7 @@ namespace QuizSystem_backend.repositories
             return await _context.RoomExams
                 .Include(r => r.Subject)
                 .Include(r => r.Course)
-                .Include(r => r.Exams)
+                .Include(r => r.Exam)
                 .ToListAsync();
         }
         public async Task<RoomExam?> GetByIdAsync(Guid id)
@@ -36,7 +36,7 @@ namespace QuizSystem_backend.repositories
             return await _context.RoomExams
                 .Include(r => r.Subject)
                 .Include(r => r.Course)
-                .Include(r => r.Exams)
+                .Include(r => r.Exam)
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
         public async Task SaveChangesAsync()

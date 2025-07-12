@@ -11,13 +11,12 @@ namespace QuizSystem_backend.Models
         public int DurationMinutes { get; set; }
         public int NoOfQuestions { get; set; }
         //public float TotalScore { get; set; }
-        public Guid? RoomExamId { get; set; }
         public Status Status { get; set; }
         public Guid SubjectId { get; set; }
         public Guid UserId { get; set; }
 
         // Navigation
-        public virtual RoomExam RoomExam { get; set; } = null!;
+        public virtual ICollection<RoomExam> RoomExams { get; set; } = null!;
 
         public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = null!;
         public virtual User? User { get; set; } = null!;

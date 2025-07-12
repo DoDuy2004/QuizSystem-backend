@@ -17,7 +17,7 @@ namespace QuizSystem_backend.Models
             {
                 var context = scope.ServiceProvider.GetRequiredService<QuizSystemDbContext>();
 
-                if (context.Database.GetPendingMigrations().Any())
+                if (!context.Database.GetPendingMigrations().Any())
                 {
                     context.Database.Migrate();
                 }

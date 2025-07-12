@@ -40,8 +40,9 @@ namespace QuizSystem_backend.Helper
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.Subject))
                 .ForMember(dest => dest.Course, opt => opt.MapFrom(src => src.Course))
-                .ForMember(dest => dest.Exam, opt => opt.MapFrom(src => src.Exam))
-                .ReverseMap();
+                .ForMember(dest => dest.Exam, opt => opt.MapFrom(src => src.Exams!.FirstOrDefault()))
+                .ReverseMap()
+                .ForMember(dest=>dest.Exams,opt=>opt.MapFrom(src=> src.Exam!=null?new List<Exam> { src.Exam }:null));
 
             CreateMap<ExamQuestionDto, ExamQuestion>().ReverseMap();
             CreateMap<QuestionDto, Question>()

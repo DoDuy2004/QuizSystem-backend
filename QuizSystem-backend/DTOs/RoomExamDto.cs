@@ -14,7 +14,7 @@ namespace QuizSystem_backend.DTOs
         public Guid ExamId { get; set; }
         public Subject? Subject { get; set; }         // Object Subject
         public CourseClass? Course { get; set; }       // Object CourseClass
-        public Exam Exam { get; set; }
+        public List<Exam>? Exams { get; set; }
 
     }
 }

@@ -112,7 +112,7 @@ namespace QuizSystem_backend.Controllers
                 }
 
                 // Tính timeRemaining
-                var timeRemaining = CalculateTimeRemaining(roomExam.StartDate, roomExam.Exam?.DurationMinutes ?? 0);
+                var timeRemaining = CalculateTimeRemaining(roomExam.StartDate, roomExam.Exams[0]?.DurationMinutes ?? 0);
 
                 return Ok(new
                 {
@@ -125,11 +125,9 @@ namespace QuizSystem_backend.Controllers
                         Subject = roomExam.Subject,
                         Course = roomExam.Course,
                         StartDate = roomExam.StartDate,
-                        DurationMinutes = roomExam.Exam?.DurationMinutes ?? 0,
+                        DurationMinutes = roomExam.Exams[0]?.DurationMinutes ?? 0,
                         TimeRemaining = timeRemaining,
-                        Exams = roomExam.Exam != null
-                                                ? new List<Exam> { roomExam.Exam }
-                                                : new List<Exam>()
+                        Exams = roomExam.Exams 
                     }
                 });
             }

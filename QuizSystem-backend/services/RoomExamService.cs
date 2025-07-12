@@ -74,6 +74,7 @@ public class RoomExamService : IRoomExamService
 
         var roomExam = _mapper.Map<RoomExam>(roomExamDto);
 
+        roomExam.ExamId=exam.Id;
         roomExam.Exam = exam;
 
         roomExam.CourseClassId = courseClass.Id;
@@ -82,7 +83,11 @@ public class RoomExamService : IRoomExamService
         var addedRoomExam = await _roomExamRepository.AddAsync(roomExam);
 
         var result = _mapper.Map<AddRoomExamDto>(addedRoomExam);
+
+        result.Exams = new List<Exam> { exam };
+
         result.SubjectName = courseClass.Subject.Name;
+
         result.CourseClassName = courseClass.Name;
 
         var mailContent = new MailContent();

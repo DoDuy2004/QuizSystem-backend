@@ -25,6 +25,7 @@ namespace QuizSystem_backend.repositories
         }
         public async Task<IEnumerable<RoomExam>> GetAllAsync()
         {
+
             return await _context.RoomExams
                 .Include(r => r.Subject)
                 .Include(r => r.Course)

@@ -11,10 +11,10 @@ namespace QuizSystem_backend.Models
         public Status Status { get; set; }
         public Guid CourseClassId { get; set; }
         public Guid SubjectId { get; set; } // Assuming SubjectId is a Guid, adjust as necessary
-
+        public Guid ExamId { get; set; }
         // Navigation   
         public virtual CourseClass Course { get; set; } = null!;
-        public virtual ICollection<Exam> Exams { get; set; } = null!;
+        public virtual Exam Exam { get; set; } = null!;
 
 
         public virtual ICollection<StudentExam> StudentExams { get; set; } = null!;

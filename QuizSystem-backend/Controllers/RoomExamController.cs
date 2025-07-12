@@ -112,7 +112,7 @@ namespace QuizSystem_backend.Controllers
                 }
 
                 // Tính timeRemaining
-                var timeRemaining = CalculateTimeRemaining(roomExam.StartDate, roomExam.Exams[0]?.DurationMinutes ?? 0);
+                var timeRemaining = CalculateTimeRemaining(roomExam.StartDate, roomExam.Exam?.DurationMinutes ?? 0);
 
                 return Ok(new
                 {
@@ -125,9 +125,11 @@ namespace QuizSystem_backend.Controllers
                         Subject = roomExam.Subject,
                         Course = roomExam.Course,
                         StartDate = roomExam.StartDate,
-                        DurationMinutes = roomExam.Exams[0]?.DurationMinutes ?? 0,
+                        DurationMinutes = roomExam.Exam?.DurationMinutes ?? 0,
                         TimeRemaining = timeRemaining,
-                        Exams = roomExam.Exams
+                        Exams = roomExam.Exam != null
+                                                ? new List<Exam> { roomExam.Exam }
+                                                : new List<Exam>()
                     }
                 });
             }
@@ -257,10 +259,10 @@ namespace QuizSystem_backend.Controllers
                 var now = DateTime.Now;
 
                 var endedRoomExams = await _context.RoomExams
-                    .Include(r => r.Exams)
+                    .Include(r => r.Exam)
                     .Where(r =>
-                        r.Exams.Any(e => e.UserId == userId) &&
-                        r.Exams.Any(e => r.StartDate.AddMinutes(e.DurationMinutes) <= now)
+                        r.Exam.UserId == userId &&
+                        r.StartDate.AddMinutes(r.Exam.DurationMinutes) <= now
                     )
                     .Select(r => new
                     {
@@ -268,18 +270,14 @@ namespace QuizSystem_backend.Controllers
                         RoomExamName = r.Name,
                         Subject = r.Subject.Name,
                         StartDate = r.StartDate,
-                        EndDate = r.Exams
-                            .Where(e => e.UserId == userId)
-                            .OrderBy(e => e.Id)
-                            .Select(e => r.StartDate.AddMinutes(e.DurationMinutes))
-                            .FirstOrDefault(),
-                        Exams = r.Exams
-                            .Where(e => e.UserId == userId)
-                            .Select(e => new
-                            {
-                                e.Id,
-                                e.Name
-                            }).ToList(),
+                        EndDate = r.StartDate.AddMinutes(r.Exam.DurationMinutes),
+                           
+                        Exam = new
+                        {
+                            r.Exam.Id,
+                            r.Exam.Name
+                        },
+
                         TotalStudentExams = _context.StudentExams.Count(se => se.RoomId == r.Id)
                     })
                     .ToListAsync();

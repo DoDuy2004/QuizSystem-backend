@@ -177,10 +177,6 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("so_cau_hoi");
 
-                    b.Property<Guid?>("RoomExamId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ma_phong_thi");
-
                     b.Property<int>("Status")
                         .HasColumnType("int")
                         .HasColumnName("trang_thai");
@@ -194,8 +190,6 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnName("ma_giang_vien");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoomExamId");
 
                     b.HasIndex("SubjectId");
 
@@ -375,6 +369,10 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_ket_thuc");
 
+                    b.Property<Guid>("ExamId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ma_de_thi");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -395,6 +393,8 @@ namespace QuizSystem_backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseClassId");
+
+                    b.HasIndex("ExamId");
 
                     b.HasIndex("SubjectId");
 
@@ -735,11 +735,6 @@ namespace QuizSystem_backend.Migrations
 
             modelBuilder.Entity("QuizSystem_backend.Models.Exam", b =>
                 {
-                    b.HasOne("QuizSystem_backend.Models.RoomExam", "RoomExam")
-                        .WithMany("Exams")
-                        .HasForeignKey("RoomExamId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
                         .WithMany("Exams")
                         .HasForeignKey("SubjectId")
@@ -751,8 +746,6 @@ namespace QuizSystem_backend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("RoomExam");
 
                     b.Navigation("Subject");
 
@@ -852,6 +845,12 @@ namespace QuizSystem_backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("QuizSystem_backend.Models.Exam", "Exam")
+                        .WithMany("RoomExams")
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("QuizSystem_backend.Models.Subject", "Subject")
                         .WithMany("RoomExams")
                         .HasForeignKey("SubjectId")
@@ -859,6 +858,8 @@ namespace QuizSystem_backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
+
+                    b.Navigation("Exam");
 
                     b.Navigation("Subject");
                 });
@@ -991,6 +992,8 @@ namespace QuizSystem_backend.Migrations
                 {
                     b.Navigation("ExamQuestions");
 
+                    b.Navigation("RoomExams");
+
                     b.Navigation("StudentExams");
                 });
 
@@ -1010,8 +1013,6 @@ namespace QuizSystem_backend.Migrations
 
             modelBuilder.Entity("QuizSystem_backend.Models.RoomExam", b =>
                 {
-                    b.Navigation("Exams");
-
                     b.Navigation("StudentExams");
 
                     b.Navigation("StudentRoomExams");

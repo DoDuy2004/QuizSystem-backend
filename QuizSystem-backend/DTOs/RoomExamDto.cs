@@ -11,6 +11,7 @@ namespace QuizSystem_backend.DTOs
         public DateTime EndDate { get; set; }
         public Status Status { get; set; }
 
+        public Guid ExamId { get; set; }
         public Subject? Subject { get; set; }         // Object Subject
         public CourseClass? Course { get; set; }       // Object CourseClass
         public List<Exam>? Exams { get; set; }

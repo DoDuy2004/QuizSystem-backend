@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -32,8 +33,9 @@ namespace QuizSystem_backend.Controllers
         private readonly IRoomExamService _roomExamService;
         private readonly IStudentExamRepository _studentExamRepository;
         private readonly IStudentRepository _studentRepository;
+        private readonly IMapper _mapper;
 
-        public StudentsController(QuizSystemDbContext context, IStudentService studentService, IRoomExamService roomExamService,IStudentExamRepository studentExamRepository,IRoomExamRepository roomExamRepository,IStudentRepository studentRepository)
+        public StudentsController(QuizSystemDbContext context, IStudentService studentService, IRoomExamService roomExamService,IStudentExamRepository studentExamRepository,IRoomExamRepository roomExamRepository,IStudentRepository studentRepository,IMapper mapper)
         {
             _roomExamRepository = roomExamRepository;
             _context = context;
@@ -41,7 +43,7 @@ namespace QuizSystem_backend.Controllers
             _roomExamService = roomExamService;
             _studentExamRepository = studentExamRepository;
             _studentRepository=studentRepository;
-            //_searchUserService = searchUserService;
+            _mapper = mapper;
         }
 
         // GET: api/Students
@@ -281,7 +283,7 @@ namespace QuizSystem_backend.Controllers
             var query = _context.RoomExams
                 .Include(re => re.Subject)
                 .Include(re => re.Course)
-                .Include(re => re.Exams)
+                .Include(re => re.Exam)
                 .Where(re => _context.StudentCourseClasses
                     .Any(scc => scc.StudentId == id && scc.CourseClassId == re.CourseClassId));
 
@@ -292,9 +294,11 @@ namespace QuizSystem_backend.Controllers
                     (re.Subject != null && re.Subject.Name.Contains(searchText)) ||
                     (re.Course != null && re.Course.Name.Contains(searchText)));
             }
+            
+            
+            var roomExams = _mapper.Map<List<RoomExamDto>>(await query.ToListAsync());
 
-            var roomExams = await query.ToListAsync();
-
+            
             return Ok(new
             {
                 code = 200,

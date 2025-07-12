@@ -127,7 +127,7 @@ namespace QuizSystem_backend.Controllers
                         StartDate = roomExam.StartDate,
                         DurationMinutes = roomExam.Exams[0]?.DurationMinutes ?? 0,
                         TimeRemaining = timeRemaining,
-                        Exams = roomExam.Exams
+                        Exams = roomExam.Exams 
                     }
                 });
             }
@@ -257,10 +257,10 @@ namespace QuizSystem_backend.Controllers
                 var now = DateTime.Now;
 
                 var endedRoomExams = await _context.RoomExams
-                    .Include(r => r.Exams)
+                    .Include(r => r.Exam)
                     .Where(r =>
-                        r.Exams.Any(e => e.UserId == userId) &&
-                        r.Exams.Any(e => r.StartDate.AddMinutes(e.DurationMinutes) <= now)
+                        r.Exam.UserId == userId &&
+                        r.StartDate.AddMinutes(r.Exam.DurationMinutes) <= now
                     )
                     .Select(r => new
                     {
@@ -268,18 +268,14 @@ namespace QuizSystem_backend.Controllers
                         RoomExamName = r.Name,
                         Subject = r.Subject.Name,
                         StartDate = r.StartDate,
-                        EndDate = r.Exams
-                            .Where(e => e.UserId == userId)
-                            .OrderBy(e => e.Id)
-                            .Select(e => r.StartDate.AddMinutes(e.DurationMinutes))
-                            .FirstOrDefault(),
-                        Exams = r.Exams
-                            .Where(e => e.UserId == userId)
-                            .Select(e => new
-                            {
-                                e.Id,
-                                e.Name
-                            }).ToList(),
+                        EndDate = r.StartDate.AddMinutes(r.Exam.DurationMinutes),
+                           
+                        Exam = new
+                        {
+                            r.Exam.Id,
+                            r.Exam.Name
+                        },
+
                         TotalStudentExams = _context.StudentExams.Count(se => se.RoomId == r.Id)
                     })
                     .ToListAsync();

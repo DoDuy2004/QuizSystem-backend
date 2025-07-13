@@ -18,7 +18,7 @@ namespace QuizSystem_backend.services
             _teacherRepository= teacherRepository;
         }
 
-        public Task<NotificationForCourseClass> AddNotificationAsync(NotificationForCourseClass notification)
+        public Task<Notification> AddNotificationAsync(Notification notification)
         {
             // Logic to add a notification for a course class
             // This would typically involve saving the notification to a database

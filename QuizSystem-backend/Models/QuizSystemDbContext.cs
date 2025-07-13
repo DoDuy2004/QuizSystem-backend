@@ -24,7 +24,8 @@ namespace QuizSystem_backend.Models
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionBank> QuestionBanks { get; set; }
         public DbSet<RoomExam> RoomExams { get; set; }
-        public DbSet<NotificationForCourseClass> NotificationForCourseClasses { get; set; }
+        public DbSet<Notification> Notification { get; set; }
+        public DbSet<NotificationForCourseClass>NotificationForCourseClass { get; set; }
         public DbSet<StudentCourseClass> StudentCourseClasses { get; set; }
         public DbSet<StudentExam> StudentExams { get; set; }
         public DbSet<StudentExamDetail> StudentExamDetails { get; set; }
@@ -766,26 +767,45 @@ namespace QuizSystem_backend.Models
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.HasKey(n => n.Id);
+
+                entity.Property(n => n.Title)
+                      .IsRequired()
+                      .HasMaxLength(100);
+
+                entity.Property(n => n.Message)
+                      .HasMaxLength(500);
+
+                entity.Property(n => n.CreatedAt);
+
+                entity.Property(n => n.IsRead);
+
+                entity.HasOne(n => n.User)
+                      .WithMany(u=>u.Notifications)
+                      .HasForeignKey(n => n.UserId)
+                      .OnDelete(DeleteBehavior.Restrict); // tuỳ bạn
+
+            });
+
             modelBuilder.Entity<NotificationForCourseClass>(entity =>
             {
                 entity.HasKey(n => n.Id);
 
                 entity.Property(n => n.Content)
                       .IsRequired()
-                      .HasMaxLength(1000); // nếu bạn muốn giới hạn
+                      .HasMaxLength(100);
+
+
+                entity.Property(n => n.CreateAt);
 
                 entity.HasOne(n => n.CourseClass)
-                      .WithMany() // hoặc .WithMany(c => c.Notifications) nếu có navigation ngược
+                      .WithMany(c => c.NotificationForCourseClasses)
                       .HasForeignKey(n => n.CourseClassId)
-                      .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasOne(n => n.User)
-                      .WithMany()
-                      .HasForeignKey(n => n.UserId)
-                      .OnDelete(DeleteBehavior.Restrict); // tuỳ bạn
+                      .OnDelete(DeleteBehavior.Restrict); 
 
             });
-
             modelBuilder.Entity<StudentRoomExam>()
                 .HasKey(sr => new { sr.StudentId, sr.RoomExamId });
 

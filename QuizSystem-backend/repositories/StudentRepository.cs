@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.repositories
@@ -40,5 +41,34 @@ namespace QuizSystem_backend.repositories
                 return Task.FromResult(false);
             }
         }
+        public async Task SetStatusAsync(Guid roomId, Guid studentId, SubmitStatus status)
+        {
+            // Giả sử có entity StudentRoomStatus lưu status từng SV
+            var record = await _context.StudentRoomExams
+                .FirstOrDefaultAsync(r => r.RoomExamId == roomId
+                                       && r.StudentId == studentId);
+
+            if (record == null)
+            {
+                // Nếu chưa có, khởi tạo mới
+                record = new StudentRoomExam
+                {
+                    RoomExamId = roomId,
+                    StudentId = studentId,
+                    SubmitStatus = status,
+                    UpdateAt = DateTime.UtcNow
+                };
+                _context.StudentRoomExams.Add(record);
+            }
+            else
+            {
+                record.SubmitStatus = status;
+                record.UpdateAt = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }

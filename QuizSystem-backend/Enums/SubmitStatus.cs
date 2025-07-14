@@ -4,5 +4,6 @@
     {
         Submitted = 0,
         NotSubmitted = 1,
+        InProgress = 2,
     }
 }

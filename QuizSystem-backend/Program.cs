@@ -18,6 +18,9 @@ using QuizSystem_backend.Helper;
 using System.Text.Json.Serialization;
 using QuizSystem_backend.services.MailServices;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using QuizSystem_backend.Hubs;
+using QuizSystem_backend.services.NotificationServices;
+using QuizSystem_backend.services.Notificationervices;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +44,7 @@ builder.Services.AddTransient<IChapterRepository, ChapterRepository>();
 builder.Services.AddTransient<IRoomExamRepository, RoomExamRepository>();
 builder.Services.AddTransient<IStudentExamRepository, StudentExamRepository>();
 
+builder.Services.AddTransient<INotificationService,NotificationService>();
 
 builder.Services.AddTransient<IRoomExamService, RoomExamService>();
 
@@ -55,7 +59,7 @@ builder.Services.AddTransient<IEmailSender, SendMailService>();
 builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
 builder.Services.AddTransient<TeacherService>();
 
-
+builder.Services.AddSignalR();
 
 
 
@@ -168,6 +172,7 @@ app.UseSession();
 
 app.MapControllers();
 
+app.MapHub<QuizHub>("/QuizHub");
 SeedData.Initialize(app.Services);
 
 //using var scope = app.Services.CreateScope();

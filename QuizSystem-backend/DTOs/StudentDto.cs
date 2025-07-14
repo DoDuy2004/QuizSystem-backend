@@ -5,6 +5,7 @@ namespace QuizSystem_backend.DTOs
 {
     public class StudentDto : UserDto
     {
+        public StudentDto() { }
         public StudentDto(Student student) : base(student)
         {
             StudentCode = student.StudentCode;

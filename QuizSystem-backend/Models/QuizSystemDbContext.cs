@@ -25,7 +25,7 @@ namespace QuizSystem_backend.Models
         public DbSet<QuestionBank> QuestionBanks { get; set; }
         public DbSet<RoomExam> RoomExams { get; set; }
         public DbSet<Notification> Notification { get; set; }
-        public DbSet<NotificationForCourseClass>NotificationForCourseClass { get; set; }
+        public DbSet<NotificationForCourseClass> NotificationForCourseClass { get; set; }
         public DbSet<StudentCourseClass> StudentCourseClasses { get; set; }
         public DbSet<StudentExam> StudentExams { get; set; }
         public DbSet<StudentExamDetail> StudentExamDetails { get; set; }
@@ -343,7 +343,7 @@ namespace QuizSystem_backend.Models
 
                 //entity.Property(e => e.RoomExamId)
                 //    .HasColumnName("ma_phong_thi");
-                   
+
 
                 entity.Property(e => e.Status)
                     .HasColumnName("trang_thai");
@@ -400,49 +400,7 @@ namespace QuizSystem_backend.Models
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            // Facutly
-            //modelBuilder.Entity<Facutly>(entity =>
-            //{
-            //    entity.ToTable("Khoa");
-            //    entity.HasKey(e => e.Id);
 
-            //    entity.Property(e => e.Id)
-            //        .HasColumnName("ma_khoa")
-            //        .ValueGeneratedOnAdd();
-
-            //    entity.Property(e => e.FacutlyCode)
-            //        .HasColumnName("ma_khoa_code")
-            //        .IsRequired()
-            //        .HasMaxLength(20);
-
-            //    entity.HasIndex(e => e.FacutlyCode)
-            //        .IsUnique();
-
-            //    entity.Property(e => e.Name)
-            //        .HasColumnName("ten_khoa")
-            //        .IsRequired()
-            //        .HasMaxLength(100);
-
-            //    entity.Property(e => e.Status)
-            //        .HasColumnName("trang_thai");
-
-            //    entity.HasMany(e => e.Subjects)
-            //        .WithOne(s => s.Facutly)
-            //        .HasForeignKey(s => s.FacutlyId)
-            //        .OnDelete(DeleteBehavior.Restrict);
-
-            //    entity.HasMany(e => e.Teachers)
-            //        .WithOne(t => t.Facutly)
-            //        .HasForeignKey(t => t.FacutlyId)
-            //        .OnDelete(DeleteBehavior.Restrict);
-
-            //    entity.HasMany(e => e.Students)
-            //        .WithOne(s => s.Facutly)
-            //        .HasForeignKey(s => s.FacutlyId)
-            //        .OnDelete(DeleteBehavior.Restrict);
-            //});
-
-            // Question
             modelBuilder.Entity<Question>(entity =>
             {
                 entity.ToTable("CauHoi");
@@ -611,11 +569,11 @@ namespace QuizSystem_backend.Models
                     .OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(re => re.Subject)
                    .WithMany(e => e.RoomExams)
-                   .HasForeignKey(e => e.SubjectId )
+                   .HasForeignKey(e => e.SubjectId)
                    .OnDelete(DeleteBehavior.Restrict);
             });
 
-            
+
 
             // StudentCourseClass
             modelBuilder.Entity<StudentCourseClass>(entity =>
@@ -684,7 +642,7 @@ namespace QuizSystem_backend.Models
                     .HasForeignKey(sed => sed.StudentExamId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-               
+
             });
 
             // StudentExamDetail
@@ -769,21 +727,27 @@ namespace QuizSystem_backend.Models
 
             modelBuilder.Entity<Notification>(entity =>
             {
+                entity.ToTable("ThongBao");
                 entity.HasKey(n => n.Id);
 
+
                 entity.Property(n => n.Title)
+                      .HasColumnName("tieu_de")
                       .IsRequired()
                       .HasMaxLength(100);
 
                 entity.Property(n => n.Message)
+                      .HasColumnName("tin_nhan")
                       .HasMaxLength(500);
 
-                entity.Property(n => n.CreatedAt);
+                entity.Property(n => n.CreatedAt)
+                      .HasColumnName("ngay_tao");
 
-                entity.Property(n => n.IsRead);
+                entity.Property(n => n.IsRead)
+                      .HasColumnName("da_doc");
 
                 entity.HasOne(n => n.User)
-                      .WithMany(u=>u.Notifications)
+                      .WithMany(u => u.Notifications)
                       .HasForeignKey(n => n.UserId)
                       .OnDelete(DeleteBehavior.Restrict); // tuỳ bạn
 
@@ -793,31 +757,53 @@ namespace QuizSystem_backend.Models
             {
                 entity.HasKey(n => n.Id);
 
+                entity.ToTable("ThongBaoLopHocPhan");
+
                 entity.Property(n => n.Content)
+                      .HasColumnName("noi_dung")
                       .IsRequired()
                       .HasMaxLength(100);
 
 
-                entity.Property(n => n.CreateAt);
+                entity.Property(n => n.CreateAt)
+                      .HasColumnName("ngay_tao");
 
                 entity.HasOne(n => n.CourseClass)
                       .WithMany(c => c.NotificationForCourseClasses)
                       .HasForeignKey(n => n.CourseClassId)
-                      .OnDelete(DeleteBehavior.Restrict); 
+                      .OnDelete(DeleteBehavior.Restrict);
 
             });
-            modelBuilder.Entity<StudentRoomExam>()
-                .HasKey(sr => new { sr.StudentId, sr.RoomExamId });
 
-            modelBuilder.Entity<StudentRoomExam>()
-                .HasOne(sr => sr.Student)
-                .WithMany()
-                .HasForeignKey(sr => sr.StudentId);
+            modelBuilder.Entity<StudentRoomExam>(entity =>
+            {
+                entity.ToTable("Sinhvien -Kithi");
 
-            modelBuilder.Entity<StudentRoomExam>()
-                .HasOne(sr => sr.RoomExam)
-                .WithMany(r => r.StudentRoomExams)
-                .HasForeignKey(sr => sr.RoomExamId);
+                entity.HasKey(sr => new { sr.StudentId, sr.RoomExamId });
+
+                entity.Property(sr => sr.RoomExamId)
+                      .HasColumnName("ma_ki_thi");
+
+                entity.Property(sr => sr.StudentId)
+                      .HasColumnName("ma_sinh_vien");
+
+                entity.Property(sr => sr.SubmitStatus)
+                      .HasColumnName("trang_thai_bai_lam");
+
+                entity.Property(sr => sr.SubmittedAt)
+                      .HasColumnName("thoi_gian_nop");
+
+                entity.HasOne(sr => sr.Student)
+                        .WithMany()
+                        .HasForeignKey(sr => sr.StudentId);
+
+                entity.HasOne(sr => sr.RoomExam)
+                        .WithMany(r => r.StudentRoomExams)
+                        .HasForeignKey(sr => sr.RoomExamId);
+            }
+            );
+
+
         }
     }
 }

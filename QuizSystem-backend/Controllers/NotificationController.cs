@@ -9,7 +9,6 @@ namespace QuizSystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Route("api/[controller]")]
     public class NotificationsController : ControllerBase
     {
         private readonly INotificationService _notifSvc;

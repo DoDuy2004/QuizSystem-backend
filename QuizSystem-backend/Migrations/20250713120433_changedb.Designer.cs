@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizSystem_backend.Models;
 
@@ -11,9 +12,11 @@ using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Migrations
 {
     [DbContext(typeof(QuizSystemDbContext))]
-    partial class QuizSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250713120433_changedb")]
+    partial class changedb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,18 +233,15 @@ namespace QuizSystem_backend.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ngay_tao");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsRead")
-                        .HasColumnType("bit")
-                        .HasColumnName("da_doc");
+                        .HasColumnType("bit");
 
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
-                        .HasColumnName("tin_nhan");
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<Guid?>("TeacherId")
                         .HasColumnType("uniqueidentifier");
@@ -249,8 +249,7 @@ namespace QuizSystem_backend.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("tieu_de");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -261,7 +260,7 @@ namespace QuizSystem_backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ThongBao", (string)null);
+                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.NotificationForCourseClass", b =>
@@ -273,21 +272,19 @@ namespace QuizSystem_backend.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("noi_dung");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<Guid>("CourseClassId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ngay_tao");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CourseClassId");
 
-                    b.ToTable("ThongBaoLopHocPhan", (string)null);
+                    b.ToTable("NotificationForCourseClass");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Question", b =>
@@ -540,20 +537,16 @@ namespace QuizSystem_backend.Migrations
             modelBuilder.Entity("QuizSystem_backend.Models.StudentRoomExam", b =>
                 {
                     b.Property<Guid>("StudentId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ma_sinh_vien");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RoomExamId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ma_ki_thi");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("SubmitStatus")
-                        .HasColumnType("int")
-                        .HasColumnName("trang_thai_bai_lam");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("SubmittedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("thoi_gian_nop");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
@@ -562,7 +555,7 @@ namespace QuizSystem_backend.Migrations
 
                     b.HasIndex("RoomExamId");
 
-                    b.ToTable("Sinhvien -Kithi", (string)null);
+                    b.ToTable("StudentRoomExams");
                 });
 
             modelBuilder.Entity("QuizSystem_backend.Models.Subject", b =>

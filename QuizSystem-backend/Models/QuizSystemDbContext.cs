@@ -31,10 +31,29 @@ namespace QuizSystem_backend.Models
         public DbSet<StudentExamDetail> StudentExamDetails { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<StudentRoomExam> StudentRoomExams { get; set; }
+        public DbSet<NotificationMessage> NotificationMessage { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Ignore<NotFiniteNumberException>();
+            //NorificationMessage
+            modelBuilder.Entity<NotificationMessage>(entity=>
+            {
+                entity.ToTable("TinNhanThongBao");
+                entity.HasKey(e=>e.Id);
+                entity.Property(n => n.Content)
+                .HasColumnName("noi_dung");
+
+                entity.HasOne(n => n.User)
+                        .WithMany(u => u.NotificationMessages)
+                        .HasForeignKey(u => u.User.Id)
+                        .OnDelete(DeleteBehavior.Cascade); ;
+                entity.HasOne(n => n.Notification)
+                        .WithMany(n => n.Messages)
+                        .HasForeignKey(n => n.NotificationId)
+                        .OnDelete(DeleteBehavior.Cascade); 
+            }
+            );
             // User
             modelBuilder.Entity<User>(entity =>
             {

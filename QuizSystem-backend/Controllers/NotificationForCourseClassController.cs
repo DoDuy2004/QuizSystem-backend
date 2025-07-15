@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Azure.Core;
 using Microsoft.AspNetCore.Http;
@@ -97,6 +98,43 @@ namespace QuizSystem_backend.Controllers
         {
             return Ok(await _context.NotificationForCourseClass.FindAsync(id));
         }
+        [HttpPost("{notificationId}/AddMessage")]
+        public async Task<IActionResult>AddMessage(Guid notificationId,string message )
+        {
+            
+            if (message == string.Empty) return NoContent();
+            
+
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            var notification = await _context.NotificationForCourseClass.FindAsync(notificationId);
+            if (notification == null) return NotFound("notification not found");
+
+            var messe = new NotificationMessage
+            {
+                Id = Guid.NewGuid(),
+                Content = message,
+                CreateAt = DateTime.Now,
+                UserId= userId,
+                NotificationId= notificationId
+            };
+
+            _context.NotificationMessage.Add(messe);
+            await _context.SaveChangesAsync();
+            
+            return Ok(messe);
+        }
+        [HttpGet("{notificationId}/GetMessage")]
+        public async Task<IActionResult> GetMessage(Guid notificationId)
+        {
+
+            var notification = await _context.NotificationForCourseClass.FindAsync(notificationId);
+            if (notification == null) return NotFound("notification not found");
+
+            return Ok(notification.Messages);
+
+        }
+
 
 
     }

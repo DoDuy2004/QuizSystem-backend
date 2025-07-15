@@ -15,11 +15,13 @@ namespace QuizSystem_backend.services
     {
         private readonly IExamRepository _examRepository;
         private readonly IMapper _mapper;
+        private readonly QuizSystemDbContext _context;
 
-        public ExamServices(IExamRepository examRepository, IMapper mapper)
+        public ExamServices(IExamRepository examRepository, IMapper mapper,QuizSystemDbContext context)
         {
             _examRepository = examRepository;
             _mapper = mapper;
+            _context = context;
         }
 
         public async Task<List<QuestionDto>> AddListQuestionToExamAsync(List<QuestionDto> listQuestionDto,Guid examId)
@@ -115,9 +117,11 @@ namespace QuizSystem_backend.services
                     var questions = await _examRepository
                         .GetQuestionsByChapterAndDifficultyAsync(row.ChapterId, difficulty, count);
 
+                    var chapter = await _context.Chapters.FindAsync(row.ChapterId);
+                    var chapterName = chapter!.Name;
                     if (questions.Count < count)
                     {
-                        result.ErrorMessages += $"Không đủ câu hỏi ở chương {row.Name} độ khó {difficulty}. ";
+                        result.ErrorMessages += $"Không đủ câu hỏi ở chương {chapterName} độ khó {difficulty}. ";
                         return result;
                     }
 

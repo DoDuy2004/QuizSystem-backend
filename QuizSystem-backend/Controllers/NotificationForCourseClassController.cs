@@ -125,7 +125,7 @@ namespace QuizSystem_backend.Controllers
             return Ok(messe);
         }
         [HttpGet("{notificationId}/GetMessage")]
-        public async Task<IActionResult> AddMessage(Guid notificationId)
+        public async Task<IActionResult> GetMessage(Guid notificationId)
         {
 
             var notification = await _context.NotificationForCourseClass.FindAsync(notificationId);

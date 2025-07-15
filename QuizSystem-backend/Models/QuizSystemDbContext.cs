@@ -46,7 +46,7 @@ namespace QuizSystem_backend.Models
 
                 entity.HasOne(n => n.User)
                         .WithMany(u => u.NotificationMessages)
-                        .HasForeignKey(u => u.User.Id)
+                        .HasForeignKey(u => u.UserId)
                         .OnDelete(DeleteBehavior.Cascade); ;
                 entity.HasOne(n => n.Notification)
                         .WithMany(n => n.Messages)

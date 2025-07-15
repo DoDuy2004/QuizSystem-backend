@@ -26,6 +26,6 @@ namespace QuizSystem_backend.Models
         public virtual ICollection<Exam>? Exams { get; set; } = null!;
 
         public virtual ICollection<Notification>Notifications { get; set; } = new List<Notification>();
-
+        public virtual ICollection<NotificationMessage> NotificationMessages { get; set; }=new List<NotificationMessage>();
     }
 }

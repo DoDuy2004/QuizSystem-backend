@@ -9,6 +9,6 @@
         
         //
         public CourseClass CourseClass { get; set; } = null!;
-        public ICollection<NotificationMessage> Messages { get; set; }=new List<NotificationMessage>();
+        public virtual ICollection<NotificationMessage> Messages { get; set; }=new List<NotificationMessage>();
     }
 }

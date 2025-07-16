@@ -32,6 +32,7 @@ namespace QuizSystem_backend.Models
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<StudentRoomExam> StudentRoomExams { get; set; }
         public DbSet<NotificationMessage> NotificationMessage { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -762,16 +763,28 @@ namespace QuizSystem_backend.Models
                 entity.Property(n => n.CreatedAt)
                       .HasColumnName("ngay_tao");
 
-                entity.Property(n => n.IsRead)
-                      .HasColumnName("da_doc");
-
-                entity.HasOne(n => n.User)
-                      .WithMany(u => u.Notifications)
-                      .HasForeignKey(n => n.UserId)
-                      .OnDelete(DeleteBehavior.Restrict); // tuỳ bạn
-
             });
 
+            modelBuilder.Entity<UserNotification>(entity =>
+            {
+                entity.ToTable("ThongBaoNguoiDung");
+                entity.HasKey(un => new { un.UserId, un.NotificationId });
+                entity.Property(un => un.UserId)
+                      .HasColumnName("ma_nguoi_dung");
+                entity.Property(un => un.NotificationId)
+                      .HasColumnName("ma_thong_bao");
+                entity.Property(un => un.IsRead)
+                      .HasColumnName("da_doc");
+                
+                entity.HasOne(un => un.User)
+                      .WithMany(u => u.UserNotifications)
+                      .HasForeignKey(un => un.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(un => un.Notification)
+                      .WithMany(n => n.UserNotifications)
+                      .HasForeignKey(un => un.NotificationId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
             modelBuilder.Entity<NotificationForCourseClass>(entity =>
             {
                 entity.HasKey(n => n.Id);

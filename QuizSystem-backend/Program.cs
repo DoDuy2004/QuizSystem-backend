@@ -138,6 +138,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 context.Response.StatusCode = 403;
                 context.Response.ContentType = "application/json";
                 return context.Response.WriteAsync("{\"message\": \"Forbidden\"}");
+            },
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) &&
+                    path.StartsWithSegments("/examHub"))
+                {
+                    // kích hoạt bearer token cho SignalR
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
             }
         };
     });

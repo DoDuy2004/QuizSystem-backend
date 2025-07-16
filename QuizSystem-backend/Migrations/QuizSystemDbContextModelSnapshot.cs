@@ -290,6 +290,35 @@ namespace QuizSystem_backend.Migrations
                     b.ToTable("ThongBaoLopHocPhan", (string)null);
                 });
 
+            modelBuilder.Entity("QuizSystem_backend.Models.NotificationMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("noi_dung");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("NotificationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotificationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TinNhanThongBao", (string)null);
+                });
+
             modelBuilder.Entity("QuizSystem_backend.Models.Question", b =>
                 {
                     b.Property<Guid>("Id")
@@ -837,6 +866,25 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("CourseClass");
                 });
 
+            modelBuilder.Entity("QuizSystem_backend.Models.NotificationMessage", b =>
+                {
+                    b.HasOne("QuizSystem_backend.Models.NotificationForCourseClass", "Notification")
+                        .WithMany("Messages")
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuizSystem_backend.Models.User", "User")
+                        .WithMany("NotificationMessages")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notification");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("QuizSystem_backend.Models.Question", b =>
                 {
                     b.HasOne("QuizSystem_backend.Models.Chapter", "Chapter")
@@ -1042,6 +1090,11 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("StudentExams");
                 });
 
+            modelBuilder.Entity("QuizSystem_backend.Models.NotificationForCourseClass", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("QuizSystem_backend.Models.Question", b =>
                 {
                     b.Navigation("Answers");
@@ -1086,6 +1139,8 @@ namespace QuizSystem_backend.Migrations
                     b.Navigation("CourseClasses");
 
                     b.Navigation("Exams");
+
+                    b.Navigation("NotificationMessages");
 
                     b.Navigation("Notifications");
 

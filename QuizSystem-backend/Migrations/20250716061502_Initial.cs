@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QuizSystem_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -180,6 +180,34 @@ namespace QuizSystem_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ThongBao",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    tieu_de = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    tin_nhan = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    ngay_tao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    da_doc = table.Column<bool>(type: "bit", nullable: false),
+                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ThongBao", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ThongBao_GiangVien_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "GiangVien",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_ThongBao_TaiKhoan_UserId",
+                        column: x => x.UserId,
+                        principalTable: "TaiKhoan",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Chuong",
                 columns: table => new
                 {
@@ -203,39 +231,6 @@ namespace QuizSystem_backend.Migrations
                         column: x => x.ma_mon_hoc,
                         principalTable: "MonHoc",
                         principalColumn: "ma_mon_hoc",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "NotificationForCourseClasses",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    CourseClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NotificationForCourseClasses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_NotificationForCourseClasses_GiangVien_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "GiangVien",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_NotificationForCourseClasses_LopHocPhan_CourseClassId",
-                        column: x => x.CourseClassId,
-                        principalTable: "LopHocPhan",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_NotificationForCourseClasses_TaiKhoan_UserId",
-                        column: x => x.UserId,
-                        principalTable: "TaiKhoan",
-                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -272,6 +267,26 @@ namespace QuizSystem_backend.Migrations
                         column: x => x.SubjectId,
                         principalTable: "MonHoc",
                         principalColumn: "ma_mon_hoc",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ThongBaoLopHocPhan",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    noi_dung = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ngay_tao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CourseClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ThongBaoLopHocPhan", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ThongBaoLopHocPhan_LopHocPhan_CourseClassId",
+                        column: x => x.CourseClassId,
+                        principalTable: "LopHocPhan",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -378,28 +393,56 @@ namespace QuizSystem_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StudentRoomExams",
+                name: "Sinhvien -Kithi",
                 columns: table => new
                 {
-                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoomExamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubmitStatus = table.Column<int>(type: "int", nullable: false),
-                    SubmittedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ma_sinh_vien = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ma_ki_thi = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    trang_thai_bai_lam = table.Column<int>(type: "int", nullable: false),
+                    thoi_gian_nop = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentRoomExams", x => new { x.StudentId, x.RoomExamId });
+                    table.PrimaryKey("PK_Sinhvien -Kithi", x => new { x.ma_sinh_vien, x.ma_ki_thi });
                     table.ForeignKey(
-                        name: "FK_StudentRoomExams_PhongThi_RoomExamId",
-                        column: x => x.RoomExamId,
+                        name: "FK_Sinhvien -Kithi_PhongThi_ma_ki_thi",
+                        column: x => x.ma_ki_thi,
                         principalTable: "PhongThi",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentRoomExams_SinhVien_StudentId",
-                        column: x => x.StudentId,
+                        name: "FK_Sinhvien -Kithi_SinhVien_ma_sinh_vien",
+                        column: x => x.ma_sinh_vien,
                         principalTable: "SinhVien",
                         principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TinNhanThongBao",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    noi_dung = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NotificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TinNhanThongBao", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TinNhanThongBao_TaiKhoan_UserId",
+                        column: x => x.UserId,
+                        principalTable: "TaiKhoan",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TinNhanThongBao_ThongBaoLopHocPhan_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "ThongBaoLopHocPhan",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -579,21 +622,6 @@ namespace QuizSystem_backend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NotificationForCourseClasses_CourseClassId",
-                table: "NotificationForCourseClasses",
-                column: "CourseClassId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NotificationForCourseClasses_TeacherId",
-                table: "NotificationForCourseClasses",
-                column: "TeacherId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NotificationForCourseClasses_UserId",
-                table: "NotificationForCourseClasses",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PhongThi_CourseClassId",
                 table: "PhongThi",
                 column: "CourseClassId");
@@ -609,20 +637,45 @@ namespace QuizSystem_backend.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Sinhvien -Kithi_ma_ki_thi",
+                table: "Sinhvien -Kithi",
+                column: "ma_ki_thi");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SinhVienLopHocPhan_ma_lop_hoc_phan",
                 table: "SinhVienLopHocPhan",
                 column: "ma_lop_hoc_phan");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_StudentRoomExams_RoomExamId",
-                table: "StudentRoomExams",
-                column: "RoomExamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TaiKhoan_email",
                 table: "TaiKhoan",
                 column: "email",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ThongBao_TeacherId",
+                table: "ThongBao",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ThongBao_UserId",
+                table: "ThongBao",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ThongBaoLopHocPhan_CourseClassId",
+                table: "ThongBaoLopHocPhan",
+                column: "CourseClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TinNhanThongBao_NotificationId",
+                table: "TinNhanThongBao",
+                column: "NotificationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TinNhanThongBao_UserId",
+                table: "TinNhanThongBao",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -635,13 +688,16 @@ namespace QuizSystem_backend.Migrations
                 name: "ChiTietKetQuaBaiThi");
 
             migrationBuilder.DropTable(
-                name: "NotificationForCourseClasses");
+                name: "Sinhvien -Kithi");
 
             migrationBuilder.DropTable(
                 name: "SinhVienLopHocPhan");
 
             migrationBuilder.DropTable(
-                name: "StudentRoomExams");
+                name: "ThongBao");
+
+            migrationBuilder.DropTable(
+                name: "TinNhanThongBao");
 
             migrationBuilder.DropTable(
                 name: "CauTraLoi");
@@ -651,6 +707,9 @@ namespace QuizSystem_backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "GiangVien");
+
+            migrationBuilder.DropTable(
+                name: "ThongBaoLopHocPhan");
 
             migrationBuilder.DropTable(
                 name: "CauHoi");

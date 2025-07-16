@@ -94,6 +94,7 @@ namespace QuizSystem_backend.repositories
 
             var existingQuestion = await _context.Questions
                 .Include(q => q.Chapter)
+                .Include(q => q.Chapter)
                 .FirstOrDefaultAsync(q => q.Id == question.Id || q.Content == question.Content);
 
             if (existingQuestion == null)

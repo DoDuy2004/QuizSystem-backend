@@ -8,7 +8,7 @@ namespace QuizSystem_backend.DTOs
         public QuestionBankDto () { }
         public QuestionBankDto(QuestionBank qb) 
         {
-            var questions = qb.Questions != null ? qb.Questions.Select(q => new QuestionDto(q)).ToList() : null;
+            var questions = qb.Questions != null ? qb.Questions.Where(q => q.Status != Status.DELETED).Select(q => new QuestionDto(q)).ToList() : null;
             //var course = qb.Course != null ? new CourseClassDto(qb.Course) : null;
             //var teacher = qb.Teacher != null ? new TeacherDto(qb.Teacher) : null;
 

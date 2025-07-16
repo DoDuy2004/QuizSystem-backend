@@ -34,8 +34,13 @@ namespace QuizSystem_backend.Helper
             //    .ForMember(dest => dest.RoomExamId, opt =>
             //                                          opt.Condition(src => src.RoomExamId != null));
             CreateMap<ExamDto, Exam>()
+                .ForMember(dest => dest.NoOfQuestions,
+                    opt => opt.MapFrom(src => src.ExamQuestions != null ? src.ExamQuestions.Count : 0))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
+                .ForMember(dest => dest.ExamQuestions!, opt => opt.Ignore())
+                .ForMember(dest => dest.NoOfQuestions, opt => opt.Ignore())
                 .ReverseMap();
+
             CreateMap<RoomExamDto, RoomExam>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id))
                 .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.Subject))

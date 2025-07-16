@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
+using QuizSystem_backend.Enums;
+using QuizSystem_backend.Hubs;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.services;
 using System.Security.Claims;
@@ -20,12 +23,16 @@ namespace QuizSystem_backend.Controllers
         private readonly QuizSystemDbContext _context;
         private readonly IRoomExamService _roomExamService;
         private readonly IEmailSender _emailSender;
+        private readonly IStudentService _studentService;
+        private readonly IHubContext<QuizHub> _hubContext;
 
-        public RoomExamController(IRoomExamService roomExamService, QuizSystemDbContext context,IEmailSender emailSender)
+        public RoomExamController(IRoomExamService roomExamService, QuizSystemDbContext context,IEmailSender emailSender,IStudentService studentService,IHubContext<QuizHub>hubContext)
         {
             _context = context;
             _roomExamService = roomExamService;
             _emailSender = emailSender;
+            _studentService= studentService;
+            _hubContext= hubContext;
         }
 
         //[HttpGet]
@@ -345,6 +352,19 @@ namespace QuizSystem_backend.Controllers
                 message = "Success",
                 data = result
             });
+
+        }
+
+        [HttpPost("start")]
+        public async Task<IActionResult>StartExam(Guid roomId)
+        {
+            var studentId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            await _studentService.SetStatusAsync(roomId, studentId,SubmitStatus.InProgress);
+
+            await _hubContext.Clients.Group(roomId.ToString()).SendAsync("ReceiveStatusChange",studentId,SubmitStatus.InProgress);
+
+            return Ok();   
 
         }
 

@@ -9,6 +9,6 @@
         // Navigation
         //public virtual Facutly Facutly { get; set; } = null!;
 
-        public virtual ICollection<NotificationForCourseClass> NotificationForCourseClasses { get; set; } = new List<NotificationForCourseClass>();
+        public virtual ICollection<Notification> NotificationForCourseClasses { get; set; } = new List<Notification>();
     }
 }

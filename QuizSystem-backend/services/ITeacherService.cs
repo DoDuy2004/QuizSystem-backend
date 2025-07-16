@@ -7,6 +7,6 @@ namespace QuizSystem_backend.services
     {
         Task<List<Teacher>> ImportTeacherConfirm(List<TeacherImportDto> teachersPreview);
         Task<List<TeacherImportDto>> ImportFileTeacherPreview(IFormFile file);
-        Task<NotificationForCourseClass> AddNotificationAsync(NotificationForCourseClass notification);
+        Task<Notification> AddNotificationAsync(Notification notification);
     }
 }

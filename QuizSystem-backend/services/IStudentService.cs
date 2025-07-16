@@ -1,6 +1,7 @@
 ﻿using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.DTOs.StudentExamDto;
+using QuizSystem_backend.Enums;
 using QuizSystem_backend.Models;
 
 namespace QuizSystem_backend.services
@@ -13,7 +14,9 @@ namespace QuizSystem_backend.services
 
         Task<List<StudentImportDto>> ImportFileStudentPreview(IFormFile file);
         Task<StudentExamResultDto?> SubmitStudentExamAsync(SubmitStudentExamDto dto);
-        
+        Task SetStatusAsync(Guid roomId, Guid studentId, SubmitStatus status);
+
+
     }
     
 }

@@ -1,6 +1,7 @@
 ﻿using Humanizer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using QuizSystem_backend.DTOs;
@@ -8,6 +9,7 @@ using QuizSystem_backend.DTOs.ExamDtos;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.DTOs.StudentExamDto;
 using QuizSystem_backend.Enums;
+using QuizSystem_backend.Hubs;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
 
@@ -17,12 +19,13 @@ namespace QuizSystem_backend.services
     {
         private readonly IStudentRepository _studentRepository;
         private readonly IExamRepository _examRepository;
-        private readonly object _courseClassRepository;
+        private readonly ICourseClassRepository _courseClassRepository;
         private readonly IStudentExamRepository _studentExamRepository;
         private readonly QuizSystemDbContext _context;
         private readonly IRoomExamRepository _roomExamRepository;
+        private readonly IHubContext<QuizHub> _hubContext;
 
-        public StudentService(IStudentRepository studentRepository, IExamRepository examReposotory, ICourseClassRepository courseClassRepository,IStudentExamRepository studentExamRepository,QuizSystemDbContext context,IRoomExamRepository romExamRepository)
+        public StudentService(IStudentRepository studentRepository, IExamRepository examReposotory, ICourseClassRepository courseClassRepository,IStudentExamRepository studentExamRepository,QuizSystemDbContext context,IRoomExamRepository romExamRepository,IHubContext<QuizHub>hubContext)
         {
             _studentRepository = studentRepository;
             _examRepository = examReposotory;
@@ -30,6 +33,7 @@ namespace QuizSystem_backend.services
             _studentExamRepository = studentExamRepository;
             _context=context;
             _roomExamRepository = romExamRepository;
+            _hubContext=hubContext;
         }
         public async Task<IEnumerable<Student>> GetStudentsAsync()
         {
@@ -183,7 +187,6 @@ namespace QuizSystem_backend.services
             await _studentExamRepository.AddStudentExamAsync(studentExam);
 
 
-            // 2. Lưu từng câu trả lời (StudentExamDetail)
             foreach (var answerDto in dto.Answers)
             {
                 foreach (var answerId in answerDto.AnswerIds)
@@ -200,13 +203,19 @@ namespace QuizSystem_backend.services
 
             await _context.SaveChangesAsync();
 
-            // 3. Chấm điểm và trả về kết quả (dùng lại hàm GetStudentExamResultAsync đã viết)
             var result = await _studentExamRepository.GradeStudentExamAsync(studentExam.Id);
+
+            await _hubContext.Clients
+            .Group(studentExam.RoomId.ToString()!)
+            .SendAsync("ReceiveStatusChange", studentExam.StudentId, SubmitStatus.Submitted);
 
             return result;
         }
 
-        
+        public async Task SetStatusAsync(Guid roomId, Guid studentId, SubmitStatus status)
+        {
+            await _studentRepository.SetStatusAsync(roomId, studentId, status);
+        }
 
 
     }

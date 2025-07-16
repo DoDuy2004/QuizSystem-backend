@@ -35,6 +35,7 @@ namespace QuizSystem_backend.Models
         public virtual ICollection<RoomExam> RoomExams { get; set; } = null;
         public ICollection<StudentCourseClass> Students { get; set; } = null!;
         public virtual ICollection<NotFiniteNumberException> Notifications { get; set; } = new List<NotFiniteNumberException>();
+        public ICollection<NotificationForCourseClass> NotificationForCourseClasses { get; set;} = new List<NotificationForCourseClass>();
 
 
     }

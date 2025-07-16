@@ -9,6 +9,7 @@ namespace QuizSystem_backend.Models
 
         public SubmitStatus SubmitStatus { get; set; } = SubmitStatus.NotSubmitted;
         public DateTime? SubmittedAt { get; set; }
+        public DateTime? UpdateAt { get; set; }
 
         // Navigation
         public virtual Student Student { get; set; } = null!;

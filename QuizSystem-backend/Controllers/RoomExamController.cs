@@ -26,13 +26,13 @@ namespace QuizSystem_backend.Controllers
         private readonly IStudentService _studentService;
         private readonly IHubContext<QuizHub> _hubContext;
 
-        public RoomExamController(IRoomExamService roomExamService, QuizSystemDbContext context,IEmailSender emailSender,IStudentService studentService,IHubContext<QuizHub>hubContext)
+        public RoomExamController(IRoomExamService roomExamService, QuizSystemDbContext context, IEmailSender emailSender, IStudentService studentService, IHubContext<QuizHub> hubContext)
         {
             _context = context;
             _roomExamService = roomExamService;
             _emailSender = emailSender;
-            _studentService= studentService;
-            _hubContext= hubContext;
+            _studentService = studentService;
+            _hubContext = hubContext;
         }
 
         //[HttpGet]
@@ -134,7 +134,7 @@ namespace QuizSystem_backend.Controllers
                         StartDate = roomExam.StartDate,
                         DurationMinutes = roomExam.Exams[0]?.DurationMinutes ?? 0,
                         TimeRemaining = timeRemaining,
-                        Exams = roomExam.Exams 
+                        Exams = roomExam.Exams
                     }
                 });
             }
@@ -276,7 +276,7 @@ namespace QuizSystem_backend.Controllers
                         Subject = r.Subject.Name,
                         StartDate = r.StartDate,
                         EndDate = r.StartDate.AddMinutes(r.Exam.DurationMinutes),
-                           
+
                         Exam = new
                         {
                             r.Exam.Id,
@@ -356,17 +356,74 @@ namespace QuizSystem_backend.Controllers
         }
 
         [HttpPost("start")]
-        public async Task<IActionResult>StartExam(Guid roomId)
+        public async Task<IActionResult> StartExam(Guid roomId)
         {
             var studentId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            await _studentService.SetStatusAsync(roomId, studentId,SubmitStatus.InProgress);
+            await _studentService.SetStatusAsync(roomId, studentId, SubmitStatus.InProgress);
 
-            await _hubContext.Clients.Group(roomId.ToString()).SendAsync("ReceiveStatusChange",studentId,SubmitStatus.InProgress);
+            await _hubContext.Clients.Group(roomId.ToString()).SendAsync("ReceiveStatusChange", studentId, SubmitStatus.InProgress);
 
-            return Ok();   
+            return Ok();
 
         }
 
+
+        [HttpGet("{roomExamId}/GetRoomExamStatus")]
+        public async Task<IActionResult> GetRoomExamStatus(Guid roomExamId)
+        {
+            var roomExam = await _context.RoomExams.FindAsync(roomExamId);
+            if (roomExam == null)
+                return BadRequest("RoomExam not found");
+
+            var listStudent = await _context.StudentRoomExams.Where(sre => sre.RoomExamId == roomExamId)
+                .Include(srx => srx.RoomExam)
+                    .ThenInclude(re => re.StudentExams).Select(sre => new StudentInRoom
+                    {
+                        Id = sre.StudentId,
+                        FullName = sre.Student.FullName,
+                        Email = sre.Student.Email,
+                        SubmitStatus = sre.SubmitStatus,
+                    }).ToListAsync();
+            return Ok(new
+            {
+                code = 200,
+                message = "Success",
+                data = listStudent
+            });
+        }
+
+        [HttpPost("{roomExamId}/studentEnterRoomAsync")]
+        public async Task<IActionResult> StudentEnterRoomAsync(Guid roomExamId)
+        {
+            var studentId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            if (roomExamId == Guid.Empty)
+            {
+                return BadRequest("Invalid room exam ID.");
+            }
+            var roomExam = await _context.RoomExams.FindAsync(roomExamId);
+            if (roomExam == null)
+            {
+                return NotFound("Room exam not found.");
+            }
+            var existingEntry = await _context.StudentRoomExams
+                .FirstOrDefaultAsync(sre => sre.RoomExamId == roomExamId && sre.StudentId == studentId);
+            if (existingEntry != null)
+            {
+                return BadRequest("Học sinh đã vào phòng thi trước đó");
+            }
+            var studentExam = await _context.StudentExams
+                .FirstOrDefaultAsync(se => se.RoomId == roomExamId && se.StudentId == studentId);
+
+            studentExam!.SubmitStatus = SubmitStatus.InProgress;
+
+            var teacherId = roomExam.Exam.UserId;
+            await _hubContext.Clients.User(teacherId.ToString())
+                .SendAsync("ReceiveStatusChange", studentId, SubmitStatus.InProgress);
+
+            return Ok(new { message = "Student entered the room exam successfully." });
+
+        }
     }
 }

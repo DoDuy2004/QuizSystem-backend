@@ -17,56 +17,71 @@ namespace QuizSystem_backend.services.Notificationervices
         {
             var notif = new Notification
             {
-                UserId = userId,
+                Id = Guid.NewGuid(),
                 Title = title,
-                Message = message
+                Message = message,
+                CreatedAt = DateTime.UtcNow
             };
             _context.Notification.Add(notif);
+            var userNotification=new UserNotification
+            {
+                UserId = userId,
+                NotificationId = notif.Id,
+                IsRead = false,
+            };
+            _context.UserNotifications.Add(userNotification);
+
+           
             await _context.SaveChangesAsync();
 
-            var count = await _context.Notification
-                .Where(n => n.UserId == userId)
+            var count = await _context.UserNotifications
+                .Where(un => un.UserId == userId)
                 .CountAsync();
 
             if (count > 10)
             {
-                var oldNotifs = await _context.Notification
-                    .Where(n => n.UserId == userId)
-                    .OrderBy(n => n.CreatedAt)
+                var oldNotifs = await _context.UserNotifications.Include(un=>un.Notification)
+                    .Where(un => un.UserId == userId)
+                    .OrderBy(un => un.Notification.CreatedAt)
                     .Take(1)
                     .ToListAsync();
 
-                _context.Notification.RemoveRange(oldNotifs);
+                _context.UserNotifications.RemoveRange(oldNotifs);
                 await _context.SaveChangesAsync();
             }
         }
-        public async Task<IList<NotificationDto>> GetNotificationAsync(Guid userId, int max = 10)
+        public async Task<IList<NotificationDto>> GetNotificationAsync(Guid userId,int max = 10)
         {
-            return await _context.Notification
-                .Where(n => n.UserId == userId)
-                .OrderByDescending(n => n.CreatedAt)
+            return await _context.UserNotifications
+                .Where(un => un.UserId == userId).Include(un => un.Notification)
+                .OrderByDescending(un => un.Notification.CreatedAt)
                 .Take(max)
-                .Select(n => new NotificationDto
+                .Select(un => new NotificationDto
                 {
-                    Id = n.Id,
-                    Title = n.Title,
-                    Message = n.Message,
-                    CreatedAt = n.CreatedAt,
-                    IsRead = n.IsRead
+                    Id = un.NotificationId,
+                    Title = un.Notification.Title,
+                    Message = un.Notification.Message,
+                    CreatedAt = un.Notification.CreatedAt,
+                    IsRead = un.IsRead
                 })
                 .ToListAsync();
         }
         public async Task<int> GetUnreadCountAsync(Guid userId)
         {
-            return await _context.Notification
-                .Where(n => n.UserId == userId && !n.IsRead)
+            return await _context.UserNotifications
+                .Where(un => un.UserId == userId && !un.IsRead)
                 .CountAsync();
         }
-        public async Task MarkAsReadAsync(Guid notificationId)
+        public async Task MarkAsReadAsync(Guid userId,List<NotificationDto> listNotificationDto)
         {
-            var notif = await _context.Notification.FindAsync(notificationId);
-            if (notif == null) throw new KeyNotFoundException("Notification not found");
-            notif.IsRead = true;
+            foreach(var notiDto in listNotificationDto)
+            {
+                var notif = await _context.UserNotifications
+                    .FirstOrDefaultAsync(un => un.UserId == userId && un.NotificationId == notiDto.Id);
+                if (notif == null) throw new KeyNotFoundException("Notification not found");
+                notif.IsRead = true;
+            }
+            
             await _context.SaveChangesAsync();
         }
         public async Task DeleteNotificationAsync(Guid notificationId)

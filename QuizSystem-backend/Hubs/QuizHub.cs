@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using QuizSystem_backend.Models;
 namespace QuizSystem_backend.Hubs;
 
+[Authorize]
 public class QuizHub: Hub
 {
-    public Task JoinRoom(string roomId)
-        => Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+    public Task JoinCourseClassGroup(Guid courseClassId)
+        => Groups.AddToGroupAsync(Context.ConnectionId, $"CourseClass_{courseClassId}");
 
-    public Task LeaveRoom(string roomId)
-        =>Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);    
+    public Task LeaveCourseClassGroup(Guid courseClassId)
+        =>Groups.RemoveFromGroupAsync(Context.ConnectionId, $"CourseClass_{courseClassId}");    
 
 }

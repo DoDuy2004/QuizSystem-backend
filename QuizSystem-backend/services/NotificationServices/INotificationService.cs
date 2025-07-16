@@ -6,7 +6,7 @@ namespace QuizSystem_backend.services.NotificationServices
     {
         Task AddNotificationAsync(Guid userId, string title, string message);
         Task<IList<NotificationDto>> GetNotificationAsync(Guid userId, int max = 10);
-        Task MarkAsReadAsync(Guid notificationId);
+        Task MarkAsReadAsync(Guid userId, List<NotificationDto> listNotificationDto);
         Task DeleteNotificationAsync(Guid notificationId);
         Task<int> GetUnreadCountAsync(Guid userId);
 

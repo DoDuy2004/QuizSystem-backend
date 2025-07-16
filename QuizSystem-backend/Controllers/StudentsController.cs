@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Humanizer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -14,6 +15,7 @@ using QuizSystem_backend.DTOs;
 using QuizSystem_backend.DTOs.StudentDtos;
 using QuizSystem_backend.DTOs.StudentExamDto;
 using QuizSystem_backend.Enums;
+using QuizSystem_backend.Hubs;
 using QuizSystem_backend.Models;
 using QuizSystem_backend.repositories;
 using QuizSystem_backend.services;
@@ -34,8 +36,10 @@ namespace QuizSystem_backend.Controllers
         private readonly IStudentExamRepository _studentExamRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly IMapper _mapper;
+        private readonly IHubContext<QuizHub> _hubContext;
 
-        public StudentsController(QuizSystemDbContext context, IStudentService studentService, IRoomExamService roomExamService,IStudentExamRepository studentExamRepository,IRoomExamRepository roomExamRepository,IStudentRepository studentRepository,IMapper mapper)
+
+        public StudentsController(IHubContext<QuizHub>hubContext,QuizSystemDbContext context, IStudentService studentService, IRoomExamService roomExamService,IStudentExamRepository studentExamRepository,IRoomExamRepository roomExamRepository,IStudentRepository studentRepository,IMapper mapper)
         {
             _roomExamRepository = roomExamRepository;
             _context = context;
@@ -44,6 +48,7 @@ namespace QuizSystem_backend.Controllers
             _studentExamRepository = studentExamRepository;
             _studentRepository=studentRepository;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         // GET: api/Students
@@ -354,6 +359,15 @@ namespace QuizSystem_backend.Controllers
             {
                 return BadRequest("Failed to submit exam.");
             }
+            // Cập nhật trạng thái nộp bài thi
+
+            var teacherId = _context.RoomExams.Include(re => re.Exam)
+                .Where(re => re.Id == resultDto.RoomId)
+                .Select(re => re.Exam.UserId)
+                .FirstOrDefault();
+
+            await _hubContext.Clients.User(teacherId.ToString())
+                .SendAsync("ReceiveStatusChange", resultDto.StudentId, SubmitStatus.Submitted);
             return Ok(new
             {
                 code = 200,

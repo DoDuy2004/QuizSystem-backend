@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using QuizSystem_backend.DTOs;
+using QuizSystem_backend.Hubs;
 using QuizSystem_backend.services.Notificationervices;
 using QuizSystem_backend.services.NotificationServices;
 using System.Security.Claims;
@@ -13,10 +15,13 @@ namespace QuizSystem_backend.Controllers
     {
         private readonly INotificationService _notifSvc;
         private readonly INotificationService _notificationService;
-        public NotificationsController(INotificationService notifSvc, INotificationService notificationService)
+        private readonly IHubContext<QuizHub> _hubContext;
+
+        public NotificationsController(IHubContext<QuizHub>hubContext,INotificationService notifSvc, INotificationService notificationService)
         {
             _notifSvc = notifSvc;
             _notificationService = notificationService;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -42,17 +47,11 @@ namespace QuizSystem_backend.Controllers
             return NoContent();
         }
 
-        [HttpPost("{id}/read")]
-        public async Task<IActionResult> MarkRead(Guid id)
+        [HttpPost("/read")]
+        public async Task<IActionResult> MarkRead(List<NotificationDto> notificationDto)
         {
-            await _notifSvc.MarkAsReadAsync(id);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            await _notifSvc.DeleteNotificationAsync(id);
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            await _notifSvc.MarkAsReadAsync(userId,notificationDto);
             return NoContent();
         }
     }

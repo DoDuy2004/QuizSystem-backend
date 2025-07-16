@@ -116,7 +116,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         };
 
-        // 👇 Thêm đoạn này để xử lý lỗi trả về 401 thay vì 500
         options.Events = new JwtBearerEvents
         {
             OnAuthenticationFailed = context =>
@@ -144,7 +143,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 var accessToken = context.Request.Query["access_token"];
                 var path = context.HttpContext.Request.Path;
                 if (!string.IsNullOrEmpty(accessToken) &&
-                    path.StartsWithSegments("/examHub"))
+                    path.StartsWithSegments("/QuizHub"))
                 {
                     // kích hoạt bearer token cho SignalR
                     context.Token = accessToken;

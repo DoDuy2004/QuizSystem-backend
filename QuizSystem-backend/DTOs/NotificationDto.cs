@@ -13,8 +13,5 @@ namespace QuizSystem_backend.DTOs
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsRead { get; set; } = false;
 
-        
-
-
     }
 }

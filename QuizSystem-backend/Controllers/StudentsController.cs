@@ -361,13 +361,18 @@ namespace QuizSystem_backend.Controllers
             }
             // Cập nhật trạng thái nộp bài thi
 
+            var student = await _context.Users.FindAsync(resultDto.StudentId);
+
             var teacherId = _context.RoomExams.Include(re => re.Exam)
                 .Where(re => re.Id == resultDto.RoomId)
                 .Select(re => re.Exam.UserId)
                 .FirstOrDefault();
 
+            //await _hubContext.Clients.User(teacherId.ToString())
+            //    .SendAsync("ReceiveStatusChange", resultDto.StudentId, SubmitStatus.Submitted);
             await _hubContext.Clients.User(teacherId.ToString())
-                .SendAsync("ReceiveStatusChange", resultDto.StudentId, SubmitStatus.Submitted);
+               .SendAsync("ReceiveStatusChange", resultDto.StudentId, student.FullName, SubmitStatus.Submitted.ToString(), DateTime.Now);
+
             return Ok(new
             {
                 code = 200,

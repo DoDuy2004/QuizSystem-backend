@@ -13,6 +13,26 @@ namespace QuizSystem_backend.repositories
         }
         public async Task<RoomExam> AddAsync(RoomExam roomExam)
         {
+            var courseWithStudents = await _context.CourseClasses
+                .Include(c => c.Students)
+                .ThenInclude(scc => scc.Student)
+                .FirstOrDefaultAsync(c => c.Id == roomExam.CourseClassId);
+
+            if (courseWithStudents == null)
+                throw new Exception("Course không tồn tại hoặc chưa có Students.");
+
+            roomExam.Course = courseWithStudents;
+
+            roomExam.StudentRoomExams = courseWithStudents.Students
+                .Select(s => new StudentRoomExam
+                {
+                    //StudentId = s.StudentId,
+                    RoomExam = roomExam,
+                    Student = s.Student,
+                    SubmitStatus = Enums.SubmitStatus.NotSubmitted,
+                    SubmittedAt = null,
+                })
+                .ToList();
             _context.RoomExams.Add(roomExam);
             await _context.SaveChangesAsync();
 

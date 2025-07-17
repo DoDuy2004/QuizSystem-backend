@@ -8,8 +8,10 @@ namespace QuizSystem_backend.DTOs.StudentDtos
         public string FullName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string StudentCode { get; set; } = string.Empty;
+        public Guid StudentExamId { get; set; }
 
-        public SubmitStatus SubmitStatus = SubmitStatus.NotSubmitted;
-   
+        public SubmitStatus SubmitStatus { get; set; }
+        public DateTime? SubmittedAt { get; set; }
+
     }
 }

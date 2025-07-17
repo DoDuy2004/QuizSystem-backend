@@ -246,7 +246,6 @@ namespace QuizSystem_backend.Controllers
                     })
                     .ToListAsync();
 
-                // 👉 Lọc kết quả theo searchText
                 if (!string.IsNullOrEmpty(searchText))
                 {
                     result = result.Where(x =>
@@ -287,7 +286,6 @@ namespace QuizSystem_backend.Controllers
                     })
                     .ToListAsync();
 
-                // 👉 Lọc theo searchText
                 if (!string.IsNullOrEmpty(searchText))
                 {
                     endedRoomExams = endedRoomExams.Where(x =>
@@ -315,7 +313,6 @@ namespace QuizSystem_backend.Controllers
                     se.Status,
                     se.SubmitStatus,
 
-                    // ✅ Thông tin sinh viên
                     Student = new
                     {
                         se.Student.Id,
@@ -325,7 +322,6 @@ namespace QuizSystem_backend.Controllers
                         se.Student.StudentCode
                     },
 
-                    // ✅ Thông tin bài thi
                     Exam = new
                     {
                         se.Exam.Id,
@@ -333,7 +329,6 @@ namespace QuizSystem_backend.Controllers
                         se.Exam.DurationMinutes
                     },
 
-                    // ✅ Thông tin phòng thi
                     RoomExam = new
                     {
                         se.Room.Id,
@@ -372,19 +367,30 @@ namespace QuizSystem_backend.Controllers
         [HttpGet("{roomExamId}/GetRoomExamStatus")]
         public async Task<IActionResult> GetRoomExamStatus(Guid roomExamId)
         {
-            var roomExam = await _context.RoomExams.FindAsync(roomExamId);
+            var roomExam = await _context.RoomExams.Include(re => re.StudentExams).FirstOrDefaultAsync(re => re.Id == roomExamId);
             if (roomExam == null)
                 return BadRequest("RoomExam not found");
 
-            var listStudent = await _context.StudentRoomExams.Where(sre => sre.RoomExamId == roomExamId)
-                .Include(srx => srx.RoomExam)
-                    .ThenInclude(re => re.StudentExams).Select(sre => new StudentInRoom
-                    {
-                        Id = sre.StudentId,
-                        FullName = sre.Student.FullName,
-                        Email = sre.Student.Email,
-                        SubmitStatus = sre.SubmitStatus,
-                    }).ToListAsync();
+            var studentRoomExams = await _context.StudentRoomExams
+                .Include(sre => sre.Student)
+                .Where(sre => sre.RoomExamId == roomExamId)
+                .ToListAsync();
+
+            var studentExams = await _context.StudentExams
+                .Where(se => se.RoomId == roomExamId)
+                .ToListAsync();
+
+            var listStudent = studentRoomExams.Select(sre => new
+            {
+                Id = sre.StudentId,
+                FullName = sre.Student.FullName,
+                Email = sre.Student.Email,
+                SubmitStatus = sre.SubmitStatus,
+                SubmittedAt = sre.SubmittedAt,
+                StudentExamId = studentExams
+                .FirstOrDefault(se => se.StudentId == sre.StudentId)?.Id
+            }).ToList();
+
             return Ok(new
             {
                 code = 200,
@@ -393,30 +399,39 @@ namespace QuizSystem_backend.Controllers
             });
         }
 
-        [HttpPost("{roomExamId}/studentEnterRoomAsync")]
+        [HttpPost("{roomExamId}/studentEnterRoom")]
         public async Task<IActionResult> StudentEnterRoomAsync(Guid roomExamId)
         {
-            var studentId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            //var studentId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            string studentId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (roomExamId == Guid.Empty)
             {
                 return BadRequest("Invalid room exam ID.");
             }
-            var roomExam = await _context.RoomExams.FindAsync(roomExamId);
+            var roomExam = await _context.RoomExams.Include(re => re.Exam).FirstOrDefaultAsync(re => re.Id == roomExamId);
             if (roomExam == null)
             {
                 return NotFound("Room exam not found.");
             }
             var existingEntry = await _context.StudentRoomExams
-                .FirstOrDefaultAsync(sre => sre.RoomExamId == roomExamId && sre.StudentId == studentId);
-            if (existingEntry != null)
+                .FirstOrDefaultAsync(sre => sre.RoomExamId == roomExamId && sre.StudentId == Guid.Parse(studentId));
+            if (existingEntry != null && (existingEntry.SubmitStatus == SubmitStatus.InProgress || existingEntry.SubmitStatus == SubmitStatus.Submitted))
             {
-                return BadRequest("Học sinh đã vào phòng thi trước đó");
+                return Ok(new { message = "Học sinh đã vào phòng thi trước đó" });
             }
-            var studentExam = await _context.StudentExams
-                .FirstOrDefaultAsync(se => se.RoomId == roomExamId && se.StudentId == studentId);
+            //var studentExam = await _context.StudentExams
+            //    .FirstOrDefaultAsync(se => se.RoomId == roomExamId && se.StudentId == studentId);
+            var studentRoomExam = await _context.StudentRoomExams.FirstOrDefaultAsync(sre => sre.StudentId == Guid.Parse(studentId));
 
-            studentExam!.SubmitStatus = SubmitStatus.InProgress;
+            if(studentRoomExam == null)
+            {
+                return NotFound(new { message = "Student not found" });
+            }
+
+            studentRoomExam!.SubmitStatus = SubmitStatus.InProgress;
+
+            await _context.SaveChangesAsync();
 
             var teacherId = roomExam.Exam.UserId;
             await _hubContext.Clients.User(teacherId.ToString())

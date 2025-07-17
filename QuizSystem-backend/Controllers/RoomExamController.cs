@@ -422,7 +422,7 @@ namespace QuizSystem_backend.Controllers
             }
             //var studentExam = await _context.StudentExams
             //    .FirstOrDefaultAsync(se => se.RoomId == roomExamId && se.StudentId == studentId);
-            var studentRoomExam = await _context.StudentRoomExams.FirstOrDefaultAsync(sre => sre.StudentId == Guid.Parse(studentId));
+            var studentRoomExam = await _context.StudentRoomExams.Include(sre => sre.Student).FirstOrDefaultAsync(sre => sre.StudentId == Guid.Parse(studentId));
 
             if(studentRoomExam == null)
             {
@@ -435,7 +435,7 @@ namespace QuizSystem_backend.Controllers
 
             var teacherId = roomExam.Exam.UserId;
             await _hubContext.Clients.User(teacherId.ToString())
-                .SendAsync("ReceiveStatusChange", studentId, SubmitStatus.InProgress);
+                .SendAsync("ReceiveStatusChange", studentId, studentRoomExam.Student.FullName, SubmitStatus.InProgress.ToString());
 
             return Ok(new { message = "Student entered the room exam successfully." });
 
